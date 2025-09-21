@@ -3,27 +3,11 @@ import './App.css';
 // icons
 import { FiCalendar, FiUsers, FiBarChart2, FiCreditCard, FiPhone, FiBox } from 'react-icons/fi';
 
-// Header Component
-const Header = () => {
-  return (
-    <header>
-      <div className="container header-container">
-        <a href="/" className="logo">Mirror Me</a>
-        <nav>
-          <ul>
-            <li><a href="#features">Home</a></li>
-            <li><a href="#testimonials">About</a></li>
-            <li><a href="#pricing">Services</a></li>
-            <li><a href="#contact">Team</a></li>
-            <li><a href="#contact">Product</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="/login" className="btn btn-secondary">Book Now</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-  );
-};
+// Components
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Login from './pages/Login';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Hero Component
 const Hero = () => {
@@ -157,60 +141,29 @@ const CTA = () => {
   );
 };
 
-// Footer Component
-const Footer = () => {
-  return (
-    <footer>
-      <div className="container">
-        <div className="footer-content">
-          <div className="footer-column">
-            <h3>SalonPro</h3>
-            <p>The complete salon management solution for businesses of all sizes.</p>
-          </div>
-          <div className="footer-column">
-            <h3>Product</h3>
-            <ul>
-              <li><a href="#features">Features</a></li>
-              <li><a href="#pricing">Pricing</a></li>
-              <li><a href="#demo">Demo</a></li>
-            </ul>
-          </div>
-          <div className="footer-column">
-            <h3>Resources</h3>
-            <ul>
-              <li><a href="#blog">Blog</a></li>
-              <li><a href="#help">Help Center</a></li>
-              <li><a href="#support">Support</a></li>
-            </ul>
-          </div>
-          <div className="footer-column">
-            <h3>Company</h3>
-            <ul>
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#careers">Careers</a></li>
-              <li><a href="#contact">Contact Us</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} SalonPro. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  );
-};
+// Footer is now a separate component (src/components/Footer.jsx)
 
 // Main App Component
+const Home = () => (
+  <div className="App">
+    <Header />
+    <Hero />
+    <Features />
+    <Testimonials />
+    <CTA />
+    <Footer />
+  </div>
+);
+
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <Hero />
-      <Features />
-      <Testimonials />
-      <CTA />
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        {/* Add other routes here for multi-page site */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
