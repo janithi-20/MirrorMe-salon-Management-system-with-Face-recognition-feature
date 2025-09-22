@@ -10,8 +10,6 @@ import FeedbackModal from './components/FeedbackModal';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-
-import Login from './pages/login/Login';
 import Services from './pages/services/Services';
 import Haircut from './pages/services/Haircut';
 import SkinTreatments from './pages/services/SkinTreatments';
@@ -173,14 +171,17 @@ const Testimonials = () => {
 
 // CTA Component
 const CTA = () => {
+  // You can implement CTA content here if needed
+  return null;
+};
 
 // Brands Component
 const Brands = () => {
   const brands = [
-    { name: 'KEUNE', logo: 'https://via.placeholder.com/160x80?text=KEUNE' },
-    { name: 'LOREAL', logo: 'https://via.placeholder.com/160x80?text=LOREAL' },
-    { name: 'jEVAL', logo: 'https://via.placeholder.com/160x80?text=jEVAL' },
-    { name: 'Dreamron', logo: 'https://via.placeholder.com/160x80?text=Dreamron' }
+  { name: 'KEUNE', logo: '/keune.png' },
+    { name: 'LOREAL', logo: '/loreal.png'  },
+    { name: 'jEVAL', logo: '/jeval.png'  },
+    { name: 'Dreamron', logo: '/dreamron.jpeg' }
   ];
 
 

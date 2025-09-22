@@ -157,7 +157,7 @@ nav ul li a:hover {
   max-width: 850px;
   margin: 12px auto 0;
   font-size: 16px;
-
+}
 /* Services Page Styles */
 .services-grid {
   display: grid;
@@ -350,8 +350,8 @@ nav ul li a:hover {
 }
 
 .brand-card img {
-  max-width: 160px;
-  height: auto;
+  max-width: 100px;
+  height: 100px;
   display: block;
   margin: 0 auto;
 }
