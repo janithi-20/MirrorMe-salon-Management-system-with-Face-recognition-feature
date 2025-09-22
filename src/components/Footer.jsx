@@ -10,7 +10,7 @@ const Footer = () => {
             <p>The complete salon management solution for businesses of all sizes.</p>
           </div>
           <div className="footer-column">
-            <h3>Product</h3>
+            <h3>Brands</h3>
             <ul>
               <li><a href="#features">Features</a></li>
               <li><a href="#pricing">Pricing</a></li>
