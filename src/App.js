@@ -10,8 +10,6 @@ import FeedbackModal from './components/FeedbackModal';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-
-import Login from './pages/login/Login';
 import Services from './pages/services/Services';
 import Haircut from './pages/services/Haircut';
 import SkinTreatments from './pages/services/SkinTreatments';
@@ -169,10 +167,6 @@ const Testimonials = () => {
   );
 };
 
-
-
-// CTA Component
-const CTA = () => {
 
 // Brands Component
 const Brands = () => {
