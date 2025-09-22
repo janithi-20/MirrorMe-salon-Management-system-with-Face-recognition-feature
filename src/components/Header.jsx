@@ -15,7 +15,7 @@ const Header = () => {
             <li><a href="#contact">Team</a></li>
             <li><a href="#contact">Product</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><Link to="/login" className="btn btn-secondary">Book Now</Link></li>
+            <li><Link to="/booking" className="btn btn-secondary">Book Now</Link></li>
             <li>
               <Link to="/login" className="btn btn-icon">
                 <FiLogIn style={{ verticalAlign: 'middle', marginRight: 6 }} />
