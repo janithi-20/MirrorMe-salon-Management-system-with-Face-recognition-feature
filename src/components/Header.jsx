@@ -11,9 +11,9 @@ const Header = () => {
           <ul>
             <li><a href="#features">Home</a></li>
             <li><a href="#testimonials">About</a></li>
-            <li><a href="#pricing">Services</a></li>
+            <li><Link to="/services">Services</Link></li>
             <li><a href="#contact">Team</a></li>
-            <li><a href="#contact">Product</a></li>
+            <li><a href="#brands">Brands</a></li>
             <li><a href="#contact">Contact</a></li>
             <li><Link to="/booking" className="btn btn-secondary">Book Now</Link></li>
             <li>
