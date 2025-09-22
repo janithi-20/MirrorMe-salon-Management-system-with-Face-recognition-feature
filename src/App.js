@@ -6,7 +6,9 @@ import { FiCalendar, FiUsers, FiBarChart2, FiCreditCard, FiPhone, FiBox } from '
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Login from './pages/Login';
+import Login from './login,signup/Login';
+import Register from './login,signup/Register';
+import Booking from './booking/Booking';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Hero Component
@@ -160,7 +162,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/register" element={<Register />} />
+        <Route path="/booking" element={<Booking />} />
         {/* Add other routes here for multi-page site */}
       </Routes>
     </BrowserRouter>
