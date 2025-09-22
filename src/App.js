@@ -6,7 +6,14 @@ import { FiCalendar, FiUsers, FiBarChart2, FiCreditCard, FiPhone, FiBox } from '
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Login from './pages/Login';
+import Login from './pages/login/Login';
+import Services from './pages/services/Services';
+import Haircut from './pages/services/Haircut';
+import SkinTreatments from './pages/services/SkinTreatments';
+import Dressings from './pages/services/Dressings';
+import Nails from './pages/services/Nails';
+import Waxing from './pages/services/Waxing';
+import ManicurePedicure from './pages/services/ManicurePedicure';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Hero Component
@@ -128,14 +135,30 @@ const Testimonials = () => {
   );
 };
 
-// CTA Component
-const CTA = () => {
+// Brands Component
+const Brands = () => {
+  const brands = [
+    { name: 'KEUNE', logo: 'https://via.placeholder.com/160x80?text=KEUNE' },
+    { name: 'LOREAL', logo: 'https://via.placeholder.com/160x80?text=LOREAL' },
+    { name: 'jEVAL', logo: 'https://via.placeholder.com/160x80?text=jEVAL' },
+    { name: 'Dreamron', logo: 'https://via.placeholder.com/160x80?text=Dreamron' }
+  ];
+
   return (
-    <section className="cta">
+    <section id="brands" className="brands">
       <div className="container">
-        <h2>Ready to Transform Your Salon Business?</h2>
-        <p>Join thousands of salon owners who are already using SalonPro to streamline their operations and boost revenue.</p>
-        <a href="#signup" className="btn">Get Started Today</a>
+        <div className="section-title">
+          <h2>Brands</h2>
+          <p><strong>We partner with industry-leading brands to bring you the best salon products and treatments.</strong></p>
+        </div>
+        <div className="brands-grid">
+          {brands.map((b, i) => (
+            <div key={i} className="brand-card">
+              <img src={b.logo} alt={b.name} style={{ maxWidth: '100%' }} />
+              <h4 style={{ marginTop: 8 }}>{b.name}</h4>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -146,12 +169,12 @@ const CTA = () => {
 // Main App Component
 const Home = () => (
   <div className="App">
-    <Header />
-    <Hero />
-    <Features />
-    <Testimonials />
-    <CTA />
-    <Footer />
+  <Header />
+  <Hero />
+  <Features />
+  <Testimonials />
+  <Brands />
+  <Footer />
   </div>
 );
 
@@ -160,7 +183,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/services" element={<Services />} />
+  <Route path="/services/haircut" element={<Haircut />} />
+  <Route path="/services/skin-treatments" element={<SkinTreatments />} />
+  <Route path="/services/dressings" element={<Dressings />} />
+  <Route path="/services/nails" element={<Nails />} />
+  <Route path="/services/waxing" element={<Waxing />} />
+  <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
         {/* Add other routes here for multi-page site */}
       </Routes>
     </BrowserRouter>

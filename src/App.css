@@ -11,6 +11,11 @@ body {
   color: #333;
 }
 
+/* Ensure in-page anchors and scroll positions account for the fixed header */
+html {
+  scroll-padding-top: 90px; /* reserve space when navigating to anchors */
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -129,6 +134,11 @@ nav ul li a:hover {
   margin-bottom: 60px;
 }
 
+/* Additional safety: move section titles down when scrolled into view */
+.section-title {
+  scroll-margin-top: 90px;
+}
+
 .section-title h2 {
   font-size: 36px;
   color: #333;
@@ -139,6 +149,111 @@ nav ul li a:hover {
   color: #666;
   max-width: 700px;
   margin: 0 auto;
+}
+
+/* Services Page Styles */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.service-card {
+  background: #fff;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+.service-photo {
+  width: 100%;
+  height: 160px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+}
+
+.service-card h4 {
+  margin-top: 12px;
+  font-size: 18px;
+}
+
+.service-card p {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Make service-card buttons brown specifically */
+.service-card .btn {
+  background: #d1842c; /* brown/orange */
+  color: #fff;
+}
+
+.service-card .btn:hover {
+  background: #b36f23; /* darker brown on hover */
+  transform: translateY(-2px);
+}
+
+.service-page .btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 6px;
+  background: #d1842c;
+  color: #fff;
+}
+
+.service-page .btn:hover {
+  background: #b36f23;
+}
+ 
+
+/* Service price table */
+.service-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.service-table thead {
+  /* brown to light gradient for table headers */
+  background: linear-gradient(90deg, #d1842c 0%, #f3e3d2 100%);
+  color: #3b2a20; /* darker brown text for readability on the light end */
+}
+
+.service-table th,
+.service-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(59,42,32,0.08);
+  text-align: left;
+}
+
+/* Right-align the price column (assumed second column) */
+.service-table td:nth-child(2),
+.service-table th:nth-child(2) {
+  text-align: right;
+}
+
+.service-table tbody tr:hover td {
+  background: rgba(209,150,97,0.04);
+}
+
+.service-table th {
+  font-weight: 700;
+}
+
+.service-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 600px) {
+  .service-table th, .service-table td {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
 
 .features-grid {
@@ -192,6 +307,35 @@ nav ul li a:hover {
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
+
+/* Brands section */
+.brands {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 24px;
+  align-items: center;
+}
+
+.brand-card {
+  background: #fff;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+.brand-card img {
+  max-width: 160px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 
 .testimonial-text {
   font-style: italic;
