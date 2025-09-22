@@ -15,11 +15,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 const Hero = () => {
   return (
     <section className="hero">
-      <div className="container">
-        <h1>Salon Management System with Face Recognition</h1>
-        <p>This is a digital solution designed to enhance the operations of salons by reducing the communication gap between customers and salon. This system will be used by both customers and admins via mobile app and through website.This System is unique with a feature that scans a customer's facial outline to make intelligent recommendations to its matching hair color, the shape of the eyebrow, and hair cuts using AI powered face detection technology.</p>
-        <div className="hero-buttons">
-          <a href="#demo" className="btn">Face Recognition</a>
+      <div className="container hero-inner">
+        <div className="hero-left">
+          <h1>Experience The Elegance Of </h1>
+          <h1>Mirror Me Salon</h1>
+          <p>Where expert care meets luxurious services for a transformative beauty experience. Discover personalized styling, skincare, and more.</p>
+          <div className="hero-buttons">
+            <a href="#demo" className="cta-pill">Face Recognition</a>
+          </div>
         </div>
       </div>
     </section>
