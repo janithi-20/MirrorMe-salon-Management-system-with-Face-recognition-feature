@@ -10,8 +10,6 @@ import FeedbackModal from './components/FeedbackModal';
 // Components
 import Header from './components/Header';
 import Footer from './components/Footer';
-
-import Login from './pages/login/Login';
 import Services from './pages/services/Services';
 import Haircut from './pages/services/Haircut';
 import SkinTreatments from './pages/services/SkinTreatments';
@@ -23,22 +21,42 @@ import ManicurePedicure from './pages/services/ManicurePedicure';
 import Login from './login,signup/Login';
 import Register from './login,signup/Register';
 import Booking from './booking/Booking';
+import Profile from './pages/Profile/Profile.js';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Hero Component
+// FaceRecognitionButton Component
+const FaceRecognitionButton = () => {
+  const handleFaceRecognition = () => {
+    // Add your face recognition functionality here
+    alert('Face Recognition feature would be activated here!');
+    console.log('Face recognition button clicked');
+  };
+
+  return (
+    <button className="face-recognition-btn" onClick={handleFaceRecognition}>
+      <span className="text">Face Recognition</span>
+    </button>
+  );
+};
+
+// Hero Component - UPDATED
 const Hero = () => {
   return (
     <section className="hero">
-      <div className="container hero-inner">
-        <div className="hero-left">
-          <h1>Experience The Elegance Of </h1>
-          <h1>Mirror Me Salon</h1>
-          <p>Where expert care meets luxurious services for a transformative beauty experience. Discover personalized styling, skincare, and more.</p>
-          <div className="hero-buttons">
-            <a href="#demo" className="cta-pill">Face Recognition</a>
-          </div>
+      <div className="container">
+        <h1 className="hero-heading">
+          Experience The Elegance Of<br />
+          <span className="second-line">Mirror Me Salon</span>
+        </h1>
+
+        <p>Where expert care meets luxurious services for a transformative beauty experience. Discover personalized styling, skincare, and more.</p>
+        
+        {/* Face Recognition Section - ADDED */}
+        <div className="face-recognition-section">
+          <FaceRecognitionButton />
         </div>
+
       </div>
     </section>
   );
@@ -78,7 +96,6 @@ const Features = () => {
       photo: '/Marie.jpg'
     }
   ];
-
 
   return (
     <section id="features" className="features">
@@ -139,7 +156,6 @@ const Testimonials = () => {
     }
   ];
 
-
   return (
     <section id="testimonials" className="testimonials">
       <div className="container">
@@ -172,11 +188,6 @@ const Testimonials = () => {
   );
 };
 
-
-
-// CTA Component
-const CTA = () => {
-
 // Brands Component
 const Brands = () => {
   const brands = [
@@ -185,7 +196,6 @@ const Brands = () => {
     { name: 'jEVAL', logo: 'https://via.placeholder.com/160x80?text=jEVAL' },
     { name: 'Dreamron', logo: 'https://via.placeholder.com/160x80?text=Dreamron' }
   ];
-
 
   return (
     <section id="brands" className="brands">
@@ -207,17 +217,15 @@ const Brands = () => {
   );
 };
 
-// Footer is now a separate component (src/components/Footer.jsx)
-
 // Main App Component
 const Home = () => (
   <div className="App">
-  <Header />
-  <Hero />
-  <Features />
-  <Testimonials />
-  <Brands />
-  <Footer />
+    <Header />
+    <Hero />
+    <Features />
+    <Testimonials />
+    <Brands />
+    <Footer />
   </div>
 );
 
@@ -226,20 +234,17 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-  <Route path="/login" element={<Login />} />
-
-  <Route path="/services" element={<Services />} />
-  <Route path="/services/haircut" element={<Haircut />} />
-  <Route path="/services/skin-treatments" element={<SkinTreatments />} />
-  <Route path="/services/dressings" element={<Dressings />} />
-  <Route path="/services/nails" element={<Nails />} />
-  <Route path="/services/waxing" element={<Waxing />} />
-  <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
-
-  <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/services/haircut" element={<Haircut />} />
+        <Route path="/services/skin-treatments" element={<SkinTreatments />} />
+        <Route path="/services/dressings" element={<Dressings />} />
+        <Route path="/services/nails" element={<Nails />} />
+        <Route path="/services/waxing" element={<Waxing />} />
+        <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/booking" element={<Booking />} />
-
-        {/* Add other routes here for multi-page site */}
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,0 +1,203 @@
+.profile-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  padding: 100px 20px 60px;
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.profile-header {
+  background: linear-gradient(135deg, #2e120e 0%, #5a2b22 100%);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.profile-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.customer-greeting h2 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.wishlist-section {
+  padding: 30px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.wishlist-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.search-icon {
+  font-size: 1.5rem;
+}
+
+.wishlist-header h3 {
+  font-size: 1.8rem;
+  color: #2e120e;
+  font-weight: 600;
+}
+
+.empty-wishlist {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-wishlist p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.browse-services-btn {
+  background: #d1842c;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.browse-services-btn:hover {
+  background: #b36f23;
+  transform: translateY(-2px);
+}
+
+.appointment-history {
+  padding: 30px;
+}
+
+.appointment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.appointment-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border-left: 4px solid #d1842c;
+}
+
+.appointment-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  min-width: 80px;
+}
+
+.date {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2e120e;
+}
+
+.year {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.appointment-details {
+  flex: 1;
+}
+
+.appointment-details h4 {
+  font-size: 1.2rem;
+  color: #2e120e;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.appointment-details p {
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status.completed {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.status.upcoming {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 80px 15px 40px;
+  }
+  
+  .profile-header {
+    padding: 30px 20px;
+  }
+  
+  .profile-header h1 {
+    font-size: 2rem;
+  }
+  
+  .appointment-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .appointment-date {
+    flex-direction: row;
+    gap: 10px;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .wishlist-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .appointment-details h4 {
+    font-size: 1.1rem;
+  }
+}
