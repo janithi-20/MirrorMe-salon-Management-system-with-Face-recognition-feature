@@ -3,6 +3,11 @@
 	padding: 3rem 0;
 }
 
+/* Ensure bill content sits below the fixed header when using page-content helper */
+.bill-container.page-content {
+  padding-top: 120px; /* larger top padding to avoid header overlap */
+}
+
 .bill-card {
 	max-width: 720px;
 	margin: 0 auto;

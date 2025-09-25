@@ -28,10 +28,24 @@ import Profile from './pages/Profile/Profile';
 import Payment from './pages/payment/payment';
 import Bill from './pages/bill/bill';
 
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+
+// ---------------------- Components ----------------------
+
+// FaceRecognitionButton Component
+const FaceRecognitionButton = () => {
+  const handleFaceRecognition = () => {
+    alert('Face Recognition feature would be activated here!');
+    console.log('Face recognition button clicked');
+  };
+
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 
 // ---------------------- Components ----------------------
+
 
 // FaceRecognitionButton Component — navigates to the face recognition page
 const FaceRecognitionButton = () => {

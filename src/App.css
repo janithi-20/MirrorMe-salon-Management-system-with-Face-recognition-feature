@@ -22,6 +22,11 @@ html {
   padding: 0 20px;
 }
 
+/* Page content helper to account for fixed header height */
+.page-content {
+  padding: 92px 0 40px; /* top padding equals header height + small gap */
+}
+
 .btn {
   display: inline-block;
   background: #d1842c;

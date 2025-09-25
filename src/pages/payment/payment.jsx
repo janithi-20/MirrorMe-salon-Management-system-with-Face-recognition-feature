@@ -27,8 +27,8 @@ const Payment = () => {
 
   return (
   <div className="payment-page" style={{ backgroundImage: `url(${paymentImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-      <Header />
-      <div className="container" style={{ padding: '3rem 0' }}>
+  <Header />
+  <div className="container page-content">
         <h2>Payment</h2>
         <p>Please enter your payment details to complete the booking.</p>
 
