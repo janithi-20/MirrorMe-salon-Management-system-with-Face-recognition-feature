@@ -23,6 +23,19 @@ import ManicurePedicure from './pages/services/ManicurePedicure';
 import Login from './login,signup/Login';
 import Register from './login,signup/Register';
 import Booking from './booking/Booking';
+import FaceRecognition from './pages/FaceRecognition/FaceRecognition';
+
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+
+// Hero Component
 import Profile from './pages/Profile/Profile.js';
 import Payment from './pages/payment/payment';
 import Bill from './pages/bill/bill';
@@ -44,6 +57,28 @@ const FaceRecognitionButton = () => {
     </button>
   );
 };
+
+
+// Hero Component - UPDATED
+const Hero = () => {
+  return (
+    <section className="hero">
+      <div className="container">
+        <h1>Salon Management System with Face Recognition</h1>
+        <p>This is a digital solution designed to enhance the operations of salons by reducing the communication gap between customers and salon. This system will be used by both customers and admins via mobile app and through website.This System is unique with a feature that scans a customer's facial outline to make intelligent recommendations to its matching hair color, the shape of the eyebrow, and hair cuts using AI powered face detection technology.</p>
+        <div className="hero-buttons">
+          <a href="/face-recognition" className="btn">Face Recognition</a>
+        <h1 className="hero-heading">
+          Experience The Elegance Of<br />
+          <span className="second-line">Mirror Me Salon</span>
+        </h1>
+
+        <p>Where expert care meets luxurious services for a transformative beauty experience. Discover personalized styling, skincare, and more.</p>
+        
+        {/* Face Recognition Section - ADDED */}
+        <div className="face-recognition-section">
+          <FaceRecognitionButton />
+        </div>
 
 
 // Hero Component
@@ -158,6 +193,14 @@ const Testimonials = () => {
       </div>
     </section>
   );
+
+
+
+
+// CTA Component
+const CTA = () => {
+  // You can implement CTA content here if needed
+  return null;
 };
 
 
@@ -190,8 +233,6 @@ const Brands = () => {
   );
 };
 
-
-// Home Page Component
 const Home = () => (
   <div className="App">
     <Header />
@@ -226,6 +267,28 @@ function App() {
         <Route path="/services/nails" element={<Nails />} />
         <Route path="/services/waxing" element={<Waxing />} />
         <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/booking" element={<Booking />} />
+        <Route path="/profile" element={<Profile />} />
+  <Route path="/login" element={<Login />} />
+
+  <Route path="/services" element={<Services />} />
+  <Route path="/services/haircut" element={<Haircut />} />
+  <Route path="/services/skin-treatments" element={<SkinTreatments />} />
+  <Route path="/services/dressings" element={<Dressings />} />
+  <Route path="/services/nails" element={<Nails />} />
+  <Route path="/services/waxing" element={<Waxing />} />
+  <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
+
+
+  <Route path="/register" element={<Register />} />
+  <Route path="/booking" element={<Booking />} />
+  <Route path="/face-recognition" element={<FaceRecognition />} />
+  <Route path="/payment" element={<Payment />} />
+  <Route path="/bill" element={<Bill />} />
+
+        {/* Add other routes here for multi-page site */}
+
       </Routes>
     </BrowserRouter>
   );

@@ -3,8 +3,13 @@ import '../App.css';
 
 const Footer = () => {
   return (
+
     <footer className="site-footer">
       <div className="container">
+
+    <footer>
+      <div id="contact" className="container">
+
         <div className="footer-content">
           <div className="footer-column">
             <h3>SalonPro</h3>
