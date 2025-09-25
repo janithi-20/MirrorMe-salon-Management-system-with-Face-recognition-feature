@@ -1,0 +1,77 @@
+/* Minimal payment styles */
+.payment-page .payment-form {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.payment-form .field {
+  margin-bottom: 12px;
+}
+
+.payment-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.payment-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+/* Make page text white while keeping input text readable */
+.payment-page,
+.payment-page h2,
+.payment-page p,
+.payment-page label {
+  color: #fff;
+}
+
+.payment-page .payment-form input {
+  background: rgba(255,255,255,0.95);
+  color: #222;
+}
+
+.payment-page .btn {
+  background: #8b5e3c; /* brown-ish CTA consistent with site */
+  color: #fff;
+  border: none;
+}
+
+.payment-form .grid-row {
+  display: flex;
+  gap: 12px;
+}
+
+.payment-form .grid-cell {
+  flex: 1;
+}
+
+/* Background overlay and layout */
+.payment-page {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1;
+}
+
+.payment-page .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* push footer below content and ensure footer visible above overlay */
+.payment-page footer {
+  position: relative;
+  z-index: 2;
+}

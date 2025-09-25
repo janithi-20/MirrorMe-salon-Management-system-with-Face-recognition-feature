@@ -236,7 +236,11 @@ import ManicurePedicure from './pages/services/ManicurePedicure';
 import Login from './login,signup/Login';
 import Register from './login,signup/Register';
 import Booking from './booking/Booking';
+
 import Profile from './pages/Profile/Profile.js';
+import Payment from './pages/payment/payment';
+import Bill from './pages/bill/bill';
+
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -401,15 +405,21 @@ const Testimonials = () => {
       </div>
     </section>
   );
+
+
+// CTA Component
+const CTA = () => {
+  // You can implement CTA content here if needed
+  return null;
 };
 
 // Brands Component
 const Brands = () => {
   const brands = [
-    { name: 'KEUNE', logo: 'https://via.placeholder.com/160x80?text=KEUNE' },
-    { name: 'LOREAL', logo: 'https://via.placeholder.com/160x80?text=LOREAL' },
-    { name: 'jEVAL', logo: 'https://via.placeholder.com/160x80?text=jEVAL' },
-    { name: 'Dreamron', logo: 'https://via.placeholder.com/160x80?text=Dreamron' }
+  { name: 'KEUNE', logo: '/keune.png' },
+    { name: 'LOREAL', logo: '/loreal.png'  },
+    { name: 'jEVAL', logo: '/jeval.png'  },
+    { name: 'Dreamron', logo: '/dreamron.jpeg' }
   ];
 
   return (
@@ -449,6 +459,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/services" element={<Services />} />
         <Route path="/services/haircut" element={<Haircut />} />
@@ -460,6 +471,23 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/booking" element={<Booking />} />
         <Route path="/profile" element={<Profile />} />
+  <Route path="/login" element={<Login />} />
+
+  <Route path="/services" element={<Services />} />
+  <Route path="/services/haircut" element={<Haircut />} />
+  <Route path="/services/skin-treatments" element={<SkinTreatments />} />
+  <Route path="/services/dressings" element={<Dressings />} />
+  <Route path="/services/nails" element={<Nails />} />
+  <Route path="/services/waxing" element={<Waxing />} />
+  <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
+
+  <Route path="/register" element={<Register />} />
+  <Route path="/booking" element={<Booking />} />
+  <Route path="/payment" element={<Payment />} />
+  <Route path="/bill" element={<Bill />} />
+
+        {/* Add other routes here for multi-page site */}
+
       </Routes>
     </BrowserRouter>
   );
