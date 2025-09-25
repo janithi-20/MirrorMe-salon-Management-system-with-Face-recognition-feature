@@ -26,7 +26,7 @@ const Profile = () => {
           <div className="wishlist-content">
             <div className="empty-wishlist">
               <p>Your wish list is empty</p>
-              <button className="browse-services-btn">Browse Services</button>
+              <button className="browse-services-btn">View More</button>
             </div>
           </div>
         </div>

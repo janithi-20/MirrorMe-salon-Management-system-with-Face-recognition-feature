@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< Updated upstream
 import { Link } from 'react-router-dom';
 import { FiLogIn } from 'react-icons/fi';
 
@@ -26,6 +27,29 @@ const Header = () => {
       </div>
     </header>
   );
+=======
+import '../App.css';
+
+const Header = () => {
+	return (
+		<header className="site-header">
+			<div className="container header-container">
+				<a href="/" className="logo">Mirror Me</a>
+				<nav>
+					<ul>
+						<li><a href="#features">Home</a></li>
+						<li><a href="#testimonials">About</a></li>
+						<li><a href="#pricing">Services</a></li>
+						<li><a href="#contact">Team</a></li>
+						<li><a href="#contact">Product</a></li>
+						<li><a href="#contact">Contact</a></li>
+						<li><a href="/login" className="btn btn-secondary">Book Now</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+	);
+>>>>>>> Stashed changes
 };
 
 export default Header;
