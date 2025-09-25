@@ -327,6 +327,12 @@ nav ul li a:hover {
   border: 2px solid #fff;
   box-shadow: 0 6px 14px rgba(0,0,0,0.08);
   max-width: 700%;
+  object-fit: cover;
+  border-radius: 100 px;
+  display: block;
+  margin: 0 auto 10px;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 /* Testimonials Section */
