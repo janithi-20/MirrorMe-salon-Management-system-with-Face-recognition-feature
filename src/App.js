@@ -21,6 +21,8 @@ import ManicurePedicure from './pages/services/ManicurePedicure';
 import Login from './login,signup/Login';
 import Register from './login,signup/Register';
 import Booking from './booking/Booking';
+import Payment from './pages/payment/payment';
+import Bill from './pages/bill/bill';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -228,7 +230,9 @@ function App() {
   <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
 
   <Route path="/register" element={<Register />} />
-        <Route path="/booking" element={<Booking />} />
+  <Route path="/booking" element={<Booking />} />
+  <Route path="/payment" element={<Payment />} />
+  <Route path="/bill" element={<Bill />} />
 
         {/* Add other routes here for multi-page site */}
       </Routes>
