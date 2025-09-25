@@ -1,5 +1,16 @@
 import React from 'react';
 import './App.css';
+
+// icons
+
+import { FaStar } from "react-icons/fa6";
+import { FaStarHalf } from "react-icons/fa6";
+
+// Modal
+import FeedbackModal from './components/FeedbackModal';
+
+
+// Components
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { FiCalendar, FiUsers, FiBarChart2, FiCreditCard, FiPhone, FiBox } from 'react-icons/fi';
@@ -26,17 +37,54 @@ const Features = () => {
     { icon: <FiBox size={28} />, title: 'Inventory Tracking', description: 'Keep track of your products and supplies with automated inventory management.' }
   ];
 
+  const teamMembers = [
+    {
+      title: "Lewis Fernandiz",
+      description: "Salon Manager/Director",
+      photo: '/Lewis.jpg'
+    },
+    {
+      title: "Angela Diano",
+      description: "Assistant Stylist/Junior Stylist",
+      photo: '/Angela.jpg'
+    },
+    {
+      title: "Kylie Nellina",
+      description: "Nail Technician",
+      photo: '/Kylie.jpg'
+    },
+    {
+      title: "Shalini Neha",
+      description: "Massage Therapist",
+      photo: '/Shalini.jpg'
+    },
+    {
+      title: "Ethan Kal",
+      description: "Color Specialist",
+      photo: '/Ethan.jpg'
+    },
+    {
+      title: "Marie De Zoya",
+      description: "Skincare specialist",
+      photo: '/Marie.jpg'
+    }
+  ];
+
   return (
     <section id="features" className="features">
       <div className="container">
         <div className="section-title">
-          <h2>Powerful Features</h2>
-          <p>Everything you need to manage and grow your salon business efficiently</p>
+          <h2>Our Team</h2>
+          <p>Each of our team members have different individual strengths, years of experience.</p>
+          <p className="team-description">Our stylists and therapists combine years of hands-on experience with up-to-date techniques and a passion for customer satisfaction. Browse the profiles below to learn more about their specialties and book with confidence.</p>
         </div>
         <div className="features-grid">
           {features.map((feature, index) => (
             <div key={index} className="feature-card">
               <div className="feature-icon">{feature.icon}</div>
+              {feature.photo && (
+                <img src={feature.photo} alt={feature.title} className="member-photo" />
+              )}
               <h3>{feature.title}</h3>
               <p>{feature.description}</p>
             </div>
@@ -48,18 +96,46 @@ const Features = () => {
 };
 
 const Testimonials = () => {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const testimonials = [
     { text: 'SalonPro has transformed how we manage our salon. Booking is easier, clients are happier, and our revenue has increased by 30%!', name: 'Sarah Johnson', role: 'Owner, Elite Beauty Salon' },
     { text: 'The inventory management feature alone has saved us countless hours. Now we never run out of our most popular products.', name: 'Michael Chen', role: 'Manager, Luxe Hair Studio' },
     { text: "Our clients love the automated reminders and easy booking system. It's made our operations so much smoother.", name: 'Jessica Williams', role: 'Stylist, Style & Smile Salon' }
+    {
+      text: "They remember my preferences and my service history, which is a great new feature. It makes me feel like they know me and what I like",
+      name: "Sonali De Silva",
+      role: (
+        <span>
+          <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
+        </span>
+      )
+    },
+    {
+      text: " The face recognition feature is a game-changer! It speeds up the check-in process and adds a personal touch to the customer experience.",
+      name: "Michael Fernando",
+      role: (
+        <span>
+          <FaStar /><FaStar /><FaStar /><FaStarHalf />
+        </span>
+      )
+    },
+    {
+      text: "I love how easy it is to book my appointments online. It's so convenient and a much more reliable way to schedule than having to call the salon.",
+      name: "Jessica Perera",
+      role: (
+        <span>
+          <FaStar /><FaStar /><FaStar /><FaStar />
+        </span>
+      )
+    }
   ];
 
   return (
     <section id="testimonials" className="testimonials">
       <div className="container">
         <div className="section-title">
-          <h2>What Our Clients Say</h2>
-          <p>Hear from salon owners who have transformed their business with SalonPro</p>
+          <h2>Your Happiness, Our Success</h2>
+          <p>Hear from our valueble customers, who had a great experience with our "MirroeMe" Salon </p>
         </div>
         <div className="testimonials-grid">
           {testimonials.map((t, i) => (
