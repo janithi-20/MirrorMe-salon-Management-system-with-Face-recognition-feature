@@ -28,6 +28,7 @@ import Profile from './pages/Profile/Profile';
 import Payment from './pages/payment/payment';
 import Bill from './pages/bill/bill';
 
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 
@@ -40,10 +41,18 @@ const FaceRecognitionButton = () => {
     console.log('Face recognition button clicked');
   };
 
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
+
+// ---------------------- Components ----------------------
+
+
+// FaceRecognitionButton Component — navigates to the face recognition page
+const FaceRecognitionButton = () => {
   return (
-    <button className="face-recognition-btn" onClick={handleFaceRecognition}>
+    <Link to="/face-recognition" className="face-recognition-btn">
       <span className="text">Face Recognition</span>
-    </button>
+    </Link>
   );
 };
 
