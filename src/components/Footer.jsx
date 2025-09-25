@@ -1,5 +1,4 @@
 import React from 'react';
-<<<<<<< Updated upstream
 
 const Footer = () => {
   return (
@@ -41,7 +40,7 @@ const Footer = () => {
       </div>
     </footer>
   );
-=======
+
 import '../App.css';
 
 const Footer = () => {
@@ -84,7 +83,6 @@ const Footer = () => {
 			</div>
 		</footer>
 	);
->>>>>>> Stashed changes
 };
 
 export default Footer;
