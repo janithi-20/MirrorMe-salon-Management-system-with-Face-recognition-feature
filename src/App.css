@@ -350,8 +350,8 @@ nav ul li a:hover {
 }
 
 .brand-card img {
-  max-width: 160px;
-  height: auto;
+  max-width: 100px;
+  height: 100px;
   display: block;
   margin: 0 auto;
 }
