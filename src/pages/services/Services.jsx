@@ -46,7 +46,7 @@ const Services = () => {
   return (
     <div>
       <Header />
-      <main className="container" style={{ padding: '3rem 0' }}>
+  <main className="container page-content">
         <div className="section-title">
           <h2 style={{ fontWeight: 700, textAlign: 'center' }}>Our Services</h2>
           <p style={{ fontWeight: 700, textAlign: 'center', marginTop: 12 }}>

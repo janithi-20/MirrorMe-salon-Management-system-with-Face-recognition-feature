@@ -26,8 +26,8 @@ const Bill = () => {
 
   return (
     <div className="bill-page" style={{ backgroundImage: `url(${billImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-      <Header />
-      <div className="container bill-container">
+  <Header />
+  <div className="container bill-container page-content">
         <div className="bill-card" id="bill">
           <h2>Invoice</h2>
           <div className="bill-row"><strong>Customer:</strong> <span>{invoice.customer}</span></div>
