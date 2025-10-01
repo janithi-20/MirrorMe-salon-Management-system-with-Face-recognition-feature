@@ -24,25 +24,14 @@ import Login from './login,signup/Login';
 import Register from './login,signup/Register';
 import Booking from './booking/Booking';
 import FaceRecognition from './pages/FaceRecognition/FaceRecognition';
-
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-);
-
-// Hero Component
-import Profile from './pages/Profile/Profile.js';
+import Profile from './pages/Profile/Profile';
 import Payment from './pages/payment/payment';
 import Bill from './pages/bill/bill';
 
-// Router
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+
+// ---------------------- Components ----------------------
 
 // FaceRecognitionButton Component
 const FaceRecognitionButton = () => {
@@ -58,32 +47,22 @@ const FaceRecognitionButton = () => {
   );
 };
 
-
-// Hero Component - UPDATED
-const Hero = () => {
-  return (
-    <section className="hero">
-      <div className="container">
-        <h1>Salon Management System with Face Recognition</h1>
-        <p>This is a digital solution designed to enhance the operations of salons by reducing the communication gap between customers and salon. This system will be used by both customers and admins via mobile app and through website.This System is unique with a feature that scans a customer's facial outline to make intelligent recommendations to its matching hair color, the shape of the eyebrow, and hair cuts using AI powered face detection technology.</p>
-        <div className="hero-buttons">
-          <a href="/face-recognition" className="btn">Face Recognition</a>
-        <h1 className="hero-heading">
-          Experience The Elegance Of<br />
-          <span className="second-line">Mirror Me Salon</span>
-        </h1>
-
-        <p>Where expert care meets luxurious services for a transformative beauty experience. Discover personalized styling, skincare, and more.</p>
-        
-        {/* Face Recognition Section - ADDED */}
-        <div className="face-recognition-section">
-          <FaceRecognitionButton />
-        </div>
-
-
 // Hero Component
 const Hero = () => (
   <section className="hero">
+    {/* Background video (public/homepage.mp4) - plays muted and loops */}
+    <video
+      className="hero-video"
+      src="/homepage.mp4"
+      poster="/homepage.jpg"
+      autoPlay
+      muted
+      loop
+      playsInline
+    />
+    {/* dark overlay to keep text readable */}
+    <div className="hero-overlay" />
+
     <div className="container">
       <h1 className="hero-heading">
         Experience The Elegance Of<br />
@@ -100,8 +79,7 @@ const Hero = () => (
   </section>
 );
 
-
-// Features (Our Team) Component
+// Features (Our Team)
 const Features = () => {
   const team = [
     { title: "Lewis Fernandiz", description: "Salon Manager/Director", photo: '/Lewis.jpg' },
@@ -118,11 +96,6 @@ const Features = () => {
         <div className="section-title">
           <h2>Our Team</h2>
           <p>Each of our team members have different strengths and years of experience.</p>
-          <p className="team-description">
-            Our stylists and therapists combine years of hands-on experience with up-to-date techniques 
-            and a passion for customer satisfaction. Browse the profiles below to learn more about their 
-            specialties and book with confidence.
-          </p>
         </div>
         <div className="features-grid">
           {team.map((member, index) => (
@@ -140,8 +113,7 @@ const Features = () => {
   );
 };
 
-
-// Testimonials Component
+// Testimonials
 const Testimonials = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
@@ -193,18 +165,9 @@ const Testimonials = () => {
       </div>
     </section>
   );
-
-
-
-
-// CTA Component
-const CTA = () => {
-  // You can implement CTA content here if needed
-  return null;
 };
 
-
-// Brands Component
+// Brands
 const Brands = () => {
   const brands = [
     { name: 'KEUNE', logo: '/keune.png' },
@@ -233,6 +196,7 @@ const Brands = () => {
   );
 };
 
+// Home
 const Home = () => (
   <div className="App">
     <Header />
@@ -245,7 +209,7 @@ const Home = () => (
 );
 
 
-// Main App Component with Routes
+// ---------------------- Main App with Routes ----------------------
 function App() {
   return (
     <BrowserRouter>
@@ -258,6 +222,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/bill" element={<Bill />} />
+        <Route path="/face-recognition" element={<FaceRecognition />} />
 
         {/* Services Routes */}
         <Route path="/services" element={<Services />} />
@@ -267,28 +232,6 @@ function App() {
         <Route path="/services/nails" element={<Nails />} />
         <Route path="/services/waxing" element={<Waxing />} />
         <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/booking" element={<Booking />} />
-        <Route path="/profile" element={<Profile />} />
-  <Route path="/login" element={<Login />} />
-
-  <Route path="/services" element={<Services />} />
-  <Route path="/services/haircut" element={<Haircut />} />
-  <Route path="/services/skin-treatments" element={<SkinTreatments />} />
-  <Route path="/services/dressings" element={<Dressings />} />
-  <Route path="/services/nails" element={<Nails />} />
-  <Route path="/services/waxing" element={<Waxing />} />
-  <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
-
-
-  <Route path="/register" element={<Register />} />
-  <Route path="/booking" element={<Booking />} />
-  <Route path="/face-recognition" element={<FaceRecognition />} />
-  <Route path="/payment" element={<Payment />} />
-  <Route path="/bill" element={<Bill />} />
-
-        {/* Add other routes here for multi-page site */}
-
       </Routes>
     </BrowserRouter>
   );
