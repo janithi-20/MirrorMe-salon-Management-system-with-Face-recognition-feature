@@ -1,50 +1,12 @@
 /* Booking page styles */
-.booking-page {
-  position: relative;
-  min-height: calc(100vh - 80px); /* account for header/footer */
-  /* background image intentionally set via inline style in Booking.jsx to use public/ path */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.booking-page::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  /* only cover main booking content area, not footer */
-  height: calc(100% - 220px); /* adjust if footer height changes */
-  background: rgba(18,12,10,0.35); /* slightly lighter */
-  z-index: 0;
-}
-
 .booking-main {
   padding: 100px 20px 60px;
-  position: relative;
-  z-index: 1; /* sit above overlay */
 }
-
-/* White summary text (below form) */
-.booking-main > div strong,
-.booking-main > div { color: #fff; }
-
-/* Remove any footer shadow/background effect on booking page specifically */
-.booking-page .site-footer {
-  box-shadow: none !important;
-  background: #000; /* solid black footer on booking page */
-}
-
-.booking-page .site-footer p,
-.booking-page .site-footer a,
-.booking-page .site-footer h3,
-.booking-page .site-footer li { color: #fff; }
 
 .booking-title {
   font-size: 28px;
   margin-bottom: 20px;
-  color: #f7f2f2;
+  color: #222;
 }
 
 .booking-form {
@@ -61,7 +23,7 @@
 .grid-cell {
   background: #d1842c; /* primary brown */
   padding: 26px 18px;
-  border: 1px solid rgba(255, 253, 253, 0.08);
+  border: 1px solid rgba(0,0,0,0.08);
   color: #fff;
 }
 
@@ -93,8 +55,8 @@
 }
 
 .oval-book {
-  background: #fdfaf9;
-  color: #151414;
+  background: #6b6361;
+  color: #fff;
   padding: 16px 48px;
   border-radius: 999px;
   border: none;
