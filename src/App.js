@@ -1,7 +1,9 @@
+// Clean App.js
 import React from 'react';
 import './App.css';
 
 // Icons
+import { FiCalendar, FiUsers, FiBarChart2, FiCreditCard, FiPhone, FiBox } from 'react-icons/fi';
 import { FaStar, FaStarHalf } from "react-icons/fa6";
 
 // Modal
@@ -27,14 +29,12 @@ import FaceRecognition from './pages/FaceRecognition/FaceRecognition';
 import Profile from './pages/Profile/Profile';
 import Payment from './pages/payment/payment';
 import Bill from './pages/bill/bill';
-
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 
 // ---------------------- Components ----------------------
 
-// FaceRecognitionButton Component
+
 const FaceRecognitionButton = () => {
   const handleFaceRecognition = () => {
     alert('Face Recognition feature would be activated here!');
@@ -42,6 +42,7 @@ const FaceRecognitionButton = () => {
   };
 
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
 
 
 // ---------------------- Components ----------------------
@@ -57,8 +58,19 @@ const FaceRecognitionButton = () => {
 };
 
 // Hero Component
+
 const Hero = () => (
   <section className="hero">
+    <video
+      className="hero-video"
+      src="/homepage.mp4"
+      poster="/homepage.jpg"
+      autoPlay
+      muted
+      loop
+      playsInline
+    />
+    <div className="hero-overlay" />
     <div className="container">
       <h1 className="hero-heading">
         Experience The Elegance Of<br />
@@ -108,6 +120,7 @@ const Features = () => {
     </section>
   );
 };
+
 
 // Testimonials
 const Testimonials = () => {
