@@ -81,7 +81,7 @@ const Booking = () => {
   };
 
   return (
-    <div className="booking-page">
+    <div className="booking-page" style={{ backgroundImage: "url('/images/booking.jpg')" }}>
       <Header />
 
       <main className="booking-main container">
