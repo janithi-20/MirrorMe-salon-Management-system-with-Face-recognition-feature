@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-// Temporarily using clean substitute while App.js is being repaired
-import App from './AppClean';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 

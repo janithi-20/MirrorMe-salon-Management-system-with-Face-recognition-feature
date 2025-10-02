@@ -1,0 +1,3 @@
+/* Hero specific overrides (keeps existing App.css working) */
+.hero-heading { margin-bottom: 12px; }
+.second-line { color: inherit; }

@@ -1,0 +1,3 @@
+/* Features (Team) specific styles; shared grid styles remain in App.css */
+.features .feature-card h3 { margin-top: 8px; }
+.features .member-photo { border-radius: 8px; }
