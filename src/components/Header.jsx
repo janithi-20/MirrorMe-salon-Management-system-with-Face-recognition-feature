@@ -15,9 +15,7 @@ const Header = () => {
             <li><Link to="/services">Services</Link></li>
             <li><a href="#brands">Brands</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li>
-              <Link to="/booking" className="btn btn-secondary">Book Now</Link>
-            </li>
+            
             <li>
               <Link to="/login" className="btn btn-icon">
                 <FiLogIn style={{ verticalAlign: 'middle', marginRight: 6 }} />
