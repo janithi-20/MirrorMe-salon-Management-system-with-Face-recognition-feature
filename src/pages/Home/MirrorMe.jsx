@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Hero.css';
+import './MirrorMe.css';
 
 const FaceRecognitionButton = () => (
   <Link to="/face-recognition" className="face-recognition-btn">
@@ -8,8 +8,20 @@ const FaceRecognitionButton = () => (
   </Link>
 );
 
-const Hero = () => (
+const MirrorMe = () => (
   <section className="hero">
+    {/* Background Video */}
+    <video
+      className="hero-video"
+      src="/homepage.mp4"
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      aria-hidden="true"
+    />
+    {/* Content */}
     <div className="container">
       <h1 className="hero-heading">
         Experience The Elegance Of<br />
@@ -26,4 +38,4 @@ const Hero = () => (
   </section>
 );
 
-export default Hero;
+export default MirrorMe;
