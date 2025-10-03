@@ -20,6 +20,7 @@ import FaceRecognition from './pages/FaceRecognition/FaceRecognition';
 import Profile from './pages/Profile/Profile';
 import Payment from './pages/payment/payment';
 import Bill from './pages/bill/bill';
+import Team from './pages/Team/Team';
  
 
 // Main App with Routes
@@ -35,7 +36,9 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/bill" element={<Bill />} />
-        <Route path="/face-recognition" element={<FaceRecognition />} />
+  <Route path="/face-recognition" element={<FaceRecognition />} />
+  <Route path="/team" element={<Team />} />
+  <Route path="/Team" element={<Team />} />
 
         {/* Services */}
         <Route path="/services" element={<Services />} />

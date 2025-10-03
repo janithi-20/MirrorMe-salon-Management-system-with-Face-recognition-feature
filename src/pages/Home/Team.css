@@ -1,0 +1,14 @@
+/* Team section overrides */
+.team {
+	margin-top: 30px; /* ensure section sits a bit below previous block */
+}
+
+.member-photo {
+	width: 240px;
+	height: 240px;
+	object-fit: cover;
+	border-radius: 12px;
+	display: block;
+	margin: 0 auto 12px;
+	box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}

@@ -108,9 +108,13 @@ nav ul li a:hover {
 
 /* Hero Section */
 .hero {
-  background: linear-gradient(180deg, #5a2b22 0%, #2e120e 45%, #2e120e 100%);
-  padding: 120px 0 100px;
-  color: #fff;
+  
+  background-image: url("./../public/homepage.jpg");
+  background-size: cover;       /* cover full section */
+  background-position: center top;  /* keep image centered */
+  background-repeat: no-repeat; /* prevent tiling */
+  color: #020101;       
+  height: 110vh;             /* make text white for visibility */
 }
 
 .hero-inner { display: flex; align-items: center; }
@@ -340,19 +344,19 @@ nav ul li a:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-/* Testimonials Section */
-.testimonials {
+/* Team Section */
+.Team {
   padding: 100px 0;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
 }
 
-.testimonials-grid {
+.team-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
 }
 
-.testimonial-card {
+.team-card {
   background: #fff;
   padding: 30px;
   border-radius: 8px;
@@ -388,18 +392,18 @@ nav ul li a:hover {
 }
 
 
-.testimonial-text {
+.team-text {
   font-style: italic;
   margin-bottom: 20px;
   color: #555;
 }
 
-.testimonial-author {
+.team-author {
   display: flex;
   align-items: center;
 }
 
-/* Short centered feedback button under testimonials */
+/* Short centered feedback button under team */
 .feedback-short {
   display: flex;
   justify-content: center;

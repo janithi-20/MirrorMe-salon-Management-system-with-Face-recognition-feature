@@ -1,18 +1,18 @@
 import React from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import Hero from './Hero';
-import Features from './Features';
-import Testimonials from './Testimonials';
+import MirrorMe from './MirrorMe';
 import Brands from './Brands';
+import Feedback from './Feedback';
+import Team from './Team';
 
 const Home = () => (
   <div className="App">
     <Header />
-    <Hero />
-    <Features />
-    <Testimonials />
+  <MirrorMe />
     <Brands />
+    <Feedback />
+    <Team />
     <Footer />
   </div>
 );
