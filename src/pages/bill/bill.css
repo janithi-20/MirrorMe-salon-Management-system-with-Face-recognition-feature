@@ -1,0 +1,36 @@
+/* Basic bill styles */
+.bill-container {
+	padding: 3rem 0;
+}
+
+/* Ensure bill content sits below the fixed header when using page-content helper */
+.bill-container.page-content {
+  padding-top: 120px; /* larger top padding to avoid header overlap */
+}
+
+.bill-card {
+	max-width: 720px;
+	margin: 0 auto;
+	background: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.bill-card h2 {
+	margin-top: 0;
+}
+
+.bill-row {
+	display: flex;
+	justify-content: space-between;
+	padding: 8px 0;
+	border-bottom: 1px dashed #eee;
+}
+
+@media print {
+	body * { visibility: hidden; }
+	.bill-card, .bill-card * { visibility: visible; }
+	.bill-card { position: absolute; left: 0; top: 0; width: 100%; }
+}
+
