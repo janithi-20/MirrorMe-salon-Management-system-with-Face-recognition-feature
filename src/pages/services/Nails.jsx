@@ -1,14 +1,19 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import nailsBg from './nails.jpg';
+import gelExpress from './nails image/gel colour express.jpg';
+import gelIndividual from './nails image/gel individual.jpg';
+import gelSoak from './nails image/gel nail soak off.jpg';
+import nailArt from './nails image/nail art rein stone-sticker.jpg';
+import normalColor from './nails image/normal colour.jpg';
 
-// Nail services (note: 'Gel Individual' provided twice; keeping one instance)
+// Nail services with images
 const services = [
-	{ id: 'gel-individual', service: 'Gel Individual', price: 900 },
-	{ id: 'gel-soak-off', service: 'Gel Nail Soak Off', price: 1700 },
-	{ id: 'normal-color', service: 'Normal Color', price: 1100 },
-	{ id: 'gel-color-express', service: 'Gel Color (Express Mani)', price: 2300 },
-	{ id: 'nail-art', service: 'Nail Art Rein Stone/Sticker/ Each', price: 180 }
+	{ id: 'gel-individual', service: 'Gel Individual', price: 900, img: gelIndividual },
+	{ id: 'gel-soak-off', service: 'Gel Nail Soak Off', price: 1700, img: gelSoak },
+	{ id: 'normal-color', service: 'Normal Color', price: 1100, img: normalColor },
+	{ id: 'gel-color-express', service: 'Gel Color (Express Mani)', price: 2300, img: gelExpress },
+	{ id: 'nail-art', service: 'Nail Art Rein Stone/Sticker/ Each', price: 1800, img: nailArt }
 ];
 
 function formatCurrency(v){
@@ -42,30 +47,17 @@ const Nails = () => {
 				<h2 style={{ marginTop: 0 }}>Nails</h2>
 				<p><strong>Care & Style:</strong> Choose a nail service and continue to book your appointment.</p>
 
-				<div style={{ marginTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: 560 }}>
-					{services.map(s => (
-						<button
-							key={s.id}
-							type="button"
-							onClick={() => goToBooking(s)}
-							className="nails-btn"
-							style={{
-								padding: '12px 16px',
-								borderRadius: 8,
-								border: '2px solid #ccc',
-								background: '#fff',
-								cursor: 'pointer',
-								textAlign: 'left',
-								fontSize: '.85rem',
-								lineHeight: 1.3,
-								boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
-							}}
-						>
-							<span style={{ display: 'block', fontWeight: 600 }}>{s.service}</span>
-							<span style={{ opacity: 0.7 }}>{formatCurrency(s.price)}</span>
-						</button>
-					))}
-				</div>
+					<div style={{ marginTop: '1.25rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14, maxWidth: 880 }}>
+						{services.map(s => (
+							<button key={s.id} type="button" onClick={() => goToBooking(s)} style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRadius: 10, border: '1px solid #e6e6e6', background: '#fff', cursor: 'pointer', boxShadow: '0 6px 18px rgba(0,0,0,0.06)' }}>
+								<div style={{ height: 140, backgroundImage: `url(${s.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+								<div style={{ padding: '12px 14px', textAlign: 'left' }}>
+									<div style={{ fontWeight: 700 }}>{s.service}</div>
+									<div style={{ marginTop: 6, color: '#666' }}>{formatCurrency(s.price)}</div>
+								</div>
+							</button>
+						))}
+					</div>
 
 				<div style={{ marginTop: 24 }}>
 					<Link to="/services" className="btn">Back to Services</Link>
