@@ -20,6 +20,7 @@ import Payment from './pages/payment/payment';
 import Bill from './pages/bill/bill';
 
 import Team from './pages/Team/Team';
+import Admin from './AdminPanel/Admin';
  
 
 
@@ -36,9 +37,10 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/bill" element={<Bill />} />
-  <Route path="/face-recognition" element={<FaceRecognition />} />
-  <Route path="/team" element={<Team />} />
-  <Route path="/Team" element={<Team />} />
+        <Route path="/face-recognition" element={<FaceRecognition />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/Team" element={<Team />} />
+        <Route path="/admin" element={<Admin />} />
 
         {/* Services */}
         <Route path="/services" element={<Services />} />
@@ -52,27 +54,6 @@ function App() {
     </BrowserRouter>
   );
 
-	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path="/" element={<Home />} />
-				<Route path="/login" element={<Login />} />
-				<Route path="/register" element={<Register />} />
-				<Route path="/booking" element={<Booking />} />
-				<Route path="/profile" element={<Profile />} />
-				<Route path="/payment" element={<Payment />} />
-				<Route path="/bill" element={<Bill />} />
-				<Route path="/face-recognition" element={<FaceRecognition />} />
-				<Route path="/services" element={<Services />} />
-				<Route path="/services/haircut" element={<Haircut />} />
-				<Route path="/services/skin-treatments" element={<SkinTreatments />} />
-				<Route path="/services/dressings" element={<Dressings />} />
-				<Route path="/services/nails" element={<Nails />} />
-				<Route path="/services/waxing" element={<Waxing />} />
-				<Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
-			</Routes>
-		</BrowserRouter>
-	);
 }
 
 export default App;

@@ -1,0 +1,341 @@
+/* Staff Management Section */
+.staff-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.staff-stat {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.stat-number {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #718096;
+  font-weight: 500;
+}
+
+.staff-management-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 25px;
+}
+
+.add-staff-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #d1842c;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-staff-btn:hover {
+  background: #b36f23;
+}
+
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 25px;
+}
+
+.staff-card {
+  background: white;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.staff-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.staff-display {
+  padding: 25px;
+}
+
+.staff-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.staff-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f1f5f9;
+}
+
+.staff-basic-info {
+  flex: 1;
+}
+
+.staff-basic-info h3 {
+  margin: 0 0 5px 0;
+  color: #2d3748;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.staff-position {
+  margin: 0 0 8px 0;
+  color: #718096;
+  font-weight: 500;
+}
+
+.edit-staff-btn {
+  background: transparent;
+  border: 1px solid #d1842c;
+  color: #d1842c;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-staff-btn:hover {
+  background: #d1842c;
+  color: white;
+}
+
+.staff-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.detail-icon {
+  color: #d1842c;
+  font-size: 16px;
+}
+
+.staff-salary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f7fafc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.salary-label {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.salary-amount {
+  font-weight: 700;
+  color: #059669;
+  font-size: 16px;
+}
+
+.staff-specialties {
+  margin-bottom: 15px;
+}
+
+.specialties-label {
+  display: block;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.specialties-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.specialty-tag {
+  background: #e2e8f0;
+  color: #4a5568;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.staff-join-date {
+  text-align: center;
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 12px;
+  color: #718096;
+}
+
+/* Edit Staff Form */
+.edit-staff-form {
+  padding: 25px;
+}
+
+.staff-image-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 14px;
+}
+
+.edit-input {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2d3748;
+  background: white;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: #d1842c;
+  box-shadow: 0 0 0 2px rgba(209, 132, 44, 0.1);
+}
+
+.specialties-section {
+  margin-bottom: 20px;
+}
+
+.specialties-section label {
+  display: block;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.save-btn {
+  background: #059669;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.save-btn:hover {
+  background: #047857;
+}
+
+.cancel-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #b91c1c;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.status-badge.inactive {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.status-badge.on-leave {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Section content styling */
+.section-content {
+  padding: 20px;
+}
+
+.section-content h2 {
+  margin: 0 0 24px 0;
+  color: #611605;
+  font-size: 24px;
+  font-weight: 600;
+}
