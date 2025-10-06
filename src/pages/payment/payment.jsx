@@ -47,7 +47,15 @@ const Payment = () => {
 						<form onSubmit={(e)=>{ e.preventDefault(); handleConfirm(); }} style={{ marginTop: 12 }}>
 							<div style={{ marginBottom: 14 }}>
 								<label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Bank Name</label>
-								<input required type="text" placeholder="e.g. HNB" style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid #bbb' }} />
+								<input list="bank-list" required type="text" placeholder="Select a bank" style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid #bbb' }} />
+								<datalist id="bank-list">
+									<option value="Hatton National Bank" />
+									<option value="Sampath Bank" />
+									<option value="Peoples Bank" />
+									<option value="Bank of Ceylon" />
+									<option value="National Savings Bank" />
+									<option value="Commercial Bank" />
+								</datalist>
 							</div>
 							<div style={{ marginBottom: 14 }}>
 								<label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Card Holder Name</label>

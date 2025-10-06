@@ -11,6 +11,7 @@ import Dressings from './pages/services/Dressings';
 import Nails from './pages/services/Nails';
 import Waxing from './pages/services/Waxing';
 import ManicurePedicure from './pages/services/ManicurePedicure';
+import BeautyConsultation from './pages/services/beautyconsultation';
 import Login from './login,signup/Login';
 import Register from './login,signup/Register';
 import Booking from './booking/Booking';
@@ -22,6 +23,7 @@ import Bill from './pages/bill/bill';
 import Team from './pages/Team/Team';
 import Admin from './AdminPanel/Admin';
  
+            <Route path="/services/consultations" element={<BeautyConsultation />} />
 
 
 function App() {
@@ -50,6 +52,7 @@ function App() {
         <Route path="/services/nails" element={<Nails />} />
         <Route path="/services/waxing" element={<Waxing />} />
         <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
+  <Route path="/services/consultations" element={<BeautyConsultation />} />
       </Routes>
     </BrowserRouter>
   );
