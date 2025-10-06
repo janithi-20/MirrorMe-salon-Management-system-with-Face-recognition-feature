@@ -21,6 +21,8 @@ import Payment from './pages/payment/payment';
 import Bill from './pages/bill/bill';
 
 import Team from './pages/Team/Team';
+import Admin from './AdminPanel/Admin';
+ 
             <Route path="/services/consultations" element={<BeautyConsultation />} />
 
 
@@ -37,9 +39,10 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/bill" element={<Bill />} />
-  <Route path="/face-recognition" element={<FaceRecognition />} />
-  <Route path="/team" element={<Team />} />
-  <Route path="/Team" element={<Team />} />
+        <Route path="/face-recognition" element={<FaceRecognition />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/Team" element={<Team />} />
+        <Route path="/admin" element={<Admin />} />
 
         {/* Services */}
         <Route path="/services" element={<Services />} />

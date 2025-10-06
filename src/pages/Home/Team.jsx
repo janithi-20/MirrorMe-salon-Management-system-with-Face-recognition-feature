@@ -4,12 +4,12 @@ import './Team.css';
 // Our Team section: image above name and specialization
 const Team = () => {
 	const members = [
-		{ name: 'Lewis Fernandiz', specialization: 'Hair Stylist', photo: '/Lewis.jpg' },
-		{ name: 'Angela Diano', specialization: 'Hair Stylist', photo: '/Angela.jpg' },
-		{ name: 'Kylie Nellina', specialization: 'Nail Artist', photo: '/Kylie.jpg' },
-		{ name: 'Shalini Neha', specialization: 'Massage Therapist', photo: '/Shalini.jpg' },
-		{ name: 'Ethan Kal', specialization: 'Color Specialist', photo: '/Ethan.jpg' },
-		{ name: 'Marie De Zoya', specialization: 'Skincare Specialist', photo: '/Marie.jpg' },
+		{ name: 'Lewis Fernandiz', specialization: 'Hair Stylist', experience: '5+ years experience', photo: '/Lewis.jpg' },
+		{ name: 'Angela Diano', specialization: 'Junior Hair Stylist', experience: '1+ years experience', photo: '/Angela.jpg' },
+		{ name: 'Kylie Nellina', specialization: 'Nail Artist', experience: '3 years experience', photo: '/Kylie.jpg' },
+		{ name: 'Shalini Neha', specialization: 'Massage Therapist', experience: '5 years experience', photo: '/Shalini.jpg' },
+		{ name: 'Ethan Kal', specialization: 'Color Specialist', experience: '5+ years experience', photo: '/Ethan.jpg' },
+		{ name: 'Marie De Zoya', specialization: 'Skincare Specialist', experience: '4+ years experience', photo: '/Marie.jpg' },
 	];
 
 	return (
@@ -23,6 +23,7 @@ const Team = () => {
 							<img className="member-photo" src={m.photo} alt={m.name} />
 							<h3>{m.name}</h3>
 							<p>{m.specialization}</p>
+							<p className="member-experience">{m.experience}</p>
 						</div>
 					))}
 				</div>
