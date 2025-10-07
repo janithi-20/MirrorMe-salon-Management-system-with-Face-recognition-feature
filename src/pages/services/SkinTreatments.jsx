@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import skinBg from './skin.jpg';
 import faceshaving from './skin images/faceshaving.jpg';
 import upperthreading from './skin images/upperthreading.jpg';
 import galvanic from './skin images/galvanic.webp';
@@ -36,10 +35,6 @@ const SkinTreatments = () => {
 
 	return (
 		<div style={{
-			backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${skinBg})`,
-			backgroundSize: 'cover',
-			backgroundPosition: 'center',
-			backgroundRepeat: 'no-repeat',
 			padding: '3.5rem 1rem'
 		}}>
 			<div className="service-page container" style={{ background: 'rgba(255,255,255,0.92)', padding: '2rem 1.75rem', borderRadius: 16, boxShadow: '0 6px 18px rgba(0,0,0,0.15)', maxWidth: 920 }}>

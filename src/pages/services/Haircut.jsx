@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import hairBg from './hair.jpg';
 import blowdryLong from './haircut images/blowdry long hair.jpg';
 import blowdryMedium from './haircut images/blowdry medium hair.jpg';
 import blowdryShort from './haircut images/blowdry short hair.jpg';
@@ -44,10 +43,6 @@ const Haircut = () => {
 	return (
 		<div
 			style={{
-				backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${hairBg})`,
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundRepeat: 'no-repeat',
 				padding: '3.5rem 1rem'
 			}}
 		>

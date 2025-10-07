@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import dressingBg from './dressing.jpg';
 import eyeLashes from './dressing & makeup/eye lashes.jpg';
-import fullDressing from './dressing & makeup/full dressing early morning.jpg';
+
 import fullDressingMac from './dressing & makeup/full dessing mac.jpg';
+import fullDressingEarly from './dressing & makeup/full dressing early morning.jpg';
 import fullDressingDerma from './dressing & makeup/full dressing derma.jpg';
 import mackupMac from './dressing & makeup/mackup mac.jpg';
 import makupDerma from './dressing & makeup/makup derma.jpg';
@@ -11,7 +11,7 @@ import hairstyleImg from './dressing & makeup/hairstyle.jpg';
 import saree from './dressing & makeup/saree drapping.jpg';
 
 const services = [
-    { id: 'full-early', service: 'Full Dressing (Early Morning)', price: 2500, img: fullDressing },
+    { id: 'full-early', service: 'Full Dressing (Early Morning)', price: 2500, img: fullDressingEarly },
     { id: 'full-derma', service: 'Full Dressing Derma', price: 6500, img: fullDressingDerma },
     { id: 'full-mac', service: 'Full Dressing Mac', price: 10300, img: fullDressingMac },
     { id: 'saree', service: 'Saree Draping', price: 2000, img: saree },
@@ -27,6 +27,7 @@ function formatCurrency(v){
 
 const Dressings = () => {
     const navigate = useNavigate();
+    const placeholder = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#f2f2f2"/></svg>');
 
     const goToBooking = (svc) => {
         const booking = {
@@ -40,10 +41,6 @@ const Dressings = () => {
 
     return (
         <div style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${dressingBg})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
             padding: '3.5rem 1rem'
         }}>
             <div className="service-page container" style={{ background: 'rgba(255,255,255,0.92)', padding: '2rem 1.75rem', borderRadius: 16, boxShadow: '0 6px 18px rgba(0,0,0,0.15)', maxWidth: 920 }}>
@@ -53,7 +50,7 @@ const Dressings = () => {
                 <div style={{ marginTop: '0.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
                     {services.map(s => (
                         <button key={s.id} type="button" onClick={() => goToBooking(s)} style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRadius: 10, border: '1px solid #e6e6e6', background: '#fff', cursor: 'pointer', boxShadow: '0 6px 18px rgba(0,0,0,0.06)' }}>
-                            <div style={{ height: 140, backgroundImage: `url(${s.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                            <img src={s.img || placeholder} alt={s.service} onError={(e) => { if (e.currentTarget.src !== placeholder) e.currentTarget.src = placeholder; }} style={{ height: 140, width: '100%', objectFit: 'cover' }} />
                             <div style={{ padding: '12px 14px', textAlign: 'left' }}>
                                 <div style={{ fontWeight: 700 }}>{s.service}</div>
                                 <div style={{ marginTop: 6, color: '#666' }}>{formatCurrency(s.price)}</div>

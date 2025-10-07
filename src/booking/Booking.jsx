@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import bgImg from './bg.jpg';
 import './Booking.css';
 
 // Booking page: only date/time and staff selection per user request
@@ -39,10 +38,6 @@ const Booking = () => {
 		<div
 			className="booking-page"
 			style={{
-				backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${bgImg})`,
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundAttachment: 'fixed',
 				minHeight: '100vh',
 				display: 'flex',
 				flexDirection: 'column'
