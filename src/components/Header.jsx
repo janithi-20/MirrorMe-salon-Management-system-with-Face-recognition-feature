@@ -28,10 +28,8 @@ const Header = () => {
             <li><Link to="/team">Our Team</Link></li>
             <li><a href="#brands">Brands</a></li>
             <li><a href="#contact">Contact</a></li>
-            
-            {/* Admin moved to Contact position */}
             <li><Link to="/admin">Admin Panel</Link></li>
-            {/* Book Now removed per request */}
+            
 
             <li>
               <Link to="/login" className="btn btn-icon btn-secondary" style={{ padding: '8px 12px' }}>
