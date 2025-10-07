@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import { FiEdit2, FiSave, FiX } from 'react-icons/fi';
+import { FiEdit2, FiSave, FiX, FiPlus } from 'react-icons/fi';
 import './serviceManage.css';
 
 const ServiceManagement = () => {
   const [editingService, setEditingService] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newService, setNewService] = useState({
+    service: '',
+    price: '',
+    category: ''
+  });
+  
   const [services, setServices] = useState([
     {
       name: 'Hair Cut & Styling',
@@ -78,9 +85,114 @@ const ServiceManagement = () => {
     }
   ]);
 
+  const handleAddService = () => {
+    if (newService.service && newService.price && newService.category) {
+      const categoryIndex = services.findIndex(service => service.name === newService.category);
+      
+      if (categoryIndex !== -1) {
+        
+        const newId = Date.now().toString(); 
+        const updatedServices = [...services];
+        updatedServices[categoryIndex].subServices.push({
+          id: newId,
+          service: newService.service,
+          price: parseInt(newService.price)
+        });
+        setServices(updatedServices);
+      } else if (newService.category !== 'new') {
+        const newCategory = {
+          name: newService.category,
+          subServices: [{
+            id: Date.now().toString(),
+            service: newService.service,
+            price: parseInt(newService.price)
+          }]
+        };
+        setServices([...services, newCategory]);
+      }
+      
+      
+      setNewService({ service: '', price: '', category: '' });
+      setShowAddForm(false);
+    }
+  };
+
+  const handleCancelAdd = () => {
+    setNewService({ service: '', price: '', category: '' });
+    setShowAddForm(false);
+  };
+
   return (
     <div className="section-content">
-      <h2>Services Management</h2>
+      <div className="services-header">
+        <h2>Services Management</h2>
+        <button 
+          className="add-service-btn" 
+          onClick={() => setShowAddForm(true)}
+        >
+          <FiPlus size={16} />
+          Add New Service
+        </button>
+      </div>
+      
+      {showAddForm && (
+        <div className="add-service-form">
+          <h3>Add New Service</h3>
+          <div className="form-row">
+            <input
+              type="text"
+              placeholder="Service Name"
+              value={newService.service}
+              onChange={(e) => setNewService({...newService, service: e.target.value})}
+              className="form-input"
+            />
+            <input
+              type="number"
+              placeholder="Price (Rs.)"
+              value={newService.price}
+              onChange={(e) => setNewService({...newService, price: e.target.value})}
+              className="form-input price-input"
+            />
+            <select
+              value={newService.category}
+              onChange={(e) => setNewService({...newService, category: e.target.value})}
+              className="form-input"
+            >
+              <option value="">Select Category</option>
+              {services.map((service, index) => (
+                <option key={index} value={service.name}>{service.name}</option>
+              ))}
+              <option value="new">Create New Category</option>
+            </select>
+            {newService.category === 'new' && (
+              <input
+                type="text"
+                placeholder="New Category Name"
+                value={newService.newCategory || ''}
+                onChange={(e) => setNewService({...newService, newCategory: e.target.value, category: e.target.value})}
+                className="form-input"
+              />
+            )}
+          </div>
+          <div className="form-actions">
+            <button 
+              className="save-service-btn" 
+              onClick={handleAddService}
+            >
+              <FiSave size={16} />
+              Add Service
+            </button>
+            <button 
+              className="cancel-service-btn" 
+              onClick={handleCancelAdd}
+            >
+              <FiX size={16} />
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+      
       <div className="services-container">
         {services.map((mainService, mainIndex) => (
           <div key={mainIndex} className="main-service-card">
