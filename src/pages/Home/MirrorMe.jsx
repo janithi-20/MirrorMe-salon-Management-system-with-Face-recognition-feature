@@ -10,18 +10,11 @@ const FaceRecognitionButton = () => (
 
 const MirrorMe = () => (
   <section className="hero">
-    {/* Background Video */}
-    <video
+    <photo
       className="hero-video"
-      src="/homepage.mp4"
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="auto"
-      aria-hidden="true"
+      src="/homepage.jpg"
     />
-    {/* Content */}
+
     <div className="container">
       <h1 className="hero-heading">
         Experience The Elegance Of<br />

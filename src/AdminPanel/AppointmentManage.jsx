@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FaCheck, FaTimes, FaTrash } from 'react-icons/fa';
 import './AppointmentManage.css';
 
 const AppointmentManagement = () => {
@@ -42,18 +41,6 @@ const AppointmentManagement = () => {
     },
     {
       id: 4,
-      dateTime: 'Oct 13, 2025 - 04:45 PM',
-      service: 'Luxury Pedicure-Massage Chair',
-      customer: 'Rajitha Silva',
-      status: 'cancelled',
-      provider: 'Kylie Nellina',
-      providerImage: '/Kylie.jpg',
-      advancePayment: 4000,
-      totalAmount: 8100,
-      paymentStatus: 'refunded'
-    },
-    {
-      id: 5,
       dateTime: 'Oct 12, 2025 - 09:00 AM',
       service: 'Spa Manicure',
       customer: 'Michael Fernando',
@@ -65,7 +52,7 @@ const AppointmentManagement = () => {
       paymentStatus: 'completed'
     },
     {
-      id: 6,
+      id: 5,
       dateTime: 'Oct 11, 2025 - 03:20 PM',
       service: 'Hair Wash & Blast Dry',
       customer: 'Sonali De Silva',
@@ -78,34 +65,20 @@ const AppointmentManagement = () => {
     }
   ]);
 
-  // Appointment management handlers
-  const handleAcceptAppointment = (appointmentId) => {
+  const handlePaymentReceived = (appointmentId) => {
     setAppointments(prevAppointments =>
       prevAppointments.map(appointment =>
         appointment.id === appointmentId
-          ? { ...appointment, status: 'confirmed' }
+          ? { 
+              ...appointment, 
+              paymentStatus: 'completed',
+              status: 'completed'
+            }
           : appointment
       )
     );
   };
 
-  const handleDeclineAppointment = (appointmentId) => {
-    setAppointments(prevAppointments =>
-      prevAppointments.map(appointment =>
-        appointment.id === appointmentId
-          ? { ...appointment, status: 'cancelled' }
-          : appointment
-      )
-    );
-  };
-
-  const handleDeleteAppointment = (appointmentId) => {
-    setAppointments(prevAppointments =>
-      prevAppointments.filter(appointment => appointment.id !== appointmentId)
-    );
-  };
-
-  // Calculate summary statistics
   const totalAppointments = appointments.length;
   const completedAppointments = appointments.filter(app => app.status === 'completed').length;
   const confirmedAppointments = appointments.filter(app => app.status === 'confirmed').length;
@@ -163,31 +136,12 @@ const AppointmentManagement = () => {
               </span>
             </div>
             <div className="grid-cell appointment-actions">
-              {appointment.status === 'pending' && (
-                <>
-                  <button 
-                    className="accept-appointment-btn"
-                    onClick={() => handleAcceptAppointment(appointment.id)}
-                  >
-                    <FaCheck />
-                    Accept
-                  </button>
-                  <button 
-                    className="decline-appointment-btn"
-                    onClick={() => handleDeclineAppointment(appointment.id)}
-                  >
-                    <FaTimes />
-                    Decline
-                  </button>
-                </>
-              )}
-              {appointment.status !== 'pending' && (
+              {appointment.paymentStatus === 'pending' && (
                 <button 
-                  className="delete-appointment-btn"
-                  onClick={() => handleDeleteAppointment(appointment.id)}
+                  className="payment-received-btn"
+                  onClick={() => handlePaymentReceived(appointment.id)}
                 >
-                  <FaTrash />
-                  Delete
+                  Payment Received
                 </button>
               )}
             </div>

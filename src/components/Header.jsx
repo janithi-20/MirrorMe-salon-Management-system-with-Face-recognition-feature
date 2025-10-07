@@ -7,7 +7,10 @@ const Header = () => {
   return (
     <header className="site-header">
       <div className="container header-container">
-        <Link to="/" className="logo">Mirror Me</Link>
+        <Link to="/" className="logo">
+          <img src="/salon logo.jpg" alt="Salon Logo" className="logo-img" />
+          Mirror Me
+        </Link>
 
         <nav>
           <ul className="nav-list">
