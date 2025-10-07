@@ -2,7 +2,6 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import billBg from './bill.jpg';
 
 // Bill page expects booking details passed from payment (or booking) in location.state.booking
 // Since customer name was previously removed from booking form, we'll fallback to a placeholder if absent.
@@ -39,10 +38,6 @@ const Bill = () => {
 				<div
 					style={{
 						minHeight: '100%',
-						backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${billBg})`,
-						backgroundSize: 'cover',
-						backgroundPosition: 'center',
-						backgroundRepeat: 'no-repeat',
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'center',

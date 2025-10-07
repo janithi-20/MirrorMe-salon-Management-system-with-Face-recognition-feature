@@ -2,7 +2,6 @@ import React from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import paymentBg from './payment.jpg';
 
 const Payment = () => {
 	const navigate = useNavigate();
@@ -20,10 +19,6 @@ const Payment = () => {
 				<div
 					style={{
 						minHeight: '100%',
-						backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${paymentBg})`,
-						backgroundSize: 'cover',
-						backgroundPosition: 'center',
-						backgroundRepeat: 'no-repeat',
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'center',
