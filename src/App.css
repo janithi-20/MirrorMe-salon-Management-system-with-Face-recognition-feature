@@ -831,4 +831,61 @@ body .login-container::before {
   .face-recognition-section h2 {
     font-size: 1.5rem;
   }
+}recognition-section {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.face-recognition-section h2 {
+  margin-bottom: 15px;
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.face-recognition-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Changed from center to flex-start */
+  gap: 10px;
+  background: linear-gradient(145deg, #f3f5f4, #fdfdfc);
+  color: rgb(11, 11, 11);
+  border: none;
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 700; /* Changed from 600 to 700 for bold */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(18, 140, 126, 0.3);
+  margin: 15px 0; /* Changed from auto to 0 to remove centering */
+  font-family: 'Poppins', sans-serif;
+  width: fit-content; /* Added to make button only as wide as content */
+}
+
+.face-recognition-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px #f3f3f2(18, 140, 126, 0.4);
+  background: linear-gradient(145deg, #f6f8f7, #fcfaf8);
+}
+
+.face-recognition-btn:active {
+  transform: translateY(0);
+}
+
+.face-recognition-btn .icon {
+  font-size: 20px;
+}
+
+/* Responsive adjustments for the face recognition button */
+@media (max-width: 768px) {
+  .face-recognition-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .face-recognition-section h2 {
+    font-size: 1.5rem;
+  }
 }

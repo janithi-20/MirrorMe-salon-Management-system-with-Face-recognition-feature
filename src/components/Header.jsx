@@ -23,9 +23,7 @@ const Header = () => {
             <li><a href="#feedback">Feedback</a></li>
             <li><a href="#brands">Brands</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li>
-              <Link to="/booking" className="btn btn-secondary">Book Now</Link>
-            </li>
+            {/* Book Now removed per request */}
 
             <li className="login-dropdown">
               <button
