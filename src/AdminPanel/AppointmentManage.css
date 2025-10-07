@@ -1,0 +1,468 @@
+/* Appointments Section */
+.appointment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.appointment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.appointment-date {
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.appointment-details {
+  flex: 1;
+}
+
+.appointment-details h4 {
+  color: #2d3748;
+  font-size: 16px;
+  margin: 0 0 4px 0;
+}
+
+.appointment-details p {
+  color: #718096;
+  font-size: 14px;
+  margin: 0;
+}
+
+.appointment-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.appointment-status.completed {
+  background-color: #c6f6d5;
+  color: #2f855a;
+}
+
+.appointment-status.pending {
+  background-color: #feebc8;
+  color: #c05621;
+}
+
+/* Appointments Grid Styles */
+.appointments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.appointments-header h2 {
+  margin: 0;
+  color: #611605;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.new-appointment-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #39044d;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.new-appointment-btn:hover {
+  background: #4c51bf;
+  transform: translateY(-1px);
+}
+
+.appointments-grid {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+}
+
+.grid-header {
+  display: grid;
+  grid-template-columns: 180px 200px 120px 150px 140px 120px 140px;
+  background: #f7fafc;
+  border-bottom: 2px solid #e2e8f0;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.header-cell {
+  padding: 16px 12px;
+  border-right: 1px solid #e2e8f0;
+}
+
+.header-cell:last-child {
+  border-right: none;
+}
+
+.grid-row {
+  display: grid;
+  grid-template-columns: 180px 190px 100px 140px 130px 110px 140px;
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 0.2s ease;
+  background-color: white;
+}
+
+.grid-row:hover {
+  background-color: white;
+}
+
+.grid-row:last-child {
+  border-bottom: none;
+}
+
+.grid-cell {
+  padding: 16px 12px;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #2d3748;
+  background-color: white;
+}
+
+.grid-cell:last-child {
+  border-right: none;
+}
+
+.date-time .date {
+  color: #4a5568;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.service-info {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.service-name {
+  color: #2d3748;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.customer-name {
+  color: #718096;
+  font-size: 12px;
+}
+
+.status {
+  justify-content: center;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.completed {
+  background-color: #c6f6d5;
+  color: #2f855a;
+}
+
+.status-badge.confirmed {
+  background-color: #bee3f8;
+  color: #2b6cb0;
+}
+
+.status-badge.no-show {
+  background-color: #fed7d7;
+  color: #c53030;
+}
+
+.status-badge.cancelled {
+  background-color: #fbb6ce;
+  color: #b83280;
+}
+
+.provider-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.provider-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2e8f0;
+}
+
+.payment-info {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.advance-amount {
+  color: #2d3748;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.total-amount {
+  color: #718096;
+  font-size: 11px;
+}
+
+.payment-status {
+  justify-content: center;
+}
+
+.payment-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.payment-badge.completed {
+  background-color: #c6f6d5;
+  color: #2f855a;
+}
+
+.payment-badge.pending {
+  background-color: #feebc8;
+  color: #c05621;
+}
+
+.payment-badge.refunded {
+  background-color: #e2e8f0;
+  color: #4a5568;
+}
+
+/* Appointment Actions */
+.appointment-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.accept-appointment-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.accept-appointment-btn:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.decline-appointment-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.decline-appointment-btn:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}
+
+.delete-appointment-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.delete-appointment-btn:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.payment-received-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #059669;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.payment-received-btn:hover {
+  background: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(5, 150, 105, 0.3);
+}
+
+.appointments-summary {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-label {
+  color: #718096;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  color: #2d3748;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Responsive for appointments grid */
+@media (max-width: 1200px) {
+  .grid-header,
+  .grid-row {
+    grid-template-columns: 160px 180px 160px 130px 130px 130px 120px;
+  }
+  
+  .service-name {
+    font-size: 13px;
+  }
+  
+  .provider-avatar {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .appointment-actions {
+    gap: 4px;
+  }
+  
+  .accept-appointment-btn,
+  .delete-appointment-btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .appointments-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .grid-header,
+  .grid-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .grid-cell {
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+    justify-content: space-between;
+  }
+  
+  .grid-cell:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #4a5568;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  
+  .provider-info {
+    justify-content: flex-end;
+  }
+  
+  .status,
+  .payment-status,
+  .appointment-actions {
+    justify-content: flex-end;
+  }
+  
+  .summary-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}

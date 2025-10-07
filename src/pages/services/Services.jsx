@@ -10,6 +10,7 @@ import dressingImg from './dressing.jpg';
 import nailsImg from './nails.jpg';
 import manicureImg from './manicure.jpg';
 import waxingImg from './waxing.jpg';
+import consultImg from './consultation.jpg';
 
 const serviceCards = [
 	{ slug: 'haircut', title: 'Haircut & Styling', desc: 'Professional haircuts and trendy styles tailored to suit your personality and occasion.', image: hairImg },
@@ -18,6 +19,8 @@ const serviceCards = [
 	{ slug: 'nails', title: 'Nail Care', desc: 'Stylish nail grooming and creative designs that give your nails a perfect finish.', image: nailsImg },
 	{ slug: 'manicure-pedicure', title: 'Manicure & Pedicure', desc: 'Relaxing hand and foot care treatments for soft, clean, and polished results.', image: manicureImg },
 	{ slug: 'waxing', title: 'Waxing', desc: 'Smooth and silky skin with safe, hygienic, and gentle waxing services.', image: waxingImg }
+	 , { slug: 'consultations', title: 'Consultations', desc: 'Talk to our experts, ask questions about treatments, suitability & pricing.', image: consultImg }
+
 ];
 
 const Services = () => {

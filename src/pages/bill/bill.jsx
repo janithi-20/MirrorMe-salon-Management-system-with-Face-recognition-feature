@@ -2,7 +2,6 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import billBg from './bill.jpg';
 
 // Bill page expects booking details passed from payment (or booking) in location.state.booking
 // Since customer name was previously removed from booking form, we'll fallback to a placeholder if absent.
@@ -17,6 +16,21 @@ const Bill = () => {
 	const time = booking.time || '—';
 	const total = booking.subServicePrice || booking.total || 0;
 
+	const subject = encodeURIComponent('Your Salon Receipt');
+	const bodyLines = [
+		`Hello ${customerName},`,
+		'',
+		'Thank you for your visit. Here are your receipt details:',
+		`Service: ${service}`,
+		`Date: ${date}`,
+		`Time: ${time}`,
+		`Total: LKR ${Number(total).toLocaleString()}`,
+		'',
+		'Best regards,',
+		'Salon Team'
+	];
+	const mailtoHref = `mailto:?subject=${subject}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 			<Header />
@@ -24,10 +38,6 @@ const Bill = () => {
 				<div
 					style={{
 						minHeight: '100%',
-						backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${billBg})`,
-						backgroundSize: 'cover',
-						backgroundPosition: 'center',
-						backgroundRepeat: 'no-repeat',
 						display: 'flex',
 						alignItems: 'center',
 						justifyContent: 'center',
@@ -65,6 +75,13 @@ const Bill = () => {
 							>
 								Print / Download
 							</button>
+							<a
+								href={mailtoHref}
+								className="btn"
+								style={{ minWidth: 140, textDecoration: 'none', textAlign: 'center', lineHeight: 1.2 }}
+							>
+								Send Email
+							</a>
 						</div>
 					</div>
 				</div>
@@ -73,6 +90,16 @@ const Bill = () => {
 		</div>
 	);
 };
+
+	// Hide action buttons when printing
+	const printStyles = `@media print { .btn { display: none !important; } }`;
+
+	if (typeof document !== 'undefined' && !document.getElementById('bill-print-hide-buttons')) {
+		const styleTag = document.createElement('style');
+		styleTag.id = 'bill-print-hide-buttons';
+		styleTag.innerHTML = printStyles;
+		document.head.appendChild(styleTag);
+	}
 
 const Row = ({ label, value }) => (
 	<div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #e5e5e5' }}>
