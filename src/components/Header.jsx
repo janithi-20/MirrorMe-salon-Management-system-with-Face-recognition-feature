@@ -10,6 +10,9 @@ const Header = () => {
   return (
     <header className="site-header">
       <div className="container header-container">
+        <Link to="/" className="logo">
+          <img src="/salon logo.jpg" alt="Salon Logo" className="logo-img" />
+
         <Link to="/" className="logo" style={{ fontWeight: 700, fontSize: 20 }}>
           Mirror Me
         </Link>

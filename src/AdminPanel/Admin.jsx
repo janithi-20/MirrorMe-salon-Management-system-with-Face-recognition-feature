@@ -27,7 +27,6 @@ import './Admin.css';
     { title: 'Taken Services', value: '230 ', change: '+8%', color: '#f59e0b', icon: FiScissors },
   ];
 
-  // Enhanced analytics data
   const bookingTrend = [
     { day: 'Mon', newClients: 12, returningClients: 8 },
     { day: 'Tue', newClients: 15, returningClients: 12 },
@@ -104,9 +103,9 @@ import './Admin.css';
               })}
             </div>
 
-            {/* Charts and Analytics Row */}
+            
             <div className="analytics-row">
-              {/* Booking Trend Chart */}
+              
               <div className="chart-card">
                 <div className="chart-header">
                   <h3>Booking Overview</h3>
@@ -219,10 +218,10 @@ import './Admin.css';
                 </div>
                 <div className="status-bar-container">
                   <div className="status-bar">
-                    <div className="status-segment booked" style={{ width: `${(bookingStatus.booked / 156) * 100}%` }}></div>
-                    <div className="status-segment confirmed" style={{ width: `${(bookingStatus.confirmed / 156) * 100}%` }}></div>
-                    <div className="status-segment done" style={{ width: `${(bookingStatus.done / 156) * 100}%` }}></div>
-                    <div className="status-segment cancelled" style={{ width: `${(bookingStatus.cancelled / 156) * 100}%` }}></div>
+                    <div className="status-segment booked" style={{ width: `{(bookingStatus.booked / 156) * 100}%` }}></div>
+                    <div className="status-segment confirmed" style={{ width: `{(bookingStatus.confirmed / 156) * 100}%` }}></div>
+                    <div className="status-segment done" style={{ width: `{(bookingStatus.done / 156) * 100}%` }}></div>
+                    <div className="status-segment cancelled" style={{ width: `{(bookingStatus.cancelled / 156) * 100}%` }}></div>
                   </div>
                   <div className="status-legend">
                     <div className="status-legend-item">
