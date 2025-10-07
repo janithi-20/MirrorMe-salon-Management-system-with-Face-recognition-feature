@@ -1,20 +1,23 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiLogIn } from 'react-icons/fi';
 import '../App.css';
 
 const Header = () => {
-  const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
-
+  // single admin panel link (no dropdown)
   return (
     <header className="site-header">
       <div className="container header-container">
-        <Link to="/" className="logo">
-          <img src="/salon logo.jpg" alt="Salon Logo" className="logo-img" />
-
-        <Link to="/" className="logo" style={{ fontWeight: 700, fontSize: 20 }}>
-          Mirror Me
+        <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <img
+            src="/salon logo.jpg"
+            alt="Salon Logo"
+            className="logo-img"
+            style={{ height: 40, objectFit: 'contain' }}
+            onError={(e) => { e.target.style.display = 'none'; }}
+          />
+          <span style={{ fontWeight: 700, fontSize: 20, color: '#fff' }}>Mirror Me</span>
         </Link>
 
         <nav>
@@ -23,25 +26,20 @@ const Header = () => {
             <li><Link to="/services">Services</Link></li>
             <li><a href="#about">About</a></li>
             <li><Link to="/team">Our Team</Link></li>
-            <li><a href="#feedback">Feedback</a></li>
             <li><a href="#brands">Brands</a></li>
             <li><a href="#contact">Contact</a></li>
+
+            <li><Link to="/admin">Admin Panel</Link></li>
+            
+
             {/* Book Now removed per request */}
 
-            <li className="login-dropdown">
-              <button
-                className="btn btn-icon dropdown-toggle"
-                onClick={() => setIsLoginDropdownOpen(!isLoginDropdownOpen)}
-              >
+
+            <li>
+              <Link to="/login" className="btn btn-icon btn-secondary" style={{ padding: '8px 12px' }}>
                 <FiLogIn style={{ verticalAlign: 'middle', marginRight: 6 }} />
                 Login
-              </button>
-              {isLoginDropdownOpen && (
-                <div className="dropdown-menu">
-                  <Link to="/login" className="dropdown-item">Admin</Link>
-                  <Link to="/login" className="dropdown-item">Customer</Link>
-                </div>
-              )}
+              </Link>
             </li>
           </ul>
         </nav>
@@ -51,4 +49,3 @@ const Header = () => {
 };
 
 export default Header;
-/* eslint-enable */
