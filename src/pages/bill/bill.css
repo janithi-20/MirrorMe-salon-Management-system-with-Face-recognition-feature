@@ -1,11 +1,9 @@
-/* Basic bill styles */
 .bill-container {
 	padding: 3rem 0;
 }
 
-/* Ensure bill content sits below the fixed header when using page-content helper */
 .bill-container.page-content {
-  padding-top: 120px; /* larger top padding to avoid header overlap */
+  padding-top: 120px; 
 }
 
 .bill-card {

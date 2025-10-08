@@ -4,7 +4,6 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './Booking.css';
 
-// Booking page: only date/time and staff selection per user request
 const STAFF = [
 	'Any',
 	'Lewis Fernandiz',
@@ -18,7 +17,7 @@ const STAFF = [
 const Booking = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const incoming = location?.state?.booking || null; // keep if passed from previous page
+	const incoming = location?.state?.booking || null; 
 
 	const [datetime, setDatetime] = useState('');
 	const [staff, setStaff] = useState('Any');

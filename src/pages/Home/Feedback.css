@@ -9,10 +9,10 @@
 .team-card { background: #fff; padding: 28px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
 .team-text { font-style: italic; color: #4b5563; line-height: 1.6; margin-bottom: 18px; }
 .team-author { display: flex; align-items: center; gap: 12px; }
-.author-avatar { width: 52px; height: 52px; border-radius: 50%; background: #7c3aed; color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 20px; }
+.author-avatar { width: 52px; height: 52px; border-radius: 50%; background: #4f6285; color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 20px; }
 .author-details h4 { margin: 0; font-size: 18px; }
 .author-details p { margin: 6px 0 0; display: flex; gap: 3px; color: #374151; }
 
 .feedback-short { margin-top: 28px; display: flex; justify-content: center; }
-.feedback-btn { width: 100%; max-width: 1060px; height: 52px; border: 0; border-radius: 26px; background: #2f6fef; color: #fff; font-weight: 700; cursor: pointer; }
-.feedback-btn:hover { background: #285fd0; }
+.feedback-btn { width: 100%; max-width: 1060px; height: 52px; border: 0; border-radius: 26px; background: #A0522D; color: #fff; font-weight: 700; cursor: pointer; }
+.feedback-btn:hover { background: #A0522D; }

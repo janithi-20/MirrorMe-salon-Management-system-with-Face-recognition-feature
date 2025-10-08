@@ -8,8 +8,6 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically handle the registration logic
-    // For now, we'll just navigate to the email verification page
     navigate('/verify-email');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');

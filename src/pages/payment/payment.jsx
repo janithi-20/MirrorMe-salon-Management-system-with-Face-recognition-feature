@@ -37,7 +37,7 @@ const Payment = () => {
 						}}
 					>
 						<h2 style={{ marginTop: 0, textAlign: 'center', letterSpacing: '.5px' }}>Payment</h2>
-						{/* Booking summary intentionally removed per request */}
+						
 
 						<form onSubmit={(e)=>{ e.preventDefault(); handleConfirm(); }} style={{ marginTop: 12 }}>
 							<div style={{ marginBottom: 14 }}>
@@ -75,8 +75,6 @@ const Payment = () => {
 								<Link to="/booking" className="btn" style={{ background: '#666' }}>Back</Link>
 							</div>
 						</form>
-
-						{/* Action buttons moved into form */}
 					</div>
 				</div>
 			</main>

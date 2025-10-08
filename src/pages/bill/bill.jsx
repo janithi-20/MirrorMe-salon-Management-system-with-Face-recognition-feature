@@ -3,9 +3,6 @@ import { useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
-// Bill page expects booking details passed from payment (or booking) in location.state.booking
-// Since customer name was previously removed from booking form, we'll fallback to a placeholder if absent.
-
 const Bill = () => {
 	const location = useLocation();
 	const booking = location.state?.booking || {};
@@ -91,7 +88,6 @@ const Bill = () => {
 	);
 };
 
-	// Hide action buttons when printing
 	const printStyles = `@media print { .btn { display: none !important; } }`;
 
 	if (typeof document !== 'undefined' && !document.getElementById('bill-print-hide-buttons')) {
