@@ -4,6 +4,13 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you would typically handle the registration logic
+    // For now, we'll just navigate to the email verification page
+    navigate('/verify-email');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -95,6 +102,7 @@ const Register = () => {
     <div className="login-container">
       <h2>Sign up</h2>
       <form onSubmit={handleSubmit}>
+
         {error && (
           <div className="error-message" style={{ color: 'red', marginBottom: '10px', padding: '8px', backgroundColor: '#ffe6e6', borderRadius: '4px' }}>
             {error}
@@ -205,34 +213,6 @@ const Register = () => {
           {loading ? 'Signing up...' : 'Sign up'}
         </button>
 
-        {/* Add space between signup and OTP section */}
-        <div style={{ marginTop: "30px" }}>
-          <div style={{ display: "flex", gap: "20px", alignItems: "flex-end" }}>
-            <div className="form-group" style={{ flex: "1" }}>
-              <div style={{ position: "relative" }}>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Type OTP"
-                  required
-                  style={{ width: "100%" }}
-                />
-              </div>
-            </div>
-            <button
-              type="submit"
-              className="btn"
-              style={{
-                width: "auto",
-                padding: "10px 20px",
-                minWidth: "100px",
-                height: "40px",
-                marginBottom: "15px",
-              }}
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
         <p style={{ textAlign: "center", marginTop: 12 }}>
           Have an Account?{" "}
           <Link to="/login" className="register-link">
