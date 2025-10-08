@@ -9,7 +9,7 @@ const FaceRecognitionButton = () => (
 );
 
 const MirrorMe = () => (
-  <section className="hero">
+  <section id="about" className="hero">
     <photo
       className="hero-video"
       src="/homepage.jpg"

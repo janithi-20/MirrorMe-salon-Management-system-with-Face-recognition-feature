@@ -10,7 +10,6 @@ import fringeCut from './haircut images/fringe cut.jpg';
 import hairWash from './haircut images/hair wash.jpg';
 import trimImg from './haircut images/trim.jpg';
 
-// Haircut & Styling sub-services (as requested)
 const services = [
 	{ id: 'adv-restyle', service: 'Cut & Re-Style (Advance)', price: 4000, img: advRestyle },
 	{ id: 'fringe', service: 'Fringe Cut', price: 1000, img: fringeCut },

@@ -163,7 +163,6 @@
   color: #f57c00;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .profile-page {
     padding: 80px 15px 40px;
