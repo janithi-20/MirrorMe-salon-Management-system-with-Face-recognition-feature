@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Page-level components
 import Home from './pages/Home/Home';
 import Services from './pages/services/Services';
 import Haircut from './pages/services/Haircut';
@@ -44,8 +43,6 @@ function App() {
         <Route path="/team" element={<Team />} />
         <Route path="/Team" element={<Team />} />
         <Route path="/admin" element={<Admin />} />
-
-        {/* Services */}
         <Route path="/services" element={<Services />} />
         <Route path="/services/haircut" element={<Haircut />} />
         <Route path="/services/skin-treatments" element={<SkinTreatments />} />
