@@ -8,7 +8,6 @@ import spaMani from './manicure pedicure/spa manicure.jpg';
 import spaPedi from './manicure pedicure/spa pedicure.jpg';
 import soakUpPedi from './manicure pedicure/soak up pedicure.jpg';
 
-// Manicure & Pedicure sub-services with images
 const services = [
 	{ id: 'luxury-pedi', service: 'Luxury Pedicure - Massage Chair', price: 8100, img: luxuryPedi },
 	{ id: 'premium-pedi', service: 'Premium Pedicure', price: 6800, img: premiumPedi },
