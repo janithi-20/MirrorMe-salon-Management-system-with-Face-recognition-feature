@@ -1,0 +1,10 @@
+
+.notification-page { padding: 40px 0; }
+.notification-list { display: flex; flex-direction: column; gap: 12px; max-width: 760px; margin-top: 16px; }
+.notification-card { background: #fff; padding: 14px 16px; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+.notification-title { font-weight: 700; color: #2e120e; margin-bottom: 6px; }
+.notification-message { color: #444; font-size: 14px; }
+.notification-booking { border-left: 4px solid #2e8b57; }
+.notification-register { border-left: 4px solid #d1842c; }
+.notification-feedback { border-left: 4px solid #4e8bd1; }
+
