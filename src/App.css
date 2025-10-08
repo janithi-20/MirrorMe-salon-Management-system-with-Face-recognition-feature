@@ -199,6 +199,62 @@ nav ul li a:hover {
   color: #f0c07a;
 }
 
+/* Notification Bell */
+.nav-notification .bell-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 6px;
+  position: relative;
+}
+
+.nav-notification .bell-btn:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.bell-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #ff3b30;
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.bell-dropdown {
+  position: absolute;
+  right: 0;
+  top: 44px;
+  width: 260px;
+  background: #fff;
+  color: #222;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 200;
+}
+
+.bell-dropdown-header {
+  padding: 10px 14px;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.bell-list { list-style: none; margin: 0; padding: 0; }
+.bell-item { padding: 10px 14px; font-size: 14px; border-bottom: 1px solid rgba(0,0,0,0.04); }
+.bell-item:last-child { border-bottom: none; }
+.bell-footer { padding: 10px 14px; text-align: center; }
+.bell-footer a { color: #d1842c; font-weight: 600; text-decoration: none; }
+
 /* Hero Section */
 .hero {
   

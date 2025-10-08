@@ -1,11 +1,13 @@
 /* eslint-disable */
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FiLogIn } from 'react-icons/fi';
+import { Link, useNavigate } from 'react-router-dom';
+import { FiLogIn, FiBell } from 'react-icons/fi';
 import '../App.css';
 
 const Header = () => {
   // single admin panel link (no dropdown)
+  const navigate = useNavigate();
+
   return (
     <header className="site-header">
       <div className="container header-container">
@@ -40,6 +42,19 @@ const Header = () => {
                 <FiLogIn style={{ verticalAlign: 'middle', marginRight: 6 }} />
                 Login
               </Link>
+            </li>
+            {/* Notification bell */}
+            <li className="nav-notification">
+              <div className="bell-wrapper" style={{ position: 'relative' }}>
+                <button
+                  className="bell-btn"
+                  onClick={() => navigate('/notifications')}
+                  aria-label="Notifications"
+                >
+                  <FiBell size={20} />
+                  <span className="bell-badge">3</span>
+                </button>
+              </div>
             </li>
           </ul>
         </nav>
