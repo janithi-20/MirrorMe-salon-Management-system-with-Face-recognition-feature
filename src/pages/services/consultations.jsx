@@ -9,7 +9,7 @@ const Consultation = () => {
 	const [name, setName] = useState('');
 	const [message, setMessage] = useState('');
 
-	const PHONE = 'YOUR_PHONE_NUMBER'; // replace with phone in international format without +, e.g. 94123456789
+	const PHONE = 'YOUR_PHONE_NUMBER'; 
 
 	const sendWhatsApp = () => {
 		const text = encodeURIComponent(`Hi, I want a consultation. Name: ${name || ''} - ${message || ''}`);
@@ -18,7 +18,6 @@ const Consultation = () => {
 
 	const submitForm = (e) => {
 		e.preventDefault();
-		// For now we just open WhatsApp with the message; replace with API call if backend connected
 		sendWhatsApp();
 	};
 

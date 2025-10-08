@@ -16,8 +16,6 @@ const BeautyConsultation = () => {
 	}, []);
 
 	const sendWhatsApp = () => {
-		// Open the team's WhatsApp message link. We don't include or display any phone numbers here;
-		// registration/back-end already captures customer phone numbers.
 		window.open('https://wa.me/message/3LSVU3W662P2D1', '_blank', 'noopener,noreferrer');
 		setOpen(false);
 	};

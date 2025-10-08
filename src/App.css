@@ -18,7 +18,8 @@ body {
 }
 
 html {
-  scroll-padding-top: 90px; 
+  scroll-padding-top: 90px;
+  scroll-behavior: smooth;
 }
 
 .container {
@@ -94,7 +95,6 @@ html {
   color: #fff;
 }
 
-/* Header Styles */
 header {
   background: linear-gradient(135deg, #2e120e 0%, #3a1a15 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -170,7 +170,25 @@ nav ul li a:hover {
   color: #f0f0f0;
 }
 
-/* Header Login Button - Brownish Yellow Theme */
+.nav-link-btn {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #fff;
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+}
+
+.nav-link-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f0f0f0;
+}
+
 nav ul li .btn {
   background: linear-gradient(135deg, #211203 0%, #4e2a0a 100%);
   color: #fff;
@@ -199,7 +217,6 @@ nav ul li a:hover {
   color: #f0c07a;
 }
 
-/* Notification Bell */
 .nav-notification .bell-btn {
   background: transparent;
   border: none;
@@ -255,7 +272,6 @@ nav ul li a:hover {
 .bell-footer { padding: 10px 14px; text-align: center; }
 .bell-footer a { color: #d1842c; font-weight: 600; text-decoration: none; }
 
-/* Hero Section */
 .hero {
   
   background-image: url("./../public/homepage.jpg");
@@ -308,7 +324,6 @@ nav ul li a:hover {
   box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2);
 }
 
-/* Features Section */
 .features {
   padding: 100px 0;
   background: #fff;
@@ -353,7 +368,6 @@ nav ul li a:hover {
 
 
 
-/* Services Page Styles */
 .services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -386,14 +400,13 @@ nav ul li a:hover {
   font-size: 14px;
 }
 
-/* Make service-card buttons brown specifically */
 .service-card .btn {
-  background: #d1842c; /* brown/orange */
+  background: #d1842c; 
   color: #fff;
 }
 
 .service-card .btn:hover {
-  background: #b36f23; /* darker brown on hover */
+  background: #b36f23; 
   transform: translateY(-2px);
 }
 
@@ -410,7 +423,6 @@ nav ul li a:hover {
 }
  
 
-/* Service price table */
 .service-table {
   width: 100%;
   border-collapse: collapse;
@@ -421,9 +433,8 @@ nav ul li a:hover {
 }
 
 .service-table thead {
-  /* brown to light gradient for table headers */
   background: linear-gradient(90deg, #d1842c 0%, #f3e3d2 100%);
-  color: #3b2a20; /* darker brown text for readability on the light end */
+  color: #3b2a20; 
 }
 
 .service-table th,
@@ -433,7 +444,6 @@ nav ul li a:hover {
   text-align: left;
 }
 
-/* Right-align the price column (assumed second column) */
 .service-table td:nth-child(2),
 .service-table th:nth-child(2) {
   text-align: right;
@@ -495,7 +505,7 @@ nav ul li a:hover {
 .member-photo {
   width: 300px;
   height: 300px;
-  object-fit: cover;   /* crop/cover behavior */
+  object-fit: cover;   
   
   display: block;
   margin: 0 auto 12px;
@@ -510,7 +520,6 @@ nav ul li a:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-/* Team Section */
 .Team {
   padding: 100px 0;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
@@ -529,7 +538,6 @@ nav ul li a:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Brands section */
 .brands {
   padding: 80px 0;
   background: #fff;
@@ -569,7 +577,6 @@ nav ul li a:hover {
   align-items: center;
 }
 
-/* Short centered feedback button under team */
 .feedback-short {
   display: flex;
   justify-content: center;
@@ -641,7 +648,6 @@ nav ul li a:hover {
   font-size: 14px;
 }
 
-/* CTA Section */
 .cta {
   padding: 100px 0;
   background: #8a5ce6;
@@ -669,7 +675,6 @@ nav ul li a:hover {
   background: #f5f5f5;
 }
 
-/* Footer */
 footer {
   background: #333;
   color: #fff;
@@ -747,7 +752,6 @@ footer {
   }
 }
 
-/* Background Image for home Section */
 .hero {
   
   background-image: url("./../public/homepage.jpg");
@@ -759,7 +763,6 @@ footer {
 }
 
 
-/* Login Page */
 .login-container {
   max-width: 400px;
   margin: 50px auto;
@@ -821,7 +824,6 @@ footer {
   text-decoration: underline;
 }
 
-/* login page background: place image behind the page */
 body .login-container::before {
   content: "";
   position: fixed;
@@ -873,7 +875,6 @@ body .login-container::before {
   text-decoration: underline;
 }
 
-/* Register Page  */
 .register-page {
   padding: 80px 20px;
 }
@@ -1007,7 +1008,7 @@ body .login-container::before {
 .face-recognition-btn {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Changed from center to flex-start */
+  justify-content: flex-start; 
   gap: 10px;
   background: linear-gradient(145deg, #f3f5f4, #fdfdfc);
   color: rgb(11, 11, 11);
@@ -1015,13 +1016,13 @@ body .login-container::before {
   border-radius: 50px;
   padding: 12px 24px;
   font-size: 16px;
-  font-weight: 700; /* Changed from 600 to 700 for bold */
+  font-weight: 700; 
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(18, 140, 126, 0.3);
-  margin: 15px 0; /* Changed from auto to 0 to remove centering */
+  margin: 15px 0; 
   font-family: 'Poppins', sans-serif;
-  width: fit-content; /* Added to make button only as wide as content */
+  width: fit-content; 
 }
 
 .face-recognition-btn:hover {
@@ -1038,7 +1039,6 @@ body .login-container::before {
   font-size: 20px;
 }
 
-/* Responsive adjustments for the face recognition button */
 @media (max-width: 768px) {
   .face-recognition-btn {
     padding: 10px 20px;

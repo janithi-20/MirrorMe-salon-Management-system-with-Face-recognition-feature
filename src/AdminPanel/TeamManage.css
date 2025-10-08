@@ -1,4 +1,3 @@
-/* Staff Management Section */
 .staff-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -202,7 +201,6 @@
   color: #718096;
 }
 
-/* Edit Staff Form */
 .edit-staff-form {
   padding: 25px;
 }
@@ -301,7 +299,6 @@
   background: #b91c1c;
 }
 
-/* Status badges */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -328,7 +325,6 @@
   color: #92400e;
 }
 
-/* Section content styling */
 .section-content {
   padding: 20px;
 }
