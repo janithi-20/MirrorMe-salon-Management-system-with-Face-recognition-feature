@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className="site-footer" id="contact">
       <div className="container">
         <div className="footer-content" style={{gap: "100px" }}>
-          <div className="footer-column">
+          <div className="footer-column" id="about">
             <h3>About Us</h3>
             <p style={{ textAlign: "justify" }}>
               Mirror Me Salon is dedicated to bringing out the elegance in every client.

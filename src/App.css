@@ -838,6 +838,37 @@ body .login-container::before {
   z-index: -1;
 }
 
+/* Forgot Password specific styles */
+.forgot-password-container {
+  margin-top: 80px;
+}
+
+.forgot-password-container h2 {
+  color: #601207;
+  margin-bottom: 10px;
+}
+
+/* Verify Email specific styles */
+.verify-email-container {
+  margin-top: 80px;
+}
+
+.verify-email-container h2 {
+  color: #601207;
+  margin-bottom: 15px;
+}
+
+.verify-email-container .otp-input {
+  text-align: center;
+  font-size: 18px;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.verify-email-container .message {
+  font-style: italic;
+}
+
 
 .login-container .btn {
   background: #601207; 
