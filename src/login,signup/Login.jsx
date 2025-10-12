@@ -16,10 +16,11 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/customers/login', {
+      const response = await fetch('/customers/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
           email,
@@ -37,6 +38,9 @@ const Login = () => {
         if (data.customer) {
           localStorage.setItem('customer', JSON.stringify(data.customer));
         }
+        
+        // Trigger a custom event to notify header about login
+        window.dispatchEvent(new Event('userLoggedIn'));
         
         // Redirect to home page after successful login
         navigate('/');

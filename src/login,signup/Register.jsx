@@ -4,13 +4,6 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here you would typically handle the registration logic
-    // For now, we'll just navigate to the email verification page
-    navigate('/verify-email');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -41,6 +34,41 @@ const Register = () => {
     setError('');
     setSuccess('');
 
+    // Validate all required fields
+    if (!firstName.trim()) {
+      setError('First name is required.');
+      return;
+    }
+    if (!lastName.trim()) {
+      setError('Last name is required.');
+      return;
+    }
+    if (!email.trim()) {
+      setError('Email is required.');
+      return;
+    }
+    if (!phoneNumber.trim()) {
+      setError('Phone number is required.');
+      return;
+    }
+    if (!password) {
+      setError('Password is required.');
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    // Phone number validation
+    if (phoneNumber.length < 10) {
+      setError('Phone number must be at least 10 digits.');
+      return;
+    }
+
     // Validate password match
     if (password !== confirmPassword) {
       setError('Passwords do not match! Please make sure both passwords are the same.');
@@ -57,10 +85,13 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/customers/createCustomer', {
+      console.log('Attempting registration with data:', { firstName, lastName, email, phoneNumber });
+      
+      const response = await fetch('/customers/createCustomer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
           firstName,
@@ -71,28 +102,57 @@ const Register = () => {
         }),
       });
 
+      console.log('Response status:', response.status);
+      
       const data = await response.json();
+      console.log('Response data:', data);
 
       if (response.ok) {
-        setSuccess('Registration successful! Redirecting to login...');
-        // Clear form
-        setFirstName('');
-        setLastName('');
-        setPhoneNumber('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
+        setSuccess('Registration successful! Redirecting to email verification...');
         
-        // Redirect to login after 2 seconds
+        // Store customerId and email in session storage for verification
+        sessionStorage.setItem('customerId', data.customerId);
+        sessionStorage.setItem('registeredEmail', email);
+        sessionStorage.setItem('registrationMessage', data.message || 'Please check your email for the verification code.');
+        
+        console.log('Stored in session storage:', {
+          customerId: data.customerId,
+          email: email
+        });
+        
+        // Redirect to verify-email page after 2 seconds, passing customerId and email as state
         setTimeout(() => {
-          navigate('/login');
+          navigate('/verify-email', { 
+            state: { 
+              customerId: data.customerId,
+              email: email,
+              message: data.message || 'Please check your email for the verification code.'
+            } 
+          });
         }, 2000);
       } else {
-        setError(data.message || 'Registration failed. Please try again.');
+        console.error('Registration failed with status:', response.status, 'Data:', data);
+        
+        // Handle specific error cases
+        let errorMessage = 'Registration failed. Please try again.';
+        
+        if (data.message) {
+          errorMessage = data.message;
+        } else if (data.error) {
+          if (data.error.includes('duplicate key') && data.error.includes('email')) {
+            errorMessage = 'This email address is already registered. Please use a different email or try logging in.';
+          } else if (data.error.includes('duplicate key')) {
+            errorMessage = 'Account already exists. Please try with different details.';
+          } else {
+            errorMessage = data.error;
+          }
+        }
+        
+        setError(errorMessage);
       }
     } catch (err) {
+      console.error('Registration network error:', err);
       setError('Unable to connect to server. Please make sure the backend is running on localhost:5000');
-      console.error('Registration error:', err);
     } finally {
       setLoading(false);
     }
@@ -104,12 +164,12 @@ const Register = () => {
       <form onSubmit={handleSubmit}>
 
         {error && (
-          <div className="error-message" style={{ color: 'red', marginBottom: '10px', padding: '8px', backgroundColor: '#ffe6e6', borderRadius: '4px' }}>
+          <div className="error-message" style={{ color: 'red', marginBottom: '10px', padding: '8px', backgroundColor: '#ffe6e6', borderRadius: '4px', fontSize: '14px' }}>
             {error}
           </div>
         )}
         {success && (
-          <div className="success-message" style={{ color: 'green', marginBottom: '10px', padding: '8px', backgroundColor: '#e6ffe6', borderRadius: '4px' }}>
+          <div className="success-message" style={{ color: 'green', marginBottom: '10px', padding: '8px', backgroundColor: '#e6ffe6', borderRadius: '4px', fontSize: '14px' }}>
             {success}
           </div>
         )}
