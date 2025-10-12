@@ -7,7 +7,6 @@ import halfArmsImg from './waxing/half arms.jpg';
 import classicFullLegsImg from './waxing/classic full legs.jpg';
 import classicFullArmsImg from './waxing/classic full arms.jpg';
 
-// Waxing sub-services list with images
 const services = [
 	{ id: 'full-body', service: 'Full Body', price: 5900, img: fullBodyImg },
 	{ id: 'stomach', service: 'Stomach', price: 950, img: stomachImg },

@@ -6,7 +6,6 @@ import Footer from '../../components/Footer';
 const Profile = () => {
   return (
     <div className="profile-page">
-      {/* Header at the top */}
       <Header />
       
       <div className="profile-container">
@@ -72,7 +71,6 @@ const Profile = () => {
         </div>
       </div>
       
-      {/* Footer at the bottom */}
       <Footer />
     </div>
   );

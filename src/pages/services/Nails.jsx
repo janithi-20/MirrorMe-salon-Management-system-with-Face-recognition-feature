@@ -6,7 +6,6 @@ import gelSoak from './nails image/gel nail soak off.jpg';
 import nailArt from './nails image/nail art rein stone-sticker.jpg';
 import normalColor from './nails image/normal colour.jpg';
 
-// Nail services with images
 const services = [
 	{ id: 'gel-individual', service: 'Gel Individual', price: 900, img: gelIndividual },
 	{ id: 'gel-soak-off', service: 'Gel Nail Soak Off', price: 1700, img: gelSoak },

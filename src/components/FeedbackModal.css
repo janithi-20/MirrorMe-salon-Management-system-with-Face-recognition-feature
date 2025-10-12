@@ -1,5 +1,5 @@
 .review-modal{width:640px;max-width:96vw;border-radius:6px;overflow:hidden;font-family:inherit}
-.review-header{display:flex;align-items:center;justify-content:space-between;background:#2b7be9;color:#fff;padding:18px 20px}
+.review-header{display:flex;align-items:center;justify-content:space-between;background:#a15905;color:#fff;padding:18px 20px}
 .review-header h3{margin:0;font-size:18px}
 .review-sub{font-size:13px;opacity:0.95}
 .review-avatar{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-weight:700}
@@ -14,6 +14,6 @@
 .name-input{width:100%;padding:10px;border:1px solid #e3e6ea;border-radius:4px}
 .review-actions{display:flex;justify-content:flex-end;gap:12px;padding:14px 18px;background:#fff}
 .btn-link{background:transparent;color:#94b5e3;border:none;padding:8px 12px;cursor:pointer;font-weight:700}
-.btn{background:#2b7be9;color:#fff;padding:10px 18px;border-radius:6px;border:none;cursor:pointer;font-weight:700}
+.btn{background:#A0522D;color:#fff;padding:10px 18px;border-radius:6px;border:none;cursor:pointer;font-weight:700}
 .btn[disabled]{opacity:0.45;cursor:not-allowed}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:2000}

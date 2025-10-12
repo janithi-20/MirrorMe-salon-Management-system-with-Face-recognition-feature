@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
-// Import images now co-located in services folder
 import skinImg from './skin.jpg';
 import hairImg from './hair.jpg';
 import dressingImg from './dressing.jpg';

@@ -35,7 +35,13 @@ const VerifyEmail = () => {
     };
   }, [isVerified]);
 
-  // Timer countdown effect
+  const [timeLeft, setTimeLeft] = useState(755); 
+  const [email] = useState('*******@peatix.com'); 
+
+  const [timeLeft, setTimeLeft] = useState(60); 
+  const [email] = useState('*******@gmail.com'); 
+
+
   useEffect(() => {
     if (timeLeft > 0 && !isVerified) {
       const timer = setTimeout(() => {
@@ -45,21 +51,18 @@ const VerifyEmail = () => {
     }
   }, [timeLeft, isVerified]);
 
-  // Format time as MM:SS
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  // Handle OTP input change
   const handleOtpChange = (index, value) => {
     if (value.length <= 1 && /^\d*$/.test(value)) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
 
-      // Auto-focus next input
       if (value && index < 5) {
         const nextInput = document.getElementById(`otp-${index + 1}`);
         if (nextInput) nextInput.focus();
@@ -67,14 +70,12 @@ const VerifyEmail = () => {
     }
   };
 
-  // Handle backspace to go to previous input
   const handleKeyDown = (index, e) => {
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
       const prevInput = document.getElementById(`otp-${index - 1}`);
       if (prevInput) prevInput.focus();
     }
   };
-
   // Handle verify button click
   const handleVerify = async () => {
     const otpString = otp.join('');
@@ -227,13 +228,24 @@ const VerifyEmail = () => {
     }
     
     // Focus first input
+  const handleVerify = () => {
+    const otpString = otp.join('');
+    if (otpString.length === 6) {
+      setIsVerified(true);
+    }
+  };
+
+  const handleResendCode = () => {
+    setOtp(['', '', '', '', '', '']);
+
+    setTimeLeft(755); 
+
+    setTimeLeft(60); 
     const firstInput = document.getElementById('otp-0');
     if (firstInput) firstInput.focus();
   };
 
-  // Handle change email
   const handleChangeEmail = () => {
-    // Navigate back to signup or show email change modal
     console.log('Change email clicked');
   };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import './Team.css';
 
-// Our Team section: image above name and specialization
 const Team = () => {
 	const members = [
 		{ name: 'Lewis Fernandiz', specialization: 'Hair Stylist', experience: '5+ years experience', photo: '/Lewis.jpg' },

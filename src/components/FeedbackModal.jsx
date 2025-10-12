@@ -10,6 +10,7 @@ const FeedbackModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+
   const handleSubmit = async () => {
     if (!name.trim() || !message.trim() || rating === 0) {
       alert('Please fill in all fields and provide a rating.');
@@ -56,6 +57,12 @@ const FeedbackModal = ({ isOpen, onClose }) => {
     } finally {
       setIsSubmitting(false);
     }
+  const handleSubmit = () => {
+    const payload = { name, message, rating };
+    console.log('Feedback submitted:', payload);
+    alert('Thank you for your feedback!');
+    onClose();
+
   };
 
   return (
