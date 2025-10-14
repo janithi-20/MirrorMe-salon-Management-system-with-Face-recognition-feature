@@ -8,152 +8,33 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Here you would typically handle the registration logic
+    // For now, we'll just navigate to the email verification page
     navigate('/verify-email');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [passwordMismatch, setPasswordMismatch] = useState(false);
-  const navigate = useNavigate();
-
-  // Real-time password match validation
-  const handleConfirmPasswordChange = (e) => {
-    const value = e.target.value;
-    setConfirmPassword(value);
-    
-    // Check if passwords match in real-time
-    if (value && password && value !== password) {
-      setPasswordMismatch(true);
-    } else {
-      setPasswordMismatch(false);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-
-    // Validate password match
-    if (password !== confirmPassword) {
-      setError('Passwords do not match! Please make sure both passwords are the same.');
-      setPasswordMismatch(true);
-      return;
-    }
-
-    // Additional password validation
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters long.');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch('http://localhost:5000/customers/createCustomer', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          phoneNumber,
-          password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSuccess('Registration successful! Redirecting to login...');
-        // Clear form
-        setFirstName('');
-        setLastName('');
-        setPhoneNumber('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-        
-        // Redirect to login after 2 seconds
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      } else {
-        setError(data.message || 'Registration failed. Please try again.');
-      }
-    } catch (err) {
-      setError('Unable to connect to server. Please make sure the backend is running on localhost:5000');
-      console.error('Registration error:', err);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
     <div className="login-container">
       <h2>Sign up</h2>
       <form onSubmit={handleSubmit}>
-
-        {error && (
-          <div className="error-message" style={{ color: 'red', marginBottom: '10px', padding: '8px', backgroundColor: '#ffe6e6', borderRadius: '4px' }}>
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="success-message" style={{ color: 'green', marginBottom: '10px', padding: '8px', backgroundColor: '#e6ffe6', borderRadius: '4px' }}>
-            {success}
-          </div>
-        )}
-        
         <div className="form-group">
           <label>First Name</label>
-          <input 
-            type="text" 
-            placeholder="Enter your first name" 
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required 
-          />
+          <input type="text" placeholder="Enter your first name" required />
         </div>
 
         <div className="form-group">
           <label>Last Name</label>
-          <input 
-            type="text" 
-            placeholder="Enter your last name" 
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required 
-          />
+          <input type="text" placeholder="Enter your last name" required />
         </div>
 
         <div className="form-group">
           <label>Mobile No.</label>
-          <input 
-            type="tel" 
-            placeholder="Enter your mobile number" 
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            required 
-          />
+          <input type="tel" placeholder="Enter your mobile number" required />
         </div>
 
         <div className="form-group">
           <label>Email</label>
-          <input 
-            type="email" 
-            placeholder="Enter your email" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required 
-          />
+          <input type="email" placeholder="Enter your email" required />
         </div>
 
         <div className="form-group">
@@ -162,8 +43,6 @@ const Register = () => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Create a password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               required
             />
             <button
@@ -182,14 +61,8 @@ const Register = () => {
           <div style={{ position: "relative" }}>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
+              placeholder="Create a password"
               required
-              style={{ 
-                borderColor: passwordMismatch ? 'red' : undefined,
-                borderWidth: passwordMismatch ? '2px' : undefined 
-              }}
             />
             <button
               type="button"
@@ -200,15 +73,10 @@ const Register = () => {
               {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
             </button>
           </div>
-          {passwordMismatch && (
-            <small style={{ color: 'red', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-              ⚠️ Passwords do not match!
-            </small>
-          )}
         </div>
 
-        <button type="submit" className="btn" disabled={loading || passwordMismatch}>
-          {loading ? 'Signing up...' : 'Sign up'}
+        <button type="submit" className="btn">
+          Sign up
         </button>
 
         <p style={{ textAlign: "center", marginTop: 12 }}>

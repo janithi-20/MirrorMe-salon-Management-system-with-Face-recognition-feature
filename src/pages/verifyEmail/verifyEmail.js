@@ -4,13 +4,8 @@ import './verifyEmail.css';
 const VerifyEmail = () => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isVerified, setIsVerified] = useState(false);
-
-  const [timeLeft, setTimeLeft] = useState(755); 
-  const [email] = useState('*******@peatix.com'); 
-
   const [timeLeft, setTimeLeft] = useState(60); 
-  const [email] = useState('*******@gmail.com'); 
-
+  const [email] = useState('*@gmail.com'); 
 
   useEffect(() => {
     if (timeLeft > 0 && !isVerified) {
@@ -56,11 +51,7 @@ const VerifyEmail = () => {
 
   const handleResendCode = () => {
     setOtp(['', '', '', '', '', '']);
-
-    setTimeLeft(755); 
-
     setTimeLeft(60); 
-
     const firstInput = document.getElementById('otp-0');
     if (firstInput) firstInput.focus();
   };
@@ -125,7 +116,7 @@ const VerifyEmail = () => {
           ))}
         </div>
         
-        <button 
+        <button
           className={`verify-button ${otp.join('').length === 6 ? 'active' : ''}`}
           onClick={handleVerify}
           disabled={otp.join('').length !== 6}

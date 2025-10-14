@@ -51,12 +51,16 @@ const Services = () => {
 							/>
 							<h4 style={{ marginTop: 12 }}>{card.title}</h4>
 							<p style={{ color: '#666', whiteSpace: 'pre-line' }}>{card.desc}</p>
-							<div style={{ marginTop: 12 }}>
+							<div style={{ marginTop: 12 }} className="actions">
 								<Link to={`/services/${card.slug}`} className="btn">View Service</Link>
 							</div>
 						</div>
 					))}
 				</section>
+
+					<div style={{ textAlign: 'center', marginTop: 28 }}>
+						<Link to="/booking" className="book-now-btn book-now-wide">BOOK NOW</Link>
+					</div>
 			</main>
 			<Footer />
 		</div>
