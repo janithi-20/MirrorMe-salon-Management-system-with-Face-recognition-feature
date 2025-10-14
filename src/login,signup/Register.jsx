@@ -4,15 +4,6 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here you would typically handle the registration logic
-    // For now, we'll just navigate to the email verification page
-    navigate('/verify-email');
-
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -188,22 +179,46 @@ const Register = () => {
 
         <div className="form-group">
           <label>First Name</label>
-          <input type="text" placeholder="Enter your first name" required />
+          <input 
+            type="text" 
+            placeholder="Enter your first name" 
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required 
+          />
         </div>
 
         <div className="form-group">
           <label>Last Name</label>
-          <input type="text" placeholder="Enter your last name" required />
+          <input 
+            type="text" 
+            placeholder="Enter your last name" 
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required 
+          />
         </div>
 
         <div className="form-group">
           <label>Mobile No.</label>
-          <input type="tel" placeholder="Enter your mobile number" required />
+          <input 
+            type="tel" 
+            placeholder="Enter your mobile number" 
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            required 
+          />
         </div>
 
         <div className="form-group">
           <label>Email</label>
-          <input type="email" placeholder="Enter your email" required />
+          <input 
+            type="email" 
+            placeholder="Enter your email" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required 
+          />
         </div>
 
         <div className="form-group">
@@ -212,6 +227,8 @@ const Register = () => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Create a password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
             <button
@@ -230,8 +247,11 @@ const Register = () => {
           <div style={{ position: "relative" }}>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Create a password"
+              placeholder="Confirm your password"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
               required
+              style={{ borderColor: passwordMismatch ? 'red' : '' }}
             />
             <button
               type="button"
@@ -242,10 +262,15 @@ const Register = () => {
               {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
             </button>
           </div>
+          {passwordMismatch && (
+            <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
+              Passwords do not match
+            </div>
+          )}
         </div>
 
-        <button type="submit" className="btn">
-          Sign up
+        <button type="submit" className="btn" disabled={loading}>
+          {loading ? 'Signing up...' : 'Sign up'}
         </button>
 
         <p style={{ textAlign: "center", marginTop: 12 }}>

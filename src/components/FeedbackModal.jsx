@@ -57,12 +57,6 @@ const FeedbackModal = ({ isOpen, onClose }) => {
     } finally {
       setIsSubmitting(false);
     }
-  const handleSubmit = () => {
-    const payload = { name, message, rating };
-    console.log('Feedback submitted:', payload);
-    alert('Thank you for your feedback!');
-    onClose();
-
   };
 
   return (

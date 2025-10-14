@@ -1,14 +1,8 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { FiLogIn, FiBell, FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
-
-
-import { FiLogIn, FiLogOut, FiBell } from 'react-icons/fi';
-
-import { FiLogIn, FiBell } from 'react-icons/fi';
 
 import '../App.css';
 
@@ -17,10 +11,6 @@ const Header = () => {
   const navigate = useNavigate();
 
   const { isAdminAuthenticated, logoutAdmin } = useAuth();
-
-  const handleLogout = () => {
-    logoutAdmin();
-    navigate('/');
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
@@ -61,6 +51,11 @@ const Header = () => {
       window.removeEventListener('userLoggedIn', checkAuthStatus);
     };
   }, []);
+
+  const handleAdminLogout = () => {
+    logoutAdmin();
+    navigate('/');
+  };
 
   const handleLogout = () => {
     // Clear authentication data
@@ -104,27 +99,6 @@ const Header = () => {
         });
       }
     }
-
-  };
-
-  const handleScrollToSection = (sectionId) => {
-    // Check if we're already on the home page
-    if (window.location.pathname === '/') {
-      // If on home page, just scroll to the section
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
-      // If on a different page, navigate to home first, then scroll
-      navigate('/');
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    }
   };
 
   return (
@@ -142,7 +116,7 @@ const Header = () => {
         </Link>
 
         <nav>
-             <ul className="nav-list">
+          <ul className="nav-list">
             <li><Link to="/">Home</Link></li>
             <li><Link to="/services">Services</Link></li>
             <li>
@@ -194,35 +168,21 @@ const Header = () => {
                 Contact
               </button>
             </li>
-            <li><button className="nav-link-btn" onClick={() => handleScrollToSection('contact')}>About</button></li>
-            <li><Link to="/team">Our Team</Link></li>
-            <li><button className="nav-link-btn" onClick={() => handleScrollToSection('brands')}>Brands</button></li>
-            <li><button className="nav-link-btn" onClick={() => handleScrollToSection('contact')}>Contact</button></li>
 
-            {/* Admin Panel link (shown after Contact) */}
+            {/* Admin Panel link */}
             <li><Link to="/admin">Admin Panel</Link></li>
-            
 
-            {/* Book Now removed per request */}
-
-            {/* Show Logout if admin is authenticated, otherwise show Login */}
-            {isAdminAuthenticated ? (
+            {/* Show admin logout if admin is authenticated */}
+            {isAdminAuthenticated && (
               <li>
-                <button onClick={handleLogout} className="btn btn-icon btn-secondary" style={{ padding: '8px 12px' }}>
+                <button onClick={handleAdminLogout} className="btn btn-icon btn-secondary" style={{ padding: '8px 12px' }}>
                   <FiLogOut style={{ verticalAlign: 'middle', marginRight: 6 }} />
-                  Logout
+                  Admin Logout
                 </button>
-              </li>
-            ) : (
-              <li>
-                <Link to="/login" className="btn btn-icon btn-secondary" style={{ padding: '8px 12px' }}>
-                  <FiLogIn style={{ verticalAlign: 'middle', marginRight: 6 }} />
-                  Login
-                </Link>
               </li>
             )}
 
-            {/* Conditional Login/Logout button */}
+            {/* Conditional Login/Logout button for users */}
             {isLoggedIn ? (
               <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ color: '#fff', fontSize: '14px' }}>Welcome, {userName}!</span>
@@ -243,16 +203,6 @@ const Header = () => {
                 </Link>
               </li>
             )}
-            <li><Link to="/admin">Admin Panel</Link></li>
-            
-
-            <li>
-              <Link to="/login" className="btn btn-icon btn-secondary" style={{ padding: '8px 12px' }}>
-                <FiLogIn style={{ verticalAlign: 'middle', marginRight: 6 }} />
-                Login
-              </Link>
-            </li>
-
 
             {/* Notification bell */}
             <li className="nav-notification">
