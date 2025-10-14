@@ -4,6 +4,7 @@ import './TeamManage.css';
 
 const TeamManagement = () => {
   const [editingStaff, setEditingStaff] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
   const [staffMembers, setStaffMembers] = useState([
     {
       id: 1,
@@ -90,6 +91,19 @@ const TeamManagement = () => {
       image: '/Marie.jpg'
     }
   ]);
+  const [newStaff, setNewStaff] = useState({
+    name: '',
+    position: '',
+    experience: '',
+    email: '',
+    phone: '',
+    address: '',
+    salary: 0,
+    joinDate: '',
+    status: 'active',
+    specialties: [],
+    image: ''
+  });
   return (
     <div className="section-content">
       <h2>Team Management</h2>
@@ -113,12 +127,81 @@ const TeamManagement = () => {
       </div>
       
       <div className="staff-management-controls">
-        <button className="add-staff-btn">
-          <FiPlus size={16} />
-          Add New Staff Member
-        </button>
+        {!showAddForm ? (
+          <button className="add-staff-btn" onClick={() => setShowAddForm(true)}>
+            <FiPlus size={16} />
+            Add New Staff Member
+          </button>
+        ) : null}
       </div>
-      
+
+      {showAddForm && (
+        <div className="modal-backdrop" onClick={() => setShowAddForm(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h3>Add New Staff Member</h3>
+            <div className="modal-form-grid">
+              <div className="form-group">
+                <label>Name</label>
+                <input value={newStaff.name} onChange={(e) => setNewStaff(prev => ({ ...prev, name: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>Position</label>
+                <input value={newStaff.position} onChange={(e) => setNewStaff(prev => ({ ...prev, position: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>Experience</label>
+                <input value={newStaff.experience} onChange={(e) => setNewStaff(prev => ({ ...prev, experience: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input value={newStaff.email} onChange={(e) => setNewStaff(prev => ({ ...prev, email: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>Phone</label>
+                <input value={newStaff.phone} onChange={(e) => setNewStaff(prev => ({ ...prev, phone: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>Address</label>
+                <input value={newStaff.address} onChange={(e) => setNewStaff(prev => ({ ...prev, address: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>Salary</label>
+                <input type="number" value={newStaff.salary} onChange={(e) => setNewStaff(prev => ({ ...prev, salary: parseInt(e.target.value) || 0 }))} />
+              </div>
+              <div className="form-group">
+                <label>Join Date</label>
+                <input type="date" value={newStaff.joinDate} onChange={(e) => setNewStaff(prev => ({ ...prev, joinDate: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>Specialties (comma separated)</label>
+                <input value={newStaff.specialties.join(', ')} onChange={(e) => setNewStaff(prev => ({ ...prev, specialties: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} />
+              </div>
+              <div className="form-group">
+                <label>Image URL</label>
+                <input value={newStaff.image} onChange={(e) => setNewStaff(prev => ({ ...prev, image: e.target.value }))} />
+              </div>
+            </div>
+            <div className="modal-actions">
+              <button
+                className="save-btn"
+                onClick={() => {
+                  if (!newStaff.name) return alert('Please enter a name');
+                  const nextId = staffMembers.length ? Math.max(...staffMembers.map(s => s.id)) + 1 : 1;
+                  const staffToAdd = { ...newStaff, id: nextId };
+                  setStaffMembers(prev => [...prev, staffToAdd]);
+                  setNewStaff({ name: '', position: '', experience: '', email: '', phone: '', address: '', salary: 0, joinDate: '', status: 'active', specialties: [], image: '' });
+                  setShowAddForm(false);
+                }}
+              >
+                <FiSave size={16} /> Save
+              </button>
+              <button className="cancel-btn" onClick={() => { setShowAddForm(false); setNewStaff({ name: '', position: '', experience: '', email: '', phone: '', address: '', salary: 0, joinDate: '', status: 'active', specialties: [], image: '' }); }}>
+                <FiX size={16} /> Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+  )}
       <div className="staff-grid">
         {staffMembers.map((staff) => (
           <div key={staff.id} className="staff-card">

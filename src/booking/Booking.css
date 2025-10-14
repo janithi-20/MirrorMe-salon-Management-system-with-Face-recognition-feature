@@ -61,6 +61,25 @@
   cursor: pointer;
 }
 
+/* compact remove button used in the booking items list */
+.booking-remove-btn {
+  min-width: 74px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.25);
+  font-weight: 700;
+  padding: 0 10px;
+  font-size: 14px;
+}
+.booking-remove-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(139,69,19,0.35); }
+
 @media (max-width: 880px) {
   .grid-row { grid-template-columns: 1fr; }
   .form-actions { justify-content: center; }

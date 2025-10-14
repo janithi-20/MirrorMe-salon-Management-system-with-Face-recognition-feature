@@ -84,6 +84,52 @@ html {
   box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
 }
 
+@keyframes float-updown {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+.book-now-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(90deg, #ff7a18 0%, #ffb86b 100%);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(255, 122, 24, 0.18);
+  transform: translateZ(0);
+  animation: float-updown 2.8s ease-in-out infinite;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.book-now-btn:hover {
+  box-shadow: 0 14px 34px rgba(255, 122, 24, 0.28);
+  transform: translateY(-8px);
+}
+
+.service-card .actions { display: flex; gap: 12px; align-items: center; }
+
+/* Wide book now button (used on Services page) */
+.book-now-wide {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  max-width: 720px;
+  padding: 18px 28px;
+  border-radius: 40px;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 800px) {
+  .book-now-wide { width: 92%; }
+}
+
 .btn-secondary {
   background: transparent;
   background: #d1842c;
@@ -109,7 +155,8 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0;
+  /* add a little horizontal padding so header content sits slightly toward the right corner */
+  padding: 16px 24px;
 }
 
 .logo {
@@ -121,7 +168,8 @@ header {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 16px;
+  /* tighten the logo container padding so it doesn't add large left spacing */
+  padding: 6px 10px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
@@ -146,7 +194,8 @@ nav ul {
   display: flex;
   list-style: none;
   align-items: center;
-  gap: 32px;
+  /* reduce gap between nav items so the header looks tighter */
+  gap: 18px;
 }
 
 nav ul li {

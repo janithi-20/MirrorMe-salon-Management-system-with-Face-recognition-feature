@@ -8,7 +8,11 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Here you would typically handle the registration logic
+    // For now, we'll just navigate to the email verification page
     navigate('/verify-email');
+
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -168,6 +172,8 @@ const Register = () => {
       <h2>Sign up</h2>
       <form onSubmit={handleSubmit}>
 
+
+
         {error && (
           <div className="error-message" style={{ color: 'red', marginBottom: '10px', padding: '8px', backgroundColor: '#ffe6e6', borderRadius: '4px', fontSize: '14px' }}>
             {error}
@@ -179,48 +185,25 @@ const Register = () => {
           </div>
         )}
         
+
         <div className="form-group">
           <label>First Name</label>
-          <input 
-            type="text" 
-            placeholder="Enter your first name" 
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required 
-          />
+          <input type="text" placeholder="Enter your first name" required />
         </div>
 
         <div className="form-group">
           <label>Last Name</label>
-          <input 
-            type="text" 
-            placeholder="Enter your last name" 
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required 
-          />
+          <input type="text" placeholder="Enter your last name" required />
         </div>
 
         <div className="form-group">
           <label>Mobile No.</label>
-          <input 
-            type="tel" 
-            placeholder="Enter your mobile number" 
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            required 
-          />
+          <input type="tel" placeholder="Enter your mobile number" required />
         </div>
 
         <div className="form-group">
           <label>Email</label>
-          <input 
-            type="email" 
-            placeholder="Enter your email" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required 
-          />
+          <input type="email" placeholder="Enter your email" required />
         </div>
 
         <div className="form-group">
@@ -229,8 +212,6 @@ const Register = () => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Create a password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               required
             />
             <button
@@ -249,14 +230,8 @@ const Register = () => {
           <div style={{ position: "relative" }}>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
+              placeholder="Create a password"
               required
-              style={{ 
-                borderColor: passwordMismatch ? 'red' : undefined,
-                borderWidth: passwordMismatch ? '2px' : undefined 
-              }}
             />
             <button
               type="button"
@@ -267,15 +242,10 @@ const Register = () => {
               {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
             </button>
           </div>
-          {passwordMismatch && (
-            <small style={{ color: 'red', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-              ⚠️ Passwords do not match!
-            </small>
-          )}
         </div>
 
-        <button type="submit" className="btn" disabled={loading || passwordMismatch}>
-          {loading ? 'Signing up...' : 'Sign up'}
+        <button type="submit" className="btn">
+          Sign up
         </button>
 
         <p style={{ textAlign: "center", marginTop: 12 }}>
