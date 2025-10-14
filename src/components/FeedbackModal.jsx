@@ -6,14 +6,63 @@ const FeedbackModal = ({ isOpen, onClose }) => {
   const [message, setMessage] = useState('');
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
+
+  const handleSubmit = async () => {
+    if (!name.trim() || !message.trim() || rating === 0) {
+      alert('Please fill in all fields and provide a rating.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    const payload = { 
+      name: name.trim(), 
+      message: message.trim(), 
+      rating 
+    };
+
+    try {
+      const response = await fetch('/feedback/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Feedback submitted successfully:', result);
+        alert('Thank you for your feedback!');
+        
+        // Reset form
+        setName('');
+        setMessage('');
+        setRating(0);
+        setHover(0);
+        
+        onClose();
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to submit feedback:', errorData);
+        alert('Failed to submit feedback. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      alert('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   const handleSubmit = () => {
     const payload = { name, message, rating };
     console.log('Feedback submitted:', payload);
     alert('Thank you for your feedback!');
     onClose();
+
   };
 
   return (
@@ -64,14 +113,16 @@ const FeedbackModal = ({ isOpen, onClose }) => {
         </div>
 
         <div className="modal-actions review-actions">
-          <button type="button" className="btn btn-link" onClick={onClose}>CANCEL</button>
+          <button type="button" className="btn btn-link" onClick={onClose} disabled={isSubmitting}>
+            CANCEL
+          </button>
           <button
             type="button"
             className="btn"
-            disabled={!message.trim()}
+            disabled={!message.trim() || !name.trim() || rating === 0 || isSubmitting}
             onClick={handleSubmit}
           >
-            POST
+            {isSubmitting ? 'SUBMITTING...' : 'POST'}
           </button>
         </div>
       </div>
