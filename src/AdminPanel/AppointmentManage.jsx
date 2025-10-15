@@ -10,7 +10,6 @@ const AppointmentManagement = () => {
       customer: 'Sarah Johnson',
       status: 'completed',
       provider: 'Lewis Fernandiz',
-      providerImage: '/Lewis.jpg',
       advancePayment: 2000,
       totalAmount: 4000,
       paymentStatus: 'completed'
@@ -22,7 +21,6 @@ const AppointmentManagement = () => {
       customer: 'Emma Wilson',
       status: 'pending',
       provider: 'Marie De Zoya',
-      providerImage: '/Marie.jpg',
       advancePayment: 3000,
       totalAmount: 6800,
       paymentStatus: 'pending'
@@ -34,7 +32,6 @@ const AppointmentManagement = () => {
       customer: 'Jessica Perera',
       status: 'pending',
       provider: 'Angela Diano',
-      providerImage: '/Angela.jpg',
       advancePayment: 5000,
       totalAmount: 10300,
       paymentStatus: 'pending'
@@ -46,7 +43,6 @@ const AppointmentManagement = () => {
       customer: 'Michael Fernando',
       status: 'confirmed',
       provider: 'Kylie Nellina',
-      providerImage: '/Kylie.jpg',
       advancePayment: 2200,
       totalAmount: 4400,
       paymentStatus: 'completed'
@@ -58,7 +54,6 @@ const AppointmentManagement = () => {
       customer: 'Sonali De Silva',
       status: 'completed',
       provider: 'Ethan Kal',
-      providerImage: '/Ethan.jpg',
       advancePayment: 1000,
       totalAmount: 2000,
       paymentStatus: 'completed'
@@ -119,11 +114,6 @@ const AppointmentManagement = () => {
               </span>
             </div>
             <div className="grid-cell provider-info">
-              <img 
-                src={appointment.providerImage} 
-                alt={appointment.provider}
-                className="provider-avatar"
-              />
               <span>{appointment.provider}</span>
             </div>
             <div className="grid-cell payment-info">

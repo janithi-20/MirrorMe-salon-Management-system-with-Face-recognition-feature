@@ -286,10 +286,9 @@
   height: 120px;
   border-radius: 50%;
   background: conic-gradient(
-    #3b82f6 0deg 180deg,
-    #10b981 180deg 300deg,
-    #e2e8f0 300deg 341deg,
-    #f59e0b 341deg 360deg
+    #10b981 0deg 240deg,
+    #3b82f6 240deg 323deg,
+    #f59e0b 323deg 360deg
   );
   display: flex;
   align-items: center;
@@ -345,7 +344,7 @@
 }
 
 .pie-legend-color.walk-in {
-  background: #e2e8f0;
+  background: #3b82f6;
 }
 
 .pie-legend-color.google {
@@ -438,79 +437,145 @@
   min-height: 200px;
 }
 
-.status-bar-container {
+/* Booking Status - Box Layout */
+.status-boxes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.status-box {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.status-bar {
-  display: flex;
-  height: 8px;
-  border-radius: 4px;
+  gap: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-left: 4px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
   overflow: hidden;
-  background: #f1f5f9;
 }
 
-.status-segment {
-  height: 100%;
+.status-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  opacity: 0.1;
+  transition: opacity 0.3s ease;
 }
 
-.status-segment.booked {
-  background: #bfdbfe;
+.status-box.booked {
+  border-left-color: #f59e0b;
 }
 
-.status-segment.confirmed {
+.status-box.booked::before {
+  background: #f59e0b;
+}
+
+.status-box.confirmed {
+  border-left-color: #3b82f6;
+}
+
+.status-box.confirmed::before {
   background: #3b82f6;
 }
 
-.status-segment.done {
-  background: #1d4ed8;
+.status-box.done {
+  border-left-color: #10b981;
 }
 
-.status-segment.cancelled {
+.status-box.done::before {
+  background: #10b981;
+}
+
+.status-box.cancelled {
+  border-left-color: #ef4444;
+}
+
+.status-box.cancelled::before {
   background: #ef4444;
 }
 
-.status-legend {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-.status-legend-item {
+.status-box-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  justify-content: center;
+  margin-bottom: 5px;
 }
 
-.status-color {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-}
-
-.status-color.booked {
-  background: #bfdbfe;
-}
-
-.status-color.confirmed {
-  background: #3b82f6;
-}
-
-.status-color.done {
-  background: #1d4ed8;
-}
-
-.status-color.cancelled {
-  background: #ef4444;
-}
-
-.status-legend-item strong {
-  margin-left: auto;
-  color: #2d3748;
+.status-label {
+  font-size: 14px;
   font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+  text-align: center;
+}
+
+/* Hover effects for status boxes */
+.status-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.status-box:hover::before {
+  opacity: 0.3;
+}
+
+.status-box:hover .status-value {
+  color: #111827;
+}
+
+.status-box.booked:hover {
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.25);
+}
+
+.status-box.confirmed:hover {
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
+}
+
+.status-box.done:hover {
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
+}
+
+.status-box.cancelled:hover {
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.25);
+}
+
+/* Responsive design for status boxes */
+@media (max-width: 768px) {
+  .status-boxes-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .status-box {
+    padding: 20px;
+  }
+  
+  .status-value {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-boxes-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 .recent-activities {
@@ -937,6 +1002,131 @@
   background: #b36f23;
 }
 
+/* Enhanced Settings Styles */
+.setting-category {
+  margin-bottom: 30px;
+}
+
+.setting-category h3 {
+  color: #2d3748;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.setting-item {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 15px;
+}
+
+.setting-info {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.setting-info h4 {
+  margin: 0 0 8px 0;
+  color: #2d3748;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.setting-info p {
+  margin: 0;
+  color: #718096;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.setting-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.setting-input,
+.setting-textarea,
+.setting-select {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2d3748;
+  background: white;
+  transition: border-color 0.2s ease;
+}
+
+.setting-input:focus,
+.setting-textarea:focus,
+.setting-select:focus {
+  outline: none;
+  border-color: #d1842c;
+  box-shadow: 0 0 0 3px rgba(209, 132, 44, 0.1);
+}
+
+.setting-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.save-btn {
+  background: #38a169;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.save-btn:hover {
+  background: #2f855a;
+}
+
+.cancel-btn {
+  background: #e53e3e;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #c53030;
+}
+
+.edit-btn {
+  background: #d1842c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: #b36f23;
+}
+
 @media (max-width: 768px) {
   .admin-dashboard {
     flex-direction: column;
@@ -953,5 +1143,25 @@
   
   .admin-content {
     padding: 20px;
+  }
+
+  .setting-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .setting-info {
+    margin-right: 0;
+  }
+
+  .setting-actions {
+    justify-content: flex-end;
+  }
+
+  .setting-input,
+  .setting-textarea,
+  .setting-select {
+    max-width: 100%;
   }
 }

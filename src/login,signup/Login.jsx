@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -9,6 +10,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { loginAdmin } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,6 +18,14 @@ const Login = () => {
     setLoading(true);
 
     try {
+      // Check for admin credentials first
+      if (email === 'mirrorme@gmail.com' && password === 'Mirrorme@1234') {
+        loginAdmin();
+        setLoading(false);
+        navigate('/admin');
+        return;
+      }
+
       const response = await fetch('/customers/login', {
         method: 'POST',
         headers: {

@@ -3,13 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiLogIn, FiBell, FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
-
 import '../App.css';
 
 const Header = () => {
-  // single admin panel link (no dropdown)
   const navigate = useNavigate();
-
   const { isAdminAuthenticated, logoutAdmin } = useAuth();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,11 +49,6 @@ const Header = () => {
     };
   }, []);
 
-  const handleAdminLogout = () => {
-    logoutAdmin();
-    navigate('/');
-  };
-
   const handleLogout = () => {
     // Clear authentication data
     localStorage.removeItem('token');
@@ -72,6 +64,12 @@ const Header = () => {
     
     // Show confirmation
     alert('You have been logged out successfully!');
+  };
+
+  const handleAdminLogout = () => {
+    logoutAdmin();
+    navigate('/');
+    alert('Admin logged out successfully!');
   };
 
   const handleSmoothScroll = (targetId) => {
@@ -98,6 +96,27 @@ const Header = () => {
           block: 'start',
         });
       }
+    }
+
+  };
+
+  const handleScrollToSection = (sectionId) => {
+    // Check if we're already on the home page
+    if (window.location.pathname === '/') {
+      // If on home page, just scroll to the section
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // If on a different page, navigate to home first, then scroll
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     }
   };
 
@@ -169,20 +188,22 @@ const Header = () => {
               </button>
             </li>
 
-            {/* Admin Panel link */}
-            <li><Link to="/admin">Admin Panel</Link></li>
-
-            {/* Show admin logout if admin is authenticated */}
+            {/* Admin Panel link - only show when admin is authenticated */}
             {isAdminAuthenticated && (
+              <li><Link to="/admin">Admin Panel</Link></li>
+            )}
+
+            {/* Admin authentication buttons */}
+            {isAdminAuthenticated ? (
               <li>
                 <button onClick={handleAdminLogout} className="btn btn-icon btn-secondary" style={{ padding: '8px 12px' }}>
                   <FiLogOut style={{ verticalAlign: 'middle', marginRight: 6 }} />
                   Admin Logout
                 </button>
               </li>
-            )}
+            ) : null}
 
-            {/* Conditional Login/Logout button for users */}
+            {/* Regular user authentication buttons */}
             {isLoggedIn ? (
               <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ color: '#fff', fontSize: '14px' }}>Welcome, {userName}!</span>
@@ -204,20 +225,22 @@ const Header = () => {
               </li>
             )}
 
-            {/* Notification bell */}
-            <li className="nav-notification">
-              <div className="bell-wrapper" style={{ position: 'relative' }}>
-                <button
-                  className="bell-btn"
-                  onClick={() => navigate('/notifications')}
-                  aria-label="Notifications"
-                  style={{ color: 'white' }}
-                >
-                  <FiBell size={20} style={{ color: 'white' }} />
-                  <span className="bell-badge">3</span>
-                </button>
-              </div>
-            </li>
+            {/* Notification bell - only show when user is logged in */}
+            {isLoggedIn && (
+              <li className="nav-notification">
+                <div className="bell-wrapper" style={{ position: 'relative' }}>
+                  <button
+                    className="bell-btn"
+                    onClick={() => navigate('/notifications')}
+                    aria-label="Notifications"
+                    style={{ color: 'white' }}
+                  >
+                    <FiBell size={20} style={{ color: 'white' }} />
+                    <span className="bell-badge">3</span>
+                  </button>
+                </div>
+              </li>
+            )}
           </ul>
         </nav>
       </div>

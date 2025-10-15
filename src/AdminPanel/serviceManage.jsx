@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiEdit2, FiSave, FiX, FiPlus } from 'react-icons/fi';
+import { FiEdit2, FiSave, FiX, FiPlus, FiImage } from 'react-icons/fi';
 import './serviceManage.css';
 
 const ServiceManagement = () => {
@@ -8,118 +8,159 @@ const ServiceManagement = () => {
   const [newService, setNewService] = useState({
     service: '',
     price: '',
-    category: ''
+    category: '',
+    image: null,
+    imagePreview: null
   });
   
   const [services, setServices] = useState([
     {
       name: 'Hair Cut & Styling',
+      image: '/hair.jpg',
       subServices: [
-        { id: 'adv-restyle', service: 'Cut & Re-Style (Advance)', price: 4000 },
-        { id: 'fringe', service: 'Fringe Cut', price: 1000 },
-        { id: 'trim', service: 'Trim', price: 1400 },
-        { id: 'reg-restyle', service: 'Cut & Re-Style (Regular)', price: 2900 },
-        { id: 'wash-blast', service: 'Hair Wash & Blast Dry', price: 2000 },
-        { id: 'blow-short', service: 'Blow Dry - Short', price: 2400 },
-        { id: 'blow-medium', service: 'Blow Dry - Medium', price: 3900 },
-        { id: 'blow-long', service: 'Blow Dry - Long', price: 4500 },
-        { id: 'braid-short', service: 'Braiding Per Strand - Short', price: 1300 }
+        { id: 'adv-restyle', service: 'Cut & Re-Style (Advance)', price: 4000, image: '/haircut-images/cut-restyle-advance.jpg' },
+        { id: 'fringe', service: 'Fringe Cut', price: 1000, image: '/haircut-images/fringe-cut.jpg' },
+        { id: 'trim', service: 'Trim', price: 1400, image: '/haircut-images/trim.jpg' },
+        { id: 'reg-restyle', service: 'Cut & Re-Style (Regular)', price: 2900, image: '/haircut-images/cut-restyle-regular.jpg' },
+        { id: 'wash-blast', service: 'Hair Wash & Blast Dry', price: 2000, image: '/haircut-images/hair-wash.jpg' },
+        { id: 'blow-short', service: 'Blow Dry - Short', price: 2400, image: '/haircut-images/blowdry-short-hair.jpg' },
+        { id: 'blow-medium', service: 'Blow Dry - Medium', price: 3900, image: '/haircut-images/blowdry-medium-hair.jpg' },
+        { id: 'blow-long', service: 'Blow Dry - Long', price: 4500, image: '/haircut-images/blowdry-long-hair.jpg' },
+        { id: 'braid-short', service: 'Braiding Per Strand - Short', price: 1300, image: '/haircut-images/braiding-short.jpg' }
       ]
     },
     {
       name: 'Skin Treatments',
+      image: '/skin.jpg',
       subServices: [
-        { id: 'face-shave', service: 'Face Shaving', price: 4400 },
-        { id: 'low-upper-thread', service: 'Low Upper Threading', price: 200 },
-        { id: 'galvanize', service: 'Add on - Galvanize Treatment', price: 1400 },
-        { id: 'classic-clean', service: 'Classic Clean Up', price: 3800 },
-        { id: 'brightening-ume', service: 'Brightening Clean Up (Ume Care)', price: 6800 },
-        { id: 'basic-sothys', service: 'Basic Clean Up (Sothys)', price: 9800 }
+        { id: 'face-shave', service: 'Face Shaving', price: 4400, image: '/skin-images/faceshaving.jpg' },
+        { id: 'low-upper-thread', service: 'Low Upper Threading', price: 200, image: '/skin-images/upperthreading.jpg' },
+        { id: 'galvanize', service: 'Add on - Galvanize Treatment', price: 1400, image: '/skin-images/galvanic.webp' },
+        { id: 'classic-clean', service: 'Classic Clean Up', price: 3800, image: '/skin-images/cleanup.jpg' },
+        { id: 'brightening-ume', service: 'Brightening Clean Up (Ume Care)', price: 6800, image: '/skin-images/brightingcleanup.jpg' },
+        { id: 'basic-sothys', service: 'Basic Clean Up (Sothys)', price: 9800, image: '/skin-images/basiccleaning.jpg' }
       ]
     },
     {
       name: 'Dressings',
+      image: '/dressing.jpg',
       subServices: [
-        { id: 'full-early', service: 'Full Dressing (Early Morning) Add on Before 8.30am', price: 2500 },
-        { id: 'full-derma', service: 'Full Dressing Derma', price: 6500 },
-        { id: 'full-mac', service: 'Full Dressing Mac', price: 10300 },
-        { id: 'saree', service: 'Saree Draping', price: 2000 },
-        { id: 'makeup-mac', service: 'Make-Up (Mac)', price: 8000 },
-        { id: 'makeup-derma', service: 'Make-Up (Derma)', price: 4200 },
-        { id: 'hairstyle', service: 'Hair Style', price: 3100 },
-        { id: 'addon-lashes', service: 'Add-on Eye Lashes', price: 1800 }
+        { id: 'full-early', service: 'Full Dressing (Early Morning) Add on Before 8.30am', price: 2500, image: '/dressing-images/full-dressing-early-morning.jpg' },
+        { id: 'full-derma', service: 'Full Dressing Derma', price: 6500, image: '/dressing-images/full-dressing-derma.jpg' },
+        { id: 'full-mac', service: 'Full Dressing Mac', price: 10300, image: '/dressing-images/full-dressing-mac.jpg' },
+        { id: 'saree', service: 'Saree Draping', price: 2000, image: '/dressing-images/saree-drapping.jpg' },
+        { id: 'makeup-mac', service: 'Make-Up (Mac)', price: 8000, image: '/dressing-images/makeup-mac.jpg' },
+        { id: 'makeup-derma', service: 'Make-Up (Derma)', price: 4200, image: '/dressing-images/makeup-derma.jpg' },
+        { id: 'hairstyle', service: 'Hair Style', price: 3100, image: '/dressing-images/hairstyle.jpg' },
+        { id: 'addon-lashes', service: 'Add-on Eye Lashes', price: 1800, image: '/dressing-images/eye-lashes.jpg' }
       ]
     },
     {
       name: 'Nail Care',
+      image: '/nails.jpg',
       subServices: [
-        { id: 'gel-individual', service: 'Gel Individual', price: 900 },
-        { id: 'gel-soak-off', service: 'Gel Nail Soak Off', price: 1700 },
-        { id: 'normal-color', service: 'Normal Color', price: 1100 },
-        { id: 'gel-color-express', service: 'Gel Color (Express Mani)', price: 2300 },
-        { id: 'nail-art', service: 'Nail Art Rein Stone/Sticker/ Each', price: 180 }
+        { id: 'gel-individual', service: 'Gel Individual', price: 900, image: '/nails-images/gel-individual.jpg' },
+        { id: 'gel-soak-off', service: 'Gel Nail Soak Off', price: 1700, image: '/nails-images/gel-nail-soak-off.jpg' },
+        { id: 'normal-color', service: 'Normal Color', price: 1100, image: '/nails-images/normal-colour.jpg' },
+        { id: 'gel-color-express', service: 'Gel Color (Express Mani)', price: 2300, image: '/nails-images/gel-colour-express.jpg' },
+        { id: 'nail-art', service: 'Nail Art Rein Stone/Sticker/ Each', price: 180, image: '/nails-images/nail-art-rein-stone-sticker.jpg' }
       ]
     },
     {
       name: 'Manicure & Pedicure',
+      image: '/manicure.jpg',
       subServices: [
-        { id: 'luxury-pedi', service: 'Luxury Pedicure-Massage ', price: 8100 },
-        { id: 'premium-pedi', service: 'Premium Pedicure', price: 6800 },
-        { id: 'classic-mani', service: 'Classic Manicure', price: 2300 },
-        { id: 'classic-pedi', service: 'Classic Pedicure', price: 2300 },
-        { id: 'spa-mani', service: 'Spa Manicure', price: 4400 },
-        { id: 'spa-pedi', service: 'Spa Pedicure', price: 4800 },
-        { id: 'soak-up-pedi', service: 'Soak Up Pedicure', price: 5800 }
+        { id: 'luxury-pedi', service: 'Luxury Pedicure-Massage ', price: 8100, image: '/manicure-images/luxury-pedicure-massage-chair.jpg' },
+        { id: 'premium-pedi', service: 'Premium Pedicure', price: 6800, image: '/manicure-images/premium-pedicure.jpg' },
+        { id: 'classic-mani', service: 'Classic Manicure', price: 2300, image: '/manicure-images/classic-manicure.jpg' },
+        { id: 'classic-pedi', service: 'Classic Pedicure', price: 2300, image: '/manicure-images/classic-pedicure.jpg' },
+        { id: 'spa-mani', service: 'Spa Manicure', price: 4400, image: '/manicure-images/spa-manicure.jpg' },
+        { id: 'spa-pedi', service: 'Spa Pedicure', price: 4800, image: '/manicure-images/spa-pedicure.jpg' },
+        { id: 'soak-up-pedi', service: 'Soak Up Pedicure', price: 5800, image: '/manicure-images/soak-up-pedicure.jpg' }
       ]
     },
     {
       name: 'Waxing',
+      image: '/waxing.jpg',
       subServices: [
-        { id: 'full-body', service: 'Full Body', price: 5900 },
-        { id: 'stomach', service: 'Stomach', price: 950 },
-        { id: 'half-leg', service: 'Half Leg', price: 1450 },
-        { id: 'half-arms', service: 'Half Arms', price: 1350 },
-        { id: 'classic-full-legs', service: 'Classic Full Legs', price: 2200 },
-        { id: 'classic-full-arms', service: 'Classic Full Arms', price: 1800 }
+        { id: 'full-body', service: 'Full Body', price: 5900, image: '/waxing-images/full-body.jpg' },
+        { id: 'stomach', service: 'Stomach', price: 950, image: '/waxing-images/stomach.jpg' },
+        { id: 'half-leg', service: 'Half Leg', price: 1450, image: '/waxing-images/half-legs.jpg' },
+        { id: 'half-arms', service: 'Half Arms', price: 1350, image: '/waxing-images/half-arms.jpg' },
+        { id: 'classic-full-legs', service: 'Classic Full Legs', price: 2200, image: '/waxing-images/classic-full-legs.jpg' },
+        { id: 'classic-full-arms', service: 'Classic Full Arms', price: 1800, image: '/waxing-images/classic-full-arms.jpg' }
       ]
     }
   ]);
 
+  const handleImageChange = (e, isNewService = true) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (isNewService) {
+          setNewService(prev => ({
+            ...prev,
+            image: file,
+            imagePreview: e.target.result
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
   const handleAddService = () => {
     if (newService.service && newService.price && newService.category) {
       const categoryIndex = services.findIndex(service => service.name === newService.category);
       
       if (categoryIndex !== -1) {
-        
         const newId = Date.now().toString(); 
         const updatedServices = [...services];
         updatedServices[categoryIndex].subServices.push({
           id: newId,
           service: newService.service,
-          price: parseInt(newService.price)
+          price: parseInt(newService.price),
+          image: newService.imagePreview || '/salon logo.jpg'
         });
         setServices(updatedServices);
       } else if (newService.category !== 'new') {
         const newCategory = {
           name: newService.category,
+          image: newService.imagePreview || '/salon logo.jpg',
           subServices: [{
             id: Date.now().toString(),
             service: newService.service,
-            price: parseInt(newService.price)
+            price: parseInt(newService.price),
+            image: newService.imagePreview || '/salon logo.jpg'
           }]
         };
         setServices([...services, newCategory]);
       }
       
-      
-      setNewService({ service: '', price: '', category: '' });
+      setNewService({ service: '', price: '', category: '', image: null, imagePreview: null });
       setShowAddForm(false);
     }
   };
 
   const handleCancelAdd = () => {
-    setNewService({ service: '', price: '', category: '' });
+    setNewService({ service: '', price: '', category: '', image: null, imagePreview: null });
     setShowAddForm(false);
+  };
+
+  const handleImageError = (e) => {
+    console.log('Image failed to load:', e.target.src);
+    e.target.src = '/salon logo.jpg'; // Fallback to salon logo if image fails to load
+    e.target.style.opacity = '1'; // Ensure fallback image is visible
+  };
+
+  const getImageSrc = (imagePath) => {
+    if (!imagePath) return '/salon logo.jpg';
+    // Split the path to encode only the filename part
+    const pathParts = imagePath.split('/');
+    const filename = pathParts.pop();
+    const encodedFilename = encodeURIComponent(filename);
+    return pathParts.join('/') + '/' + encodedFilename;
   };
 
   return (
@@ -174,6 +215,32 @@ const ServiceManagement = () => {
               />
             )}
           </div>
+          
+          <div className="image-upload-section">
+            <label className="image-upload-label">
+              <FiImage size={20} />
+              Upload Service Image
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageChange(e, true)}
+                className="image-input"
+              />
+            </label>
+            {newService.imagePreview && (
+              <div className="image-preview">
+                <img src={newService.imagePreview} alt="Service preview" />
+                <button 
+                  type="button"
+                  className="remove-image-btn"
+                  onClick={() => setNewService({...newService, image: null, imagePreview: null})}
+                >
+                  <FiX size={16} />
+                </button>
+              </div>
+            )}
+          </div>
+          
           <div className="form-actions">
             <button 
               className="save-service-btn" 
@@ -197,8 +264,21 @@ const ServiceManagement = () => {
         {services.map((mainService, mainIndex) => (
           <div key={mainIndex} className="main-service-card">
             <div className="main-service-header">
-              <h3>{mainService.name}</h3>
-              <span className="service-count">{mainService.subServices.length} services</span>
+              <div className="service-header-left">
+                {mainService.image && (
+                  <div className="main-service-image">
+                    <img 
+                      src={getImageSrc(mainService.image)} 
+                      alt={mainService.name} 
+                      onError={handleImageError}
+                    />
+                  </div>
+                )}
+                <div className="service-header-text">
+                  <h3>{mainService.name}</h3>
+                  <span className="service-count">{mainService.subServices.length} services</span>
+                </div>
+              </div>
             </div>
             
             <div className="sub-services-grid">
@@ -277,6 +357,15 @@ const ServiceManagement = () => {
                     </div>
                   ) : (
                     <div className="service-display">
+                      {subService.image && (
+                        <div className="sub-service-image">
+                          <img 
+                            src={getImageSrc(subService.image)} 
+                            alt={subService.service} 
+                            onError={handleImageError}
+                          />
+                        </div>
+                      )}
                       <div className="service-info">
                         <h4>{subService.service}</h4>
                         <p className="service-price">Rs. {subService.price}</p>

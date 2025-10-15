@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 
 import Home from './pages/Home/Home';
 import Services from './pages/services/Services';
@@ -28,7 +29,13 @@ import Admin from './AdminPanel/Admin';
 function App() {
 
   return (
-    <BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
       <Routes>
         <Route path="/" element={<Home />} />
 
@@ -52,9 +59,10 @@ function App() {
         <Route path="/services/nails" element={<Nails />} />
         <Route path="/services/waxing" element={<Waxing />} />
         <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
-  <Route path="/services/consultations" element={<BeautyConsultation />} />
+        <Route path="/services/consultations" element={<BeautyConsultation />} />
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
   );
 
 }

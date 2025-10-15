@@ -1,13 +1,23 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  // Minimal admin auth state. You can extend this to persist state or load from an API.
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  // Initialize admin auth state from localStorage
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(() => {
+    return localStorage.getItem('isAdminAuthenticated') === 'true';
+  });
+
+  // Update localStorage whenever admin auth state changes
+  useEffect(() => {
+    localStorage.setItem('isAdminAuthenticated', isAdminAuthenticated.toString());
+  }, [isAdminAuthenticated]);
 
   const loginAdmin = () => setIsAdminAuthenticated(true);
-  const logoutAdmin = () => setIsAdminAuthenticated(false);
+  const logoutAdmin = () => {
+    setIsAdminAuthenticated(false);
+    localStorage.removeItem('isAdminAuthenticated');
+  };
 
   return (
     <AuthContext.Provider value={{ isAdminAuthenticated, loginAdmin, logoutAdmin }}>

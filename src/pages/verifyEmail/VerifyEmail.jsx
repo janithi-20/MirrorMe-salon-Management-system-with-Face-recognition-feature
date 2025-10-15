@@ -46,7 +46,7 @@ const VerifyEmail = () => {
       console.log('No customerId found, redirecting to register');
       navigate('/register');
     }
-  }, [customerId, email, navigate]);
+  }, [customerId, email, navigate, location.state]);
 
   // Handle OTP input change
   const handleOtpChange = (index, value) => {
@@ -111,19 +111,29 @@ const VerifyEmail = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess('Email verified successfully! Redirecting to login...');
+        setSuccess('Email verified successfully! Logging you in...');
         setOtpDigits(['', '', '', '', '', '']);
+        
+        // Auto-login after successful verification
+        if (data.customer && data.token) {
+          // Store user data for automatic login
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('customer', JSON.stringify(data.customer));
+          
+          // Trigger the userLoggedIn event to update header state
+          window.dispatchEvent(new Event('userLoggedIn'));
+        }
         
         // Clear session storage after successful verification
         sessionStorage.removeItem('customerId');
         sessionStorage.removeItem('registeredEmail');
         sessionStorage.removeItem('registrationMessage');
         
-        console.log('Email verification successful, session storage cleared');
+        console.log('Email verification successful, user automatically logged in');
         
-        // Redirect to login after 2 seconds
+        // Redirect to home page after 2 seconds
         setTimeout(() => {
-          navigate('/login');
+          navigate('/');
         }, 2000);
       } else {
         setError(data.message || 'OTP verification failed. Please try again.');

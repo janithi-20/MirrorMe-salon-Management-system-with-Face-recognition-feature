@@ -179,45 +179,54 @@ const Register = () => {
 
         <div className="form-group">
           <label>First Name</label>
-          <input 
-            type="text" 
-            placeholder="Enter your first name" 
+          <input type="text" placeholder="Enter your first name" required />
+        </div>
+
+        <div className="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Enter your last name" required />
+        </div>
+        <div className="form-group">
+          <label>First Name</label>
+          <input
+            type="text"
+            placeholder="Enter your first name"
+            required
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            required 
           />
         </div>
 
         <div className="form-group">
           <label>Last Name</label>
-          <input 
-            type="text" 
-            placeholder="Enter your last name" 
+          <input
+            type="text"
+            placeholder="Enter your last name"
+            required
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            required 
           />
         </div>
 
         <div className="form-group">
           <label>Mobile No.</label>
-          <input 
-            type="tel" 
-            placeholder="Enter your mobile number" 
+          <input
+            type="tel"
+            placeholder="Enter your mobile number"
+            required
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
-            required 
           />
         </div>
 
         <div className="form-group">
           <label>Email</label>
-          <input 
-            type="email" 
-            placeholder="Enter your email" 
+          <input
+            type="email"
+            placeholder="Enter your email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required 
           />
         </div>
 
@@ -227,9 +236,9 @@ const Register = () => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Create a password"
+              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
             />
             <button
               type="button"
@@ -248,10 +257,9 @@ const Register = () => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Confirm your password"
+              required
               value={confirmPassword}
               onChange={handleConfirmPasswordChange}
-              required
-              style={{ borderColor: passwordMismatch ? 'red' : '' }}
             />
             <button
               type="button"
@@ -264,21 +272,34 @@ const Register = () => {
           </div>
           {passwordMismatch && (
             <div style={{ color: 'red', fontSize: '12px', marginTop: '4px' }}>
-              Passwords do not match
+              Passwords do not match.
             </div>
           )}
         </div>
 
-        <button type="submit" className="btn" disabled={loading}>
-          {loading ? 'Signing up...' : 'Sign up'}
+        <button 
+          type="submit" 
+          className="btn btn-primary" 
+          disabled={loading}
+          style={{ 
+            width: '100%', 
+            padding: '12px', 
+            marginTop: '20px',
+            opacity: loading ? 0.7 : 1,
+            cursor: loading ? 'not-allowed' : 'pointer'
+          }}
+        >
+          {loading ? 'Creating Account...' : 'Register'}
         </button>
 
-        <p style={{ textAlign: "center", marginTop: 12 }}>
-          Have an Account?{" "}
-          <Link to="/login" className="register-link">
-            Login Now
-          </Link>
-        </p>
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <p>
+            Already have an account?{' '}
+            <Link to="/login" style={{ color: '#007bff', textDecoration: 'none' }}>
+              Login here
+            </Link>
+          </p>
+        </div>
       </form>
     </div>
   );

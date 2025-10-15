@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { FiScissors, FiMessageSquare, FiCalendar, FiUsers, FiTag, FiSettings, FiGrid, FiClock, FiStar, FiTrendingUp, FiDollarSign, FiActivity } from 'react-icons/fi';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { FiScissors, FiMessageSquare, FiCalendar, FiUsers, FiTag, FiSettings, FiGrid, FiClock, FiStar, FiTrendingUp } from 'react-icons/fi';
 import ServiceManagement from './serviceManage';
 import TeamManagement from './TeamManage';
 import FeedbackManagement from './FeedbackManage';
@@ -10,6 +12,27 @@ import './Admin.css';
   //Feedback management
   const Admin = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [editingSettings, setEditingSettings] = useState({});
+  const [settings, setSettings] = useState({
+    businessHours: {
+      weekdays: 'Monday - Friday: 9:00 AM - 6:00 PM',
+      weekends: 'Saturday - Sunday: 9:00 AM - 7:00 PM'
+    },
+    contact: {
+      phone: '(+94) 121-234-567',
+      email: 'info@mirrorme.lk',
+      address: '123 Main Street, Colombo 03, Sri Lanka'
+    }
+  });
+  const { isAdminAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect to login if not authenticated as admin
+  useEffect(() => {
+    if (!isAdminAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAdminAuthenticated, navigate]);
 
   const sidebarItems = [
     { id: 'dashboard', name: 'Dashboard', icon: FiGrid },
@@ -22,9 +45,9 @@ import './Admin.css';
   ];
 
   const stats = [
-    { title: 'Booking Value', value: 'Rs. 140,900', change: '+5%', color: '#3b82f6', icon: FiDollarSign },
-    { title: 'Invoice Value', value: 'Rs. 95,000', change: '+12%', color: '#10b981', icon: FiActivity },
-    { title: 'Taken Services', value: '230 ', change: '+8%', color: '#f59e0b', icon: FiScissors },
+    { title: 'Registered Customers', value: '156', color: '#3b82f6' },
+    { title: 'Invoice Value', value: 'Rs. 95,000', color: '#10b981' },
+    { title: 'Number of Bookings', value: '89', color: '#f59e0b' },
   ];
 
   const bookingTrend = [
@@ -37,8 +60,7 @@ import './Admin.css';
   ];
 
   const bookingChannels = {
-    totalBookings: 156,
-    online: 78,
+    totalBookings: 78,
     inPerson: 52,
     walkIn: 18,
     google: 8
@@ -75,6 +97,50 @@ import './Admin.css';
     }
   ];
 
+  // Settings helper functions
+  const handleEditSetting = (category, field) => {
+    setEditingSettings(prev => ({
+      ...prev,
+      [`${category}-${field}`]: settings[category][field]
+    }));
+  };
+
+  const handleSaveSetting = (category, field) => {
+    const key = `${category}-${field}`;
+    const newValue = editingSettings[key];
+    
+    setSettings(prev => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        [field]: newValue
+      }
+    }));
+    
+    setEditingSettings(prev => {
+      const updated = { ...prev };
+      delete updated[key];
+      return updated;
+    });
+  };
+
+  const handleCancelEdit = (category, field) => {
+    const key = `${category}-${field}`;
+    setEditingSettings(prev => {
+      const updated = { ...prev };
+      delete updated[key];
+      return updated;
+    });
+  };
+
+  const handleSettingChange = (category, field, value) => {
+    const key = `${category}-${field}`;
+    setEditingSettings(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case 'dashboard':
@@ -85,15 +151,8 @@ import './Admin.css';
             {/* Sales Summary Cards */}
             <div className="stats-grid">
               {stats.map((stat, index) => {
-                const IconComponent = stat.icon;
                 return (
                   <div key={index} className="stat-card enhanced" style={{ borderLeft: `4px solid ${stat.color}` }}>
-                    <div className="stat-header">
-                      <div className="stat-icon" style={{ color: stat.color }}>
-                        <IconComponent size={24} />
-                      </div>
-                      <span className="stat-change positive">{stat.change}</span>
-                    </div>
                     <div className="stat-content">
                       <div className="stat-value">{stat.value}</div>
                       <div className="stat-title">{stat.title}</div>
@@ -155,13 +214,6 @@ import './Admin.css';
                   </div>
                   <div className="pie-legend">
                     <div className="pie-legend-item">
-                      <div className="pie-legend-color online"></div>
-                      <div className="pie-legend-text">
-                        <span className="pie-legend-label">Online bookings (App)</span>
-                        <span className="pie-legend-value">{bookingChannels.online}</span>
-                      </div>
-                    </div>
-                    <div className="pie-legend-item">
                       <div className="pie-legend-color in-person"></div>
                       <div className="pie-legend-text">
                         <span className="pie-legend-label">Online bookings (website)</span>
@@ -216,34 +268,33 @@ import './Admin.css';
                   <h3>Booking Status</h3>
                   <span className="chart-period">Last updated: 6 hours ago</span>
                 </div>
-                <div className="status-bar-container">
-                  <div className="status-bar">
-                    <div className="status-segment booked" style={{ width: `{(bookingStatus.booked / 156) * 100}%` }}></div>
-                    <div className="status-segment confirmed" style={{ width: `{(bookingStatus.confirmed / 156) * 100}%` }}></div>
-                    <div className="status-segment done" style={{ width: `{(bookingStatus.done / 156) * 100}%` }}></div>
-                    <div className="status-segment cancelled" style={{ width: `{(bookingStatus.cancelled / 156) * 100}%` }}></div>
+                <div className="status-boxes-container">
+                  <div className="status-box booked">
+                    <div className="status-box-header">
+                      <span className="status-label">Booked</span>
+                    </div>
+                    <div className="status-value">{bookingStatus.booked}</div>
                   </div>
-                  <div className="status-legend">
-                    <div className="status-legend-item">
-                      <div className="status-color booked"></div>
-                      <span>Booked</span>
-                      <strong>{bookingStatus.booked}</strong>
+                  
+                  <div className="status-box confirmed">
+                    <div className="status-box-header">
+                      <span className="status-label">Confirmed</span>
                     </div>
-                    <div className="status-legend-item">
-                      <div className="status-color confirmed"></div>
-                      <span>Confirmed</span>
-                      <strong>{bookingStatus.confirmed}</strong>
+                    <div className="status-value">{bookingStatus.confirmed}</div>
+                  </div>
+                  
+                  <div className="status-box done">
+                    <div className="status-box-header">
+                      <span className="status-label">Done</span>
                     </div>
-                    <div className="status-legend-item">
-                      <div className="status-color done"></div>
-                      <span>Done</span>
-                      <strong>{bookingStatus.done}</strong>
+                    <div className="status-value">{bookingStatus.done}</div>
+                  </div>
+                  
+                  <div className="status-box cancelled">
+                    <div className="status-box-header">
+                      <span className="status-label">Cancelled</span>
                     </div>
-                    <div className="status-legend-item">
-                      <div className="status-color cancelled"></div>
-                      <span>Cancelled</span>
-                      <strong>{bookingStatus.cancelled}</strong>
-                    </div>
+                    <div className="status-value">{bookingStatus.cancelled}</div>
                   </div>
                 </div>
               </div>
@@ -307,15 +358,217 @@ import './Admin.css';
           <div className="section-content">
             <h2>Settings</h2>
             <div className="settings-grid">
-              <div className="setting-item">
-                <h4>Business Hours</h4>
-                <p>Monday - Saturday: 9:00 AM - 8:00 PM</p>
-                <button className="edit-btn">Edit</button>
+              {/* Business Hours */}
+              <div className="setting-category">
+                <h3>Business Hours</h3>
+                <div className="setting-item">
+                  <div className="setting-info">
+                    <h4>Weekdays</h4>
+                    {editingSettings['businessHours-weekdays'] !== undefined ? (
+                      <input
+                        type="text"
+                        value={editingSettings['businessHours-weekdays']}
+                        onChange={(e) => handleSettingChange('businessHours', 'weekdays', e.target.value)}
+                        className="setting-input"
+                      />
+                    ) : (
+                      <p>{settings.businessHours.weekdays}</p>
+                    )}
+                  </div>
+                  <div className="setting-actions">
+                    {editingSettings['businessHours-weekdays'] !== undefined ? (
+                      <>
+                        <button 
+                          className="save-btn"
+                          onClick={() => handleSaveSetting('businessHours', 'weekdays')}
+                        >
+                          Save
+                        </button>
+                        <button 
+                          className="cancel-btn"
+                          onClick={() => handleCancelEdit('businessHours', 'weekdays')}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <button 
+                        className="edit-btn"
+                        onClick={() => handleEditSetting('businessHours', 'weekdays')}
+                      >
+                        Edit
+                      </button>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="setting-item">
+                  <div className="setting-info">
+                    <h4>Weekends</h4>
+                    {editingSettings['businessHours-weekends'] !== undefined ? (
+                      <input
+                        type="text"
+                        value={editingSettings['businessHours-weekends']}
+                        onChange={(e) => handleSettingChange('businessHours', 'weekends', e.target.value)}
+                        className="setting-input"
+                      />
+                    ) : (
+                      <p>{settings.businessHours.weekends}</p>
+                    )}
+                  </div>
+                  <div className="setting-actions">
+                    {editingSettings['businessHours-weekends'] !== undefined ? (
+                      <>
+                        <button 
+                          className="save-btn"
+                          onClick={() => handleSaveSetting('businessHours', 'weekends')}
+                        >
+                          Save
+                        </button>
+                        <button 
+                          className="cancel-btn"
+                          onClick={() => handleCancelEdit('businessHours', 'weekends')}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <button 
+                        className="edit-btn"
+                        onClick={() => handleEditSetting('businessHours', 'weekends')}
+                      >
+                        Edit
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="setting-item">
-                <h4>Contact Information</h4>
-                <p>Phone: (+94) 121-234-567</p>
-                <button className="edit-btn">Edit</button>
+
+              {/* Contact Information */}
+              <div className="setting-category">
+                <h3>Contact Information</h3>
+                <div className="setting-item">
+                  <div className="setting-info">
+                    <h4>Phone</h4>
+                    {editingSettings['contact-phone'] !== undefined ? (
+                      <input
+                        type="tel"
+                        value={editingSettings['contact-phone']}
+                        onChange={(e) => handleSettingChange('contact', 'phone', e.target.value)}
+                        className="setting-input"
+                      />
+                    ) : (
+                      <p>{settings.contact.phone}</p>
+                    )}
+                  </div>
+                  <div className="setting-actions">
+                    {editingSettings['contact-phone'] !== undefined ? (
+                      <>
+                        <button 
+                          className="save-btn"
+                          onClick={() => handleSaveSetting('contact', 'phone')}
+                        >
+                          Save
+                        </button>
+                        <button 
+                          className="cancel-btn"
+                          onClick={() => handleCancelEdit('contact', 'phone')}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <button 
+                        className="edit-btn"
+                        onClick={() => handleEditSetting('contact', 'phone')}
+                      >
+                        Edit
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="setting-item">
+                  <div className="setting-info">
+                    <h4>Email</h4>
+                    {editingSettings['contact-email'] !== undefined ? (
+                      <input
+                        type="email"
+                        value={editingSettings['contact-email']}
+                        onChange={(e) => handleSettingChange('contact', 'email', e.target.value)}
+                        className="setting-input"
+                      />
+                    ) : (
+                      <p>{settings.contact.email}</p>
+                    )}
+                  </div>
+                  <div className="setting-actions">
+                    {editingSettings['contact-email'] !== undefined ? (
+                      <>
+                        <button 
+                          className="save-btn"
+                          onClick={() => handleSaveSetting('contact', 'email')}
+                        >
+                          Save
+                        </button>
+                        <button 
+                          className="cancel-btn"
+                          onClick={() => handleCancelEdit('contact', 'email')}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <button 
+                        className="edit-btn"
+                        onClick={() => handleEditSetting('contact', 'email')}
+                      >
+                        Edit
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="setting-item">
+                  <div className="setting-info">
+                    <h4>Address</h4>
+                    {editingSettings['contact-address'] !== undefined ? (
+                      <textarea
+                        value={editingSettings['contact-address']}
+                        onChange={(e) => handleSettingChange('contact', 'address', e.target.value)}
+                        className="setting-textarea"
+                        rows="2"
+                      />
+                    ) : (
+                      <p>{settings.contact.address}</p>
+                    )}
+                  </div>
+                  <div className="setting-actions">
+                    {editingSettings['contact-address'] !== undefined ? (
+                      <>
+                        <button 
+                          className="save-btn"
+                          onClick={() => handleSaveSetting('contact', 'address')}
+                        >
+                          Save
+                        </button>
+                        <button 
+                          className="cancel-btn"
+                          onClick={() => handleCancelEdit('contact', 'address')}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <button 
+                        className="edit-btn"
+                        onClick={() => handleEditSetting('contact', 'address')}
+                      >
+                        Edit
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
