@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
@@ -23,6 +23,29 @@ const serviceCards = [
 ];
 
 const Services = () => {
+	const navigate = useNavigate();
+
+	const handleBookNow = () => {
+		// Check if user is authenticated
+		const token = localStorage.getItem('token');
+		const customer = localStorage.getItem('customer');
+		
+		// User must have BOTH token AND customer data to be considered authenticated
+		if (!token || !customer) {
+			// User is not authenticated, show alert and redirect to login
+			alert('Please login to book an appointment. You will be redirected to the login page.');
+			navigate('/login', { 
+				state: { 
+					redirectTo: '/booking',
+					message: 'Please login to book an appointment'
+				}
+			});
+		} else {
+			// User is authenticated, proceed to booking
+			navigate('/booking');
+		}
+	};
+
 	return (
 		<div>
 			<Header />
@@ -59,7 +82,7 @@ const Services = () => {
 				</section>
 
 					<div style={{ textAlign: 'center', marginTop: 28 }}>
-						<Link to="/booking" className="book-now-btn book-now-wide">BOOK NOW</Link>
+						<button onClick={handleBookNow} className="book-now-btn book-now-wide">BOOK NOW</button>
 					</div>
 			</main>
 			<Footer />

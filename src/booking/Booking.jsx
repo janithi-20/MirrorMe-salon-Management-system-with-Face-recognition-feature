@@ -20,6 +20,29 @@ const Booking = () => {
 	const location = useLocation();
 	const incoming = location?.state?.booking || null; 
 
+	// Check if user is authenticated
+	useEffect(() => {
+		const checkAuthentication = () => {
+			const token = localStorage.getItem('token');
+			const customer = localStorage.getItem('customer');
+			
+			// User must have BOTH token AND customer data to be considered authenticated
+			if (!token || !customer) {
+				// User is not authenticated, redirect to login
+				alert('Please login to book an appointment. You will be redirected to the login page.');
+				navigate('/login', { 
+					state: { 
+						redirectTo: '/booking',
+						message: 'Please login to book an appointment'
+					}
+				});
+				return;
+			}
+		};
+
+		checkAuthentication();
+	}, [navigate]);
+
 	const [datetime, setDatetime] = useState('');
 	const [staff, setStaff] = useState('Any');
 
@@ -38,8 +61,20 @@ const Booking = () => {
 	// view-text dropdown state & refs
 	const [mainOpen, setMainOpen] = useState(false);
 	const [subOpen, setSubOpen] = useState(false);
+	const [isMobile, setIsMobile] = useState(false);
 	const mainRef = useRef(null);
 	const subRef = useRef(null);
+
+	// Mobile detection
+	useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth <= 768);
+		};
+		
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+		return () => window.removeEventListener('resize', checkMobile);
+	}, []);
 
 	useEffect(() => {
 		const onDocClick = (e) => {
@@ -49,6 +84,20 @@ const Booking = () => {
 		document.addEventListener('click', onDocClick);
 		return () => document.removeEventListener('click', onDocClick);
 	}, []);
+
+	// Close dropdowns when any dropdown is open (for mobile)
+	useEffect(() => {
+		if ((mainOpen || subOpen) && isMobile) {
+			document.body.style.overflow = 'hidden'; // Prevent background scrolling on mobile
+		} else {
+			document.body.style.overflow = 'unset';
+		}
+		
+		// Cleanup on unmount
+		return () => {
+			document.body.style.overflow = 'unset';
+		};
+	}, [mainOpen, subOpen, isMobile]);
 
 	const openAdd = () => { setAdding(true); setAddMain(''); setAddSub(''); };
 	const cancelAdd = () => setAdding(false);
@@ -72,11 +121,48 @@ const Booking = () => {
 	const selectedMainObj = ServiceIndex.find(s => s.key === addMain);
 	const selectedSubObj = selectedMainObj?.subs?.find(x => x.id === addSub);
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (items.length === 0) return alert('Add at least one service');
-		const booking = { items, datetime, staff, subtotal };
-		navigate('/payment', { state: { booking } });
+		
+		try {
+			// Get customer info from localStorage
+			const customerData = JSON.parse(localStorage.getItem('customer') || '{}');
+			
+			const bookingData = {
+				items,
+				datetime,
+				staff,
+				subtotal,
+				customerInfo: customerData
+			};
+
+			// Submit booking to backend
+			const response = await fetch('http://localhost:5000/bookings', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${localStorage.getItem('token')}`
+				},
+				body: JSON.stringify(bookingData)
+			});
+
+			const result = await response.json();
+
+			if (response.ok) {
+				// Booking created successfully, navigate to payment with the booking data
+				navigate('/payment', { 
+					state: { 
+						booking: { ...bookingData, bookingId: result.booking.bookingId }
+					} 
+				});
+			} else {
+				alert(result.message || 'Failed to create booking. Please try again.');
+			}
+		} catch (error) {
+			console.error('Booking submission error:', error);
+			alert('Unable to create booking. Please make sure you are connected to the internet and try again.');
+		}
 	};
 
 	return (
@@ -119,6 +205,7 @@ const Booking = () => {
 									<select
 										value={staff}
 										onChange={e => setStaff(e.target.value)}
+										className="mobile-select"
 										style={{
 											width: '100%',
 											padding: '0.85rem 1rem',
@@ -145,7 +232,7 @@ const Booking = () => {
 								</div>
 
 								{adding && (
-									<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 8, padding: 12, background: '#fff', borderRadius: 8 }}>
+									<div className="service-selection-container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 8, padding: 12, background: '#fff', borderRadius: 8 }}>
 										{/* Main service as form-style read-only input */}
 										<div ref={mainRef} style={{ position: 'relative' }}>
 											<label style={{ fontSize: 12 }}>Main Service</label>
@@ -160,11 +247,27 @@ const Booking = () => {
 												/>
 											</div>
 											{mainOpen && (
-												<div style={{ position: 'absolute', zIndex: 40, left: 0, right: 0, marginTop: 8, background: '#fff', border: '1px solid #eee', borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', maxHeight: 240, overflow: 'auto' }}>
-													{ServiceIndex.map(s => (
-														<div key={s.key} onClick={() => { setAddMain(s.key); setAddSub(''); setMainOpen(false); setSubOpen(true); }} style={{ padding: 12, borderBottom: '1px solid #f4f4f4', cursor: 'pointer' }}>{s.key}</div>
-													))}
-												</div>
+												<>
+													<div 
+														className="mobile-dropdown-backdrop"
+														style={{ 
+															position: 'fixed', 
+															top: 0, 
+															left: 0, 
+															right: 0, 
+															bottom: 0, 
+															background: 'rgba(0,0,0,0.5)', 
+															zIndex: 39,
+															display: isMobile ? 'block' : 'none'
+														}}
+														onClick={() => setMainOpen(false)}
+													/>
+													<div className="service-dropdown-menu" style={{ position: 'absolute', zIndex: 40, left: 0, right: 0, marginTop: 8, background: '#fff', border: '1px solid #eee', borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', maxHeight: 240, overflow: 'auto' }}>
+														{ServiceIndex.map(s => (
+															<div key={s.key} className="service-dropdown-item" onClick={() => { setAddMain(s.key); setAddSub(''); setMainOpen(false); setSubOpen(true); }} style={{ padding: 12, borderBottom: '1px solid #f4f4f4', cursor: 'pointer' }}>{s.key}</div>
+														))}
+													</div>
+												</>
 											)}
 										</div>
 										{/* Sub-service as form-style read-only input */}
@@ -181,17 +284,33 @@ const Booking = () => {
 												/>
 											</div>
 											{subOpen && addMain && (
-												<div style={{ position: 'absolute', zIndex: 40, left: 0, right: 0, marginTop: 8, background: '#fff', border: '1px solid #eee', borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', maxHeight: 240, overflow: 'auto' }}>
-													{ServiceIndex.find(s => s.key === addMain)?.subs?.map(sub => (
-														<div key={sub.id} onClick={() => { setAddSub(sub.id); setSubOpen(false); }} style={{ padding: 12, borderBottom: '1px solid #f4f4f4', cursor: 'pointer' }}>{sub.label} — LKR {sub.price.toLocaleString()}</div>
-													))}
-												</div>
+												<>
+													<div 
+														className="mobile-dropdown-backdrop"
+														style={{ 
+															position: 'fixed', 
+															top: 0, 
+															left: 0, 
+															right: 0, 
+															bottom: 0, 
+															background: 'rgba(0,0,0,0.5)', 
+															zIndex: 39,
+															display: isMobile ? 'block' : 'none'
+														}}
+														onClick={() => setSubOpen(false)}
+													/>
+													<div className="service-dropdown-menu" style={{ position: 'absolute', zIndex: 40, left: 0, right: 0, marginTop: 8, background: '#fff', border: '1px solid #eee', borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', maxHeight: 240, overflow: 'auto' }}>
+														{ServiceIndex.find(s => s.key === addMain)?.subs?.map(sub => (
+															<div key={sub.id} className="service-dropdown-item" onClick={() => { setAddSub(sub.id); setSubOpen(false); }} style={{ padding: 12, borderBottom: '1px solid #f4f4f4', cursor: 'pointer' }}>{sub.label} — LKR {sub.price.toLocaleString()}</div>
+														))}
+													</div>
+												</>
 											)}
 										</div>
-										<div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
-											<div style={{ fontWeight: 700, fontSize: 16, marginRight: 8 }}>{selectedSubObj ? 'LKR ' + selectedSubObj.price.toLocaleString() : ''}</div>
-											<button type="button" className="btn" onClick={confirmAdd}>Add</button>
-											<button type="button" className="btn" onClick={cancelAdd}>Cancel</button>
+										<div className="service-action-buttons" style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
+											<div className="service-price-display" style={{ fontWeight: 700, fontSize: 16, marginRight: 8 }}>{selectedSubObj ? 'LKR ' + selectedSubObj.price.toLocaleString() : ''}</div>
+											<button type="button" className="btn service-add-btn" onClick={confirmAdd}>Add</button>
+											<button type="button" className="btn service-cancel-btn" onClick={cancelAdd}>Cancel</button>
 										</div>
 									</div>
 								)}

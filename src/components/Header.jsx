@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiLogIn, FiBell, FiLogOut } from 'react-icons/fi';
+import { FiLogIn, FiBell, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import '../App.css';
 
@@ -11,6 +11,7 @@ const Header = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const checkAuthStatus = () => {
     // Check if user is logged in
@@ -120,6 +121,14 @@ const Header = () => {
     }
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className="site-header">
       <div className="container header-container">
@@ -134,55 +143,49 @@ const Header = () => {
           <span style={{ fontWeight: 700, fontSize: 20, color: '#fff' }}>Mirror Me</span>
         </Link>
 
-        <nav>
+        {/* Mobile menu button */}
+        <button 
+          className="mobile-menu-button"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle mobile menu"
+        >
+          {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+        </button>
+
+        <nav className={`main-nav ${isMobileMenuOpen ? 'mobile-menu-open' : ''}`}>
           <ul className="nav-list">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/services">Services</Link></li>
+            <li><Link to="/" onClick={closeMobileMenu}>Home</Link></li>
+            <li><Link to="/services" onClick={closeMobileMenu}>Services</Link></li>
             <li>
               <button 
-                onClick={() => handleSmoothScroll('about')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'white',
-                  fontSize: 'inherit',
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                  padding: 0
+                onClick={() => {
+                  handleSmoothScroll('about');
+                  closeMobileMenu();
                 }}
+                className="nav-link-btn"
               >
                 About
               </button>
             </li>
-            <li><Link to="/team">Our Team</Link></li>
+            <li><Link to="/team" onClick={closeMobileMenu}>Our Team</Link></li>
             <li>
               <button 
-                onClick={() => handleSmoothScroll('brands')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'white',
-                  fontSize: 'inherit',
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                  padding: 0
+                onClick={() => {
+                  handleSmoothScroll('brands');
+                  closeMobileMenu();
                 }}
+                className="nav-link-btn"
               >
                 Brands
               </button>
             </li>
             <li>
               <button 
-                onClick={() => handleSmoothScroll('contact')}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'white',
-                  fontSize: 'inherit',
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                  padding: 0
+                onClick={() => {
+                  handleSmoothScroll('contact');
+                  closeMobileMenu();
                 }}
+                className="nav-link-btn"
               >
                 Contact
               </button>
@@ -190,13 +193,20 @@ const Header = () => {
 
             {/* Admin Panel link - only show when admin is authenticated */}
             {isAdminAuthenticated && (
-              <li><Link to="/admin">Admin Panel</Link></li>
+              <li><Link to="/admin" onClick={closeMobileMenu}>Admin Panel</Link></li>
             )}
 
             {/* Admin authentication buttons */}
             {isAdminAuthenticated ? (
               <li>
-                <button onClick={handleAdminLogout} className="btn btn-icon btn-secondary" style={{ padding: '8px 12px' }}>
+                <button 
+                  onClick={() => {
+                    handleAdminLogout();
+                    closeMobileMenu();
+                  }} 
+                  className="btn btn-icon btn-secondary" 
+                  style={{ padding: '8px 12px' }}
+                >
                   <FiLogOut style={{ verticalAlign: 'middle', marginRight: 6 }} />
                   Admin Logout
                 </button>
@@ -208,7 +218,10 @@ const Header = () => {
               <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ color: '#fff', fontSize: '14px' }}>Welcome, {userName}!</span>
                 <button 
-                  onClick={handleLogout}
+                  onClick={() => {
+                    handleLogout();
+                    closeMobileMenu();
+                  }}
                   className="btn btn-icon btn-secondary" 
                   style={{ padding: '8px 12px', color: 'white' }}
                 >
@@ -218,7 +231,12 @@ const Header = () => {
               </li>
             ) : (
               <li>
-                <Link to="/login" className="btn btn-icon btn-secondary" style={{ padding: '8px 12px', color: 'white' }}>
+                <Link 
+                  to="/login" 
+                  className="btn btn-icon btn-secondary" 
+                  style={{ padding: '8px 12px', color: 'white' }}
+                  onClick={closeMobileMenu}
+                >
                   <FiLogIn style={{ verticalAlign: 'middle', marginRight: 6, color: 'white' }} />
                   Login
                 </Link>
@@ -231,7 +249,10 @@ const Header = () => {
                 <div className="bell-wrapper" style={{ position: 'relative' }}>
                   <button
                     className="bell-btn"
-                    onClick={() => navigate('/notifications')}
+                    onClick={() => {
+                      navigate('/notifications');
+                      closeMobileMenu();
+                    }}
                     aria-label="Notifications"
                     style={{ color: 'white' }}
                   >

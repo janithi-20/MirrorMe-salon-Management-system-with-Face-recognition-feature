@@ -82,8 +82,42 @@
 }
 
 .admin-user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
   color: #718096;
   font-weight: 500;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(229, 62, 62, 0.2);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #c53030 0%, #9c2626 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(229, 62, 62, 0.3);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(229, 62, 62, 0.2);
+}
+
+.logout-icon {
+  font-size: 16px;
 }
 
 .admin-content {
@@ -1127,6 +1161,38 @@
   background: #b36f23;
 }
 
+/* Enhanced Admin Panel Responsive Styles */
+@media (max-width: 1024px) {
+  .admin-dashboard {
+    flex-direction: column;
+  }
+  
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  
+  .admin-main {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .analytics-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .chart-card {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .admin-dashboard {
     flex-direction: column;
@@ -1135,14 +1201,57 @@
   .admin-sidebar {
     width: 100%;
     height: auto;
+    position: relative;
+  }
+  
+  .sidebar-nav {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px 0;
+    gap: 10px;
+  }
+  
+  .nav-item {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-width: 120px;
+    text-align: center;
+  }
+  
+  .admin-main {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .admin-header {
+    padding: 15px 20px;
+  }
+  
+  .admin-header h1 {
+    font-size: 24px;
   }
   
   .stats-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .stat-card {
+    padding: 20px 15px;
+  }
+  
+  .analytics-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .chart-card {
+    width: 100%;
+    padding: 15px;
   }
   
   .admin-content {
-    padding: 20px;
+    padding: 15px;
   }
 
   .setting-item {
@@ -1164,4 +1273,183 @@
   .setting-select {
     max-width: 100%;
   }
+  
+  /* Service Management Responsive */
+  .service-container {
+    padding: 15px;
+  }
+  
+  .service-card {
+    margin-bottom: 15px;
+  }
+  
+  .service-form {
+    padding: 15px;
+  }
+  
+  /* Team Management Responsive */
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .team-card {
+    padding: 15px;
+  }
+  
+  /* Appointment Management Responsive */
+  .appointment-grid {
+    display: block;
+  }
+  
+  .appointment-item {
+    display: block;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+  }
+  
+  .grid-cell {
+    display: block;
+    margin-bottom: 10px;
+    padding: 5px 0;
+  }
+  
+  .grid-cell:before {
+    content: attr(data-label) ": ";
+    font-weight: 600;
+    color: #2d3748;
+  }
+  
+  /* Feedback Management Responsive */
+  .feedback-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .feedback-item {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header {
+    padding: 10px 15px;
+  }
+  
+  .admin-header h1 {
+    font-size: 20px;
+  }
+  
+  .admin-content {
+    padding: 10px;
+  }
+  
+  .sidebar-header h2 {
+    font-size: 18px;
+  }
+  
+  .nav-item {
+    min-width: 100px;
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+  
+  .nav-icon {
+    font-size: 16px;
+  }
+  
+  .stat-card {
+    padding: 15px 10px;
+  }
+  
+  .stat-value {
+    font-size: 20px;
+  }
+  
+  .stat-title {
+    font-size: 12px;
+  }
+  
+  .chart-card {
+    padding: 10px;
+  }
+  
+  .chart-header h3 {
+    font-size: 16px;
+  }
+  
+  .setting-category h3 {
+    font-size: 16px;
+  }
+  
+  .setting-item {
+    padding: 15px;
+  }
+  
+  .setting-info h4 {
+    font-size: 14px;
+  }
+  
+  .save-btn,
+  .cancel-btn,
+  .edit-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Loading and Error States */
+.loading-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 18px;
+  background: #f9fafb;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.error-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #dc2626;
+  font-size: 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.retry-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.retry-btn:hover {
+  background: #b91c1c;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.no-bookings {
+  text-align: center;
+  padding: 30px 20px;
+  color: #6b7280;
+  font-style: italic;
 }

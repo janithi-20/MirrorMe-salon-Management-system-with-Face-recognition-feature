@@ -1,5 +1,95 @@
-.team-page .section-title h2 { margin-bottom: 8px; }
+.team-page .section-title h2 { 
+  margin-bottom: 8px; 
+}
 
-.team-page .section-title { text-align: center; }.team-page .section-title p { color: #666; }
+.team-page .section-title { 
+  text-align: center; 
+}
 
-.team-page .section-title p { color: #666; }
+.team-page .section-title p { 
+  color: #666; 
+}
+
+/* Team Page Responsive Styles */
+@media (max-width: 768px) {
+  .team-page {
+    padding: 80px 15px 40px;
+  }
+  
+  .team-page .section-title h2 {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  
+  .team-page .section-title p {
+    font-size: 16px;
+    padding: 0 10px;
+  }
+  
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    margin-top: 30px;
+  }
+  
+  .team-member {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .team-member img {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 15px;
+  }
+  
+  .team-member h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  
+  .team-member .role {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .team-member p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-page {
+    padding: 70px 10px 30px;
+  }
+  
+  .team-page .section-title h2 {
+    font-size: 24px;
+  }
+  
+  .team-page .section-title p {
+    font-size: 14px;
+  }
+  
+  .team-member {
+    padding: 15px;
+  }
+  
+  .team-member img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .team-member h3 {
+    font-size: 18px;
+  }
+  
+  .team-member .role {
+    font-size: 13px;
+  }
+  
+  .team-member p {
+    font-size: 13px;
+  }
+}

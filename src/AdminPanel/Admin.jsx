@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FiScissors, FiMessageSquare, FiCalendar, FiUsers, FiTag, FiSettings, FiGrid, FiClock, FiStar, FiTrendingUp } from 'react-icons/fi';
+import { FiScissors, FiMessageSquare, FiCalendar, FiUsers, FiTag, FiSettings, FiGrid, FiClock, FiStar, FiTrendingUp, FiLogOut } from 'react-icons/fi';
 import ServiceManagement from './serviceManage';
 import TeamManagement from './TeamManage';
 import FeedbackManagement from './FeedbackManage';
@@ -13,6 +13,9 @@ import './Admin.css';
   const Admin = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [editingSettings, setEditingSettings] = useState({});
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [settings, setSettings] = useState({
     businessHours: {
       weekdays: 'Monday - Friday: 9:00 AM - 6:00 PM',
@@ -24,15 +27,48 @@ import './Admin.css';
       address: '123 Main Street, Colombo 03, Sri Lanka'
     }
   });
-  const { isAdminAuthenticated } = useAuth();
+  const { isAdminAuthenticated, logoutAdmin } = useAuth();
   const navigate = useNavigate();
+
+  // Fetch dashboard data from API
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch('http://localhost:5000/dashboard/stats');
+      if (!response.ok) {
+        throw new Error('Failed to fetch dashboard data');
+      }
+      
+      const result = await response.json();
+      if (result.success) {
+        setDashboardData(result.data);
+      } else {
+        throw new Error(result.message || 'Failed to fetch data');
+      }
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching dashboard data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Redirect to login if not authenticated as admin
   useEffect(() => {
     if (!isAdminAuthenticated) {
       navigate('/login');
+    } else {
+      fetchDashboardData();
     }
   }, [isAdminAuthenticated, navigate]);
+
+  // Logout function
+  const handleLogout = () => {
+    logoutAdmin();
+    navigate('/login');
+  };
 
   const sidebarItems = [
     { id: 'dashboard', name: 'Dashboard', icon: FiGrid },
@@ -42,59 +78,6 @@ import './Admin.css';
     { id: 'appointments', name: 'Appointment History', icon: FiCalendar },
     { id: 'brands', name: 'Brands', icon: FiTag },
     { id: 'settings', name: 'Settings', icon: FiSettings },
-  ];
-
-  const stats = [
-    { title: 'Registered Customers', value: '156', color: '#3b82f6' },
-    { title: 'Invoice Value', value: 'Rs. 95,000', color: '#10b981' },
-    { title: 'Number of Bookings', value: '89', color: '#f59e0b' },
-  ];
-
-  const bookingTrend = [
-    { day: 'Mon', newClients: 12, returningClients: 8 },
-    { day: 'Tue', newClients: 15, returningClients: 12 },
-    { day: 'Wed', newClients: 8, returningClients: 18 },
-    { day: 'Thu', newClients: 22, returningClients: 14 },
-    { day: 'Fri', newClients: 28, returningClients: 20 },
-    { day: 'Sat', newClients: 18, returningClients: 16 },
-  ];
-
-  const bookingChannels = {
-    totalBookings: 78,
-    inPerson: 52,
-    walkIn: 18,
-    google: 8
-  };
-
-  const bookingStatus = {
-    booked: 8,
-    confirmed: 52,
-    done: 92,
-    cancelled: 4
-  };
-
-  const upcomingBookings = [
-    { 
-      id: 1, 
-      service: 'Brightening Clean Up (Ume Care)', 
-      client: 'Ledner Tobin', 
-      time: '12:45 PM', 
-      status: 'confirmed',
-    },
-    { 
-      id: 2, 
-      service: 'Cut & Re-Style (Advance)', 
-      client: 'Ashley Mackenzie', 
-      time: '02:15 PM', 
-      status: 'confirmed',
-    },
-    { 
-      id: 3, 
-      service: 'Full Dressing Derma', 
-      client: 'Mackee Rose', 
-      time: '02:15 PM', 
-      status: 'confirmed',
-    }
   ];
 
   // Settings helper functions
@@ -144,6 +127,43 @@ import './Admin.css';
   const renderContent = () => {
     switch (activeSection) {
       case 'dashboard':
+        if (loading) {
+          return (
+            <div className="dashboard-content">
+              <h2>Dashboard Overview</h2>
+              <div className="loading-message">Loading dashboard data...</div>
+            </div>
+          );
+        }
+
+        if (error) {
+          return (
+            <div className="dashboard-content">
+              <h2>Dashboard Overview</h2>
+              <div className="error-message">
+                Error loading dashboard data: {error}
+                <button onClick={fetchDashboardData} className="retry-btn">Retry</button>
+              </div>
+            </div>
+          );
+        }
+
+        if (!dashboardData) {
+          return (
+            <div className="dashboard-content">
+              <h2>Dashboard Overview</h2>
+              <div className="no-data-message">No dashboard data available</div>
+            </div>
+          );
+        }
+
+        // Prepare stats data for rendering
+        const stats = [
+          { title: 'Registered Customers', value: dashboardData.stats.totalCustomers.toString(), color: '#3b82f6' },
+          { title: 'Invoice Value', value: `Rs. ${dashboardData.stats.totalRevenue.toLocaleString()}`, color: '#10b981' },
+          { title: 'Number of Bookings', value: dashboardData.stats.totalBookings.toString(), color: '#f59e0b' },
+        ];
+
         return (
           <div className="dashboard-content">
             <h2>Dashboard Overview</h2>
@@ -181,7 +201,7 @@ import './Admin.css';
                   </div>
                 </div>
                 <div className="bar-chart">
-                  {bookingTrend.map((day, index) => (
+                  {dashboardData.bookingTrend.map((day, index) => (
                     <div key={index} className="bar-group">
                       <div className="bars">
                         <div 
@@ -208,7 +228,7 @@ import './Admin.css';
                 <div className="pie-chart-container">
                   <div className="pie-chart">
                     <div className="pie-center">
-                      <div className="pie-total">{bookingChannels.totalBookings}</div>
+                      <div className="pie-total">{dashboardData.bookingChannels.totalBookings}</div>
                       <div className="pie-label">Bookings</div>
                     </div>
                   </div>
@@ -217,21 +237,21 @@ import './Admin.css';
                       <div className="pie-legend-color in-person"></div>
                       <div className="pie-legend-text">
                         <span className="pie-legend-label">Online bookings (website)</span>
-                        <span className="pie-legend-value">{bookingChannels.inPerson}</span>
+                        <span className="pie-legend-value">{dashboardData.bookingChannels.online}</span>
                       </div>
                     </div>
                     <div className="pie-legend-item">
                       <div className="pie-legend-color walk-in"></div>
                       <div className="pie-legend-text">
                         <span className="pie-legend-label">Walk-in bookings</span>
-                        <span className="pie-legend-value">{bookingChannels.walkIn}</span>
+                        <span className="pie-legend-value">{dashboardData.bookingChannels.walkIn}</span>
                       </div>
                     </div>
                     <div className="pie-legend-item">
                       <div className="pie-legend-color google"></div>
                       <div className="pie-legend-text">
                         <span className="pie-legend-label">Through phone</span>
-                        <span className="pie-legend-value">{bookingChannels.google}</span>
+                        <span className="pie-legend-value">{dashboardData.bookingChannels.phone}</span>
                       </div>
                     </div>
                   </div>
@@ -247,18 +267,22 @@ import './Admin.css';
                   <h3>Upcoming Bookings</h3>
                 </div>
                 <div className="bookings-list">
-                  {upcomingBookings.map((booking) => (
-                    <div key={booking.id} className="booking-item">
-                      <div className="booking-details">
-                        <div className="booking-service">{booking.service}</div>
-                        <div className="booking-client">{booking.client}</div>
+                  {dashboardData.upcomingBookings.length > 0 ? (
+                    dashboardData.upcomingBookings.map((booking) => (
+                      <div key={booking.id} className="booking-item">
+                        <div className="booking-details">
+                          <div className="booking-service">{booking.service}</div>
+                          <div className="booking-client">{booking.client}</div>
+                        </div>
+                        <div className="booking-time">
+                          <div className="time">{booking.time}</div>
+                          <div className="status">Today</div>
+                        </div>
                       </div>
-                      <div className="booking-time">
-                        <div className="time">{booking.time}</div>
-                        <div className="status">Today</div>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <div className="no-bookings">No upcoming bookings for today</div>
+                  )}
                 </div>
               </div>
 
@@ -273,28 +297,28 @@ import './Admin.css';
                     <div className="status-box-header">
                       <span className="status-label">Booked</span>
                     </div>
-                    <div className="status-value">{bookingStatus.booked}</div>
+                    <div className="status-value">{dashboardData.bookingStatus.booked}</div>
                   </div>
                   
                   <div className="status-box confirmed">
                     <div className="status-box-header">
                       <span className="status-label">Confirmed</span>
                     </div>
-                    <div className="status-value">{bookingStatus.confirmed}</div>
+                    <div className="status-value">{dashboardData.bookingStatus.confirmed}</div>
                   </div>
                   
                   <div className="status-box done">
                     <div className="status-box-header">
                       <span className="status-label">Done</span>
                     </div>
-                    <div className="status-value">{bookingStatus.done}</div>
+                    <div className="status-value">{dashboardData.bookingStatus.completed}</div>
                   </div>
                   
                   <div className="status-box cancelled">
                     <div className="status-box-header">
                       <span className="status-label">Cancelled</span>
                     </div>
-                    <div className="status-value">{bookingStatus.cancelled}</div>
+                    <div className="status-value">{dashboardData.bookingStatus.cancelled}</div>
                   </div>
                 </div>
               </div>
@@ -304,34 +328,15 @@ import './Admin.css';
             <div className="recent-activities">
               <h3>Recent Activities</h3>
               <div className="activity-list">
-                <div className="activity-item">
-                  <FiClock className="activity-icon" />
-                  <div className="activity-details">
-                    <p>New appointment scheduled for tomorrow</p>
-                    <span className="activity-time">2 hours ago</span>
+                {dashboardData.recentActivities.map((activity, index) => (
+                  <div key={index} className="activity-item">
+                    <FiClock className="activity-icon" />
+                    <div className="activity-details">
+                      <p>{activity.message}</p>
+                      <span className="activity-time">{activity.time}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="activity-item">
-                  <FiStar className="activity-icon" />
-                  <div className="activity-details">
-                    <p>New 5-star review received</p>
-                    <span className="activity-time">4 hours ago</span>
-                  </div>
-                </div>
-                <div className="activity-item">
-                  <FiUsers className="activity-icon" />
-                  <div className="activity-details">
-                    <p>Team member added new service</p>
-                    <span className="activity-time">1 day ago</span>
-                  </div>
-                </div>
-                <div className="activity-item">
-                  <FiTrendingUp className="activity-icon" />
-                  <div className="activity-details">
-                    <p>Monthly revenue increased by 15%</p>
-                    <span className="activity-time">2 days ago</span>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -609,6 +614,10 @@ import './Admin.css';
           <h1>Salon Management System</h1>
           <div className="admin-user">
             <span>Welcome, Admin</span>
+            <button className="logout-btn" onClick={handleLogout} title="Logout">
+              <FiLogOut className="logout-icon" />
+              Logout
+            </button>
           </div>
         </div>
 

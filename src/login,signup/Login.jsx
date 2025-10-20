@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -10,7 +10,12 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { loginAdmin } = useAuth();
+
+  // Get redirect information from navigation state
+  const redirectTo = location.state?.redirectTo || '/';
+  const redirectMessage = location.state?.message;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,8 +57,8 @@ const Login = () => {
         // Trigger a custom event to notify header about login
         window.dispatchEvent(new Event('userLoggedIn'));
         
-        // Redirect to home page after successful login
-        navigate('/');
+        // Redirect to the intended page or home page after successful login
+        navigate(redirectTo);
       } else {
         // Display error message from backend
         setError(data.message || 'Login failed. Please check your credentials.');
@@ -69,6 +74,19 @@ const Login = () => {
   return (
     <div className="login-container">
       <h2>Login</h2>
+      {redirectMessage && (
+        <div className="info-message" style={{ 
+          color: '#d1842c', 
+          marginBottom: '15px', 
+          padding: '10px', 
+          backgroundColor: '#fff3e0', 
+          borderRadius: '4px',
+          border: '1px solid #d1842c',
+          textAlign: 'center'
+        }}>
+          {redirectMessage}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         {error && (
           <div className="error-message" style={{ color: 'red', marginBottom: '10px', padding: '8px', backgroundColor: '#ffe6e6', borderRadius: '4px' }}>
