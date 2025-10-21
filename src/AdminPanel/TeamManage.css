@@ -107,7 +107,12 @@
   font-weight: 500;
 }
 
-.edit-staff-btn {
+.staff-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-staff-btn, .delete-staff-btn {
   background: transparent;
   border: 1px solid #d1842c;
   color: #d1842c;
@@ -122,6 +127,16 @@
 
 .edit-staff-btn:hover {
   background: #d1842c;
+  color: white;
+}
+
+.delete-staff-btn {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.delete-staff-btn:hover {
+  background: #dc2626;
   color: white;
 }
 
@@ -245,6 +260,36 @@
   box-shadow: 0 0 0 2px rgba(209, 132, 44, 0.1);
 }
 
+.file-input {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2d3748;
+  background: white;
+  cursor: pointer;
+}
+
+.file-input:focus {
+  outline: none;
+  border-color: #d1842c;
+  box-shadow: 0 0 0 2px rgba(209, 132, 44, 0.1);
+}
+
+.image-preview {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f1f5f9;
+}
+
 .specialties-section {
   margin-bottom: 20px;
 }
@@ -360,5 +405,9 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-bottom: 12px;
+}
+
+.form-group:last-child {
+  grid-column: 1 / -1;
 }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }

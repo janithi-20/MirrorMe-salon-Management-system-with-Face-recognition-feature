@@ -81,9 +81,9 @@ const Services = () => {
 					))}
 				</section>
 
-					<div style={{ textAlign: 'center', marginTop: 28 }}>
-						<button onClick={handleBookNow} className="book-now-btn book-now-wide">BOOK NOW</button>
-					</div>
+				<div style={{ textAlign: 'center', marginTop: 28 }}>
+					<button onClick={handleBookNow} className="book-now-btn book-now-wide">BOOK NOW</button>
+				</div>
 			</main>
 			<Footer />
 		</div>

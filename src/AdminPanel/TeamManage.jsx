@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiEdit2, FiSave, FiX, FiPlus, FiMail, FiPhone, FiMapPin, FiClock } from 'react-icons/fi';
+import { FiEdit2, FiSave, FiX, FiPlus, FiMail, FiPhone, FiMapPin, FiClock, FiTrash2 } from 'react-icons/fi';
 import './TeamManage.css';
 
 const TeamManagement = () => {
@@ -102,16 +102,19 @@ const TeamManagement = () => {
     joinDate: '',
     status: 'active',
     specialties: [],
-    image: ''
+    image: '/default-avatar.jpg'
   });
+
+  const handleDeleteStaff = (staffId) => {
+    if (window.confirm('Are you sure you want to delete this staff member? This action cannot be undone.')) {
+      setStaffMembers(prevStaff => prevStaff.filter(staff => staff.id !== staffId));
+    }
+  };
+
   return (
     <div className="section-content">
       <h2>Team Management</h2>
       <div className="staff-stats">
-        <div className="staff-stat">
-          <span className="stat-number">{staffMembers.filter(s => s.status === 'active').length}</span>
-          <span className="stat-label">Active Staff</span>
-        </div>
         <div className="staff-stat">
           <span className="stat-number">{staffMembers.length}</span>
           <span className="stat-label">Total Staff</span>
@@ -119,10 +122,6 @@ const TeamManagement = () => {
         <div className="staff-stat">
           <span className="stat-number">Rs. {staffMembers.reduce((total, staff) => total + staff.salary, 0).toLocaleString()}</span>
           <span className="stat-label">Monthly Payroll</span>
-        </div>
-        <div className="staff-stat">
-          <span className="stat-number">{Math.round(staffMembers.reduce((total, staff) => total + parseFloat(staff.experience), 0) / staffMembers.length * 10) / 10}</span>
-          <span className="stat-label">Avg Experience (Years)</span>
         </div>
       </div>
       
@@ -173,12 +172,27 @@ const TeamManagement = () => {
                 <input type="date" value={newStaff.joinDate} onChange={(e) => setNewStaff(prev => ({ ...prev, joinDate: e.target.value }))} />
               </div>
               <div className="form-group">
-                <label>Specialties (comma separated)</label>
-                <input value={newStaff.specialties.join(', ')} onChange={(e) => setNewStaff(prev => ({ ...prev, specialties: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} />
-              </div>
-              <div className="form-group">
-                <label>Image URL</label>
-                <input value={newStaff.image} onChange={(e) => setNewStaff(prev => ({ ...prev, image: e.target.value }))} />
+                <label>Profile Image</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                        setNewStaff(prev => ({ ...prev, image: e.target.result }));
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="file-input"
+                />
+                {newStaff.image && newStaff.image !== '/default-avatar.jpg' && (
+                  <div className="image-preview">
+                    <img src={newStaff.image} alt="Preview" className="preview-image" />
+                  </div>
+                )}
               </div>
             </div>
             <div className="modal-actions">
@@ -189,13 +203,13 @@ const TeamManagement = () => {
                   const nextId = staffMembers.length ? Math.max(...staffMembers.map(s => s.id)) + 1 : 1;
                   const staffToAdd = { ...newStaff, id: nextId };
                   setStaffMembers(prev => [...prev, staffToAdd]);
-                  setNewStaff({ name: '', position: '', experience: '', email: '', phone: '', address: '', salary: 0, joinDate: '', status: 'active', specialties: [], image: '' });
+                  setNewStaff({ name: '', position: '', experience: '', email: '', phone: '', address: '', salary: 0, joinDate: '', status: 'active', specialties: [], image: '/default-avatar.jpg' });
                   setShowAddForm(false);
                 }}
               >
                 <FiSave size={16} /> Save
               </button>
-              <button className="cancel-btn" onClick={() => { setShowAddForm(false); setNewStaff({ name: '', position: '', experience: '', email: '', phone: '', address: '', salary: 0, joinDate: '', status: 'active', specialties: [], image: '' }); }}>
+              <button className="cancel-btn" onClick={() => { setShowAddForm(false); setNewStaff({ name: '', position: '', experience: '', email: '', phone: '', address: '', salary: 0, joinDate: '', status: 'active', specialties: [], image: '/default-avatar.jpg' }); }}>
                 <FiX size={16} /> Cancel
               </button>
             </div>
@@ -323,34 +337,6 @@ const TeamManagement = () => {
                       }}
                     />
                   </div>
-                  
-                  <div className="form-group">
-                    <label>Status:</label>
-                    <select
-                      defaultValue={staff.status}
-                      className="edit-input"
-                      onChange={(e) => {
-                        setStaffMembers(prevStaff =>
-                          prevStaff.map(s =>
-                            s.id === staff.id ? { ...s, status: e.target.value } : s
-                          )
-                        );
-                      }}
-                    >
-                      <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>
-                      <option value="on-leave">On Leave</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div className="specialties-section">
-                  <label>Specialties:</label>
-                  <div className="specialties-tags">
-                    {staff.specialties.map((specialty, index) => (
-                      <span key={index} className="specialty-tag">{specialty}</span>
-                    ))}
-                  </div>
                 </div>
                 
                 <div className="edit-actions">
@@ -377,16 +363,23 @@ const TeamManagement = () => {
                   <div className="staff-basic-info">
                     <h3>{staff.name}</h3>
                     <p className="staff-position">{staff.position}</p>
-                    <span className={`status-badge ${staff.status}`}>
-                      {staff.status === 'active' ? 'Active' : staff.status === 'inactive' ? 'Inactive' : 'On Leave'}
-                    </span>
                   </div>
-                  <button
-                    className="edit-staff-btn"
-                    onClick={() => setEditingStaff(staff.id)}
-                  >
-                    <FiEdit2 size={16} />
-                  </button>
+                  <div className="staff-actions">
+                    <button
+                      className="edit-staff-btn"
+                      onClick={() => setEditingStaff(staff.id)}
+                      title="Edit Staff"
+                    >
+                      <FiEdit2 size={16} />
+                    </button>
+                    <button
+                      className="delete-staff-btn"
+                      onClick={() => handleDeleteStaff(staff.id)}
+                      title="Delete Staff"
+                    >
+                      <FiTrash2 size={16} />
+                    </button>
+                  </div>
                 </div>
                 
                 <div className="staff-details">
@@ -411,15 +404,6 @@ const TeamManagement = () => {
                 <div className="staff-salary">
                   <span className="salary-label">Monthly Salary:</span>
                   <span className="salary-amount">Rs. {staff.salary.toLocaleString()}</span>
-                </div>
-                
-                <div className="staff-specialties">
-                  <span className="specialties-label">Specialties:</span>
-                  <div className="specialties-tags">
-                    {staff.specialties.map((specialty, index) => (
-                      <span key={index} className="specialty-tag">{specialty}</span>
-                    ))}
-                  </div>
                 </div>
                 
                 <div className="staff-join-date">

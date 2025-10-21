@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiCheck, FiX, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import './FeedbackManage.css';
 
 const FeedbackManagement = () => {
@@ -47,16 +47,8 @@ const FeedbackManagement = () => {
       <h2>Customer Feedback Management</h2>
       <div className="feedback-stats">
         <div className="feedback-stat">
-          <span className="stat-number">{feedbacks.filter(f => f.status === 'approved').length}</span>
-          <span className="stat-label">Approved</span>
-        </div>
-        <div className="feedback-stat">
-          <span className="stat-number">{feedbacks.filter(f => f.status === 'pending').length}</span>
-          <span className="stat-label">Pending</span>
-        </div>
-        <div className="feedback-stat">
-          <span className="stat-number">{feedbacks.filter(f => f.status === 'declined').length}</span>
-          <span className="stat-label">Declined</span>
+          <span className="stat-number">{feedbacks.length}</span>
+          <span className="stat-label">Total Feedback</span>
         </div>
         <div className="feedback-stat">
           <span className="stat-number">{feedbacks.filter(f => f.showOnMainPage).length}</span>
@@ -79,9 +71,6 @@ const FeedbackManagement = () => {
                   </div>
                 </div>
                 <div className="feedback-status-badges">
-                  <span className={`status-badge ${feedback.status}`}>
-                    {feedback.status.charAt(0).toUpperCase() + feedback.status.slice(1)}
-                  </span>
                   <span className={`visibility-badge ${feedback.showOnMainPage ? 'visible' : 'hidden'}`}>
                     {feedback.showOnMainPage ? (
                       <>
@@ -101,27 +90,6 @@ const FeedbackManagement = () => {
               <p className="feedback-comment">"{feedback.comment}"</p>
               
               <div className="feedback-actions">
-                <div className="status-controls">
-                  <label>Status:</label>
-                  <select
-                    value={feedback.status}
-                    onChange={(e) => {
-                      setFeedbacks(prevFeedbacks =>
-                        prevFeedbacks.map(f =>
-                          f.id === feedback.id
-                            ? { ...f, status: e.target.value }
-                            : f
-                        )
-                      );
-                    }}
-                    className="status-select"
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="declined">Declined</option>
-                  </select>
-                </div>
-                
                 <div className="visibility-controls">
                   <label>
                     <input
@@ -144,37 +112,37 @@ const FeedbackManagement = () => {
                 
                 <div className="quick-actions">
                   <button
-                    className="quick-approve-btn"
+                    className="quick-show-btn"
                     onClick={() => {
                       setFeedbacks(prevFeedbacks =>
                         prevFeedbacks.map(f =>
                           f.id === feedback.id
-                            ? { ...f, status: 'approved', showOnMainPage: true }
+                            ? { ...f, showOnMainPage: true }
                             : f
                         )
                       );
                     }}
-                    disabled={feedback.status === 'approved'}
+                    disabled={feedback.showOnMainPage}
                   >
-                    <FiCheck size={14} />
-                    Quick Approve & Show
+                    <FiEye size={14} />
+                    Show on Site
                   </button>
                   
                   <button
-                    className="quick-decline-btn"
+                    className="quick-hide-btn"
                     onClick={() => {
                       setFeedbacks(prevFeedbacks =>
                         prevFeedbacks.map(f =>
                           f.id === feedback.id
-                            ? { ...f, status: 'declined', showOnMainPage: false }
+                            ? { ...f, showOnMainPage: false }
                             : f
                         )
                       );
                     }}
-                    disabled={feedback.status === 'declined'}
+                    disabled={!feedback.showOnMainPage}
                   >
-                    <FiX size={14} />
-                    Quick Decline & Hide
+                    <FiEyeOff size={14} />
+                    Hide from Site
                   </button>
                 </div>
               </div>

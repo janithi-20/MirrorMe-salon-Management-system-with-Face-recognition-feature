@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FiScissors, FiMessageSquare, FiCalendar, FiUsers, FiTag, FiSettings, FiGrid, FiClock, FiStar, FiTrendingUp, FiLogOut } from 'react-icons/fi';
+import { FiScissors, FiMessageSquare, FiCalendar, FiUsers, FiTag, FiSettings, FiGrid, FiClock, FiLogOut } from 'react-icons/fi';
 import ServiceManagement from './serviceManage';
 import TeamManagement from './TeamManage';
 import FeedbackManagement from './FeedbackManage';

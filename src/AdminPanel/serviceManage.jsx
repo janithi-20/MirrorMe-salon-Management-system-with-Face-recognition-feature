@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiEdit2, FiSave, FiX, FiPlus, FiImage } from 'react-icons/fi';
+import { FiEdit2, FiSave, FiX, FiPlus, FiImage, FiTrash2 } from 'react-icons/fi';
 import './serviceManage.css';
 
 const ServiceManagement = () => {
@@ -146,6 +146,21 @@ const ServiceManagement = () => {
   const handleCancelAdd = () => {
     setNewService({ service: '', price: '', category: '', image: null, imagePreview: null });
     setShowAddForm(false);
+  };
+
+  const handleDeleteSubService = (mainIndex, subServiceId) => {
+    if (window.confirm('Are you sure you want to delete this service? This action cannot be undone.')) {
+      setServices(prevServices =>
+        prevServices.map((ms, msIndex) =>
+          msIndex === mainIndex
+            ? {
+                ...ms,
+                subServices: ms.subServices.filter(ss => ss.id !== subServiceId)
+              }
+            : ms
+        )
+      );
+    }
   };
 
   const handleImageError = (e) => {
@@ -370,12 +385,22 @@ const ServiceManagement = () => {
                         <h4>{subService.service}</h4>
                         <p className="service-price">Rs. {subService.price}</p>
                       </div>
-                      <button
-                        className="edit-service-btn"
-                        onClick={() => setEditingService(subService.id)}
-                      >
-                        <FiEdit2 size={16} />
-                      </button>
+                      <div className="service-actions">
+                        <button
+                          className="edit-service-btn"
+                          onClick={() => setEditingService(subService.id)}
+                          title="Edit Service"
+                        >
+                          <FiEdit2 size={16} />
+                        </button>
+                        <button
+                          className="delete-service-btn"
+                          onClick={() => handleDeleteSubService(mainIndex, subService.id)}
+                          title="Delete Service"
+                        >
+                          <FiTrash2 size={16} />
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>

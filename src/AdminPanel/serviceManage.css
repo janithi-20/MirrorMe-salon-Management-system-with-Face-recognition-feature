@@ -416,7 +416,12 @@
   font-size: 14px;
 }
 
-.edit-service-btn {
+.service-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-service-btn, .delete-service-btn {
   background: transparent;
   border: 1px solid #d1842c;
   color: #d1842c;
@@ -431,6 +436,16 @@
 
 .edit-service-btn:hover {
   background: #d1842c;
+  color: white;
+}
+
+.delete-service-btn {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.delete-service-btn:hover {
+  background: #dc2626;
   color: white;
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import blowdryLong from './haircut images/blowdry long hair.jpg';
 import blowdryMedium from './haircut images/blowdry medium hair.jpg';
 import blowdryShort from './haircut images/blowdry short hair.jpg';

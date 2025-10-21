@@ -176,16 +176,6 @@ const Register = () => {
           </div>
         )}
         
-
-        <div className="form-group">
-          <label>First Name</label>
-          <input type="text" placeholder="Enter your first name" required />
-        </div>
-
-        <div className="form-group">
-          <label>Last Name</label>
-          <input type="text" placeholder="Enter your last name" required />
-        </div>
         <div className="form-group">
           <label>First Name</label>
           <input

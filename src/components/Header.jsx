@@ -159,7 +159,7 @@ const Header = () => {
             <li>
               <button 
                 onClick={() => {
-                  handleSmoothScroll('about');
+                  handleSmoothScroll('contact');
                   closeMobileMenu();
                 }}
                 className="nav-link-btn"

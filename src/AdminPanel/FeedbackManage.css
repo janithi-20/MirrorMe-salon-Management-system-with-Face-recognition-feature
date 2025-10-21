@@ -200,7 +200,7 @@
   margin-left: auto;
 }
 
-.quick-approve-btn, .quick-decline-btn {
+.quick-show-btn, .quick-hide-btn {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -213,31 +213,31 @@
   transition: all 0.2s ease;
 }
 
-.quick-approve-btn {
+.quick-show-btn {
   background: #10b981;
   color: white;
 }
 
-.quick-approve-btn:hover:not(:disabled) {
+.quick-show-btn:hover:not(:disabled) {
   background: #059669;
 }
 
-.quick-approve-btn:disabled {
+.quick-show-btn:disabled {
   background: #d1d5db;
   color: #9ca3af;
   cursor: not-allowed;
 }
 
-.quick-decline-btn {
+.quick-hide-btn {
   background: #ef4444;
   color: white;
 }
 
-.quick-decline-btn:hover:not(:disabled) {
+.quick-hide-btn:hover:not(:disabled) {
   background: #dc2626;
 }
 
-.quick-decline-btn:disabled {
+.quick-hide-btn:disabled {
   background: #d1d5db;
   color: #9ca3af;
   cursor: not-allowed;
