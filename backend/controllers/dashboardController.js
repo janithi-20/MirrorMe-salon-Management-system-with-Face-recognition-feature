@@ -1,38 +1,22 @@
 // controllers/dashboardController.js
-
-// Sample data storage (in a real app, this would come from a database)
-let bookings = [
-  { id: 1, service: 'Brightening Clean Up (Ume Care)', client: 'Ledner Tobin', date: '2025-10-20', time: '12:45 PM', status: 'confirmed', amount: 3500, isNew: false },
-  { id: 2, service: 'Cut & Re-Style (Advance)', client: 'Ashley Mackenzie', date: '2025-10-20', time: '02:15 PM', status: 'confirmed', amount: 4500, isNew: true },
-  { id: 3, service: 'Full Dressing Derma', client: 'Mackee Rose', date: '2025-10-20', time: '02:15 PM', status: 'confirmed', amount: 6000, isNew: false },
-  { id: 4, service: 'Hair Treatment', client: 'John Smith', date: '2025-10-19', time: '10:00 AM', status: 'completed', amount: 2500, isNew: true },
-  { id: 5, service: 'Facial Treatment', client: 'Sarah Johnson', date: '2025-10-19', time: '03:30 PM', status: 'completed', amount: 4000, isNew: false },
-  { id: 6, service: 'Manicure & Pedicure', client: 'Emma Wilson', date: '2025-10-18', time: '11:00 AM', status: 'completed', amount: 3000, isNew: true },
-  { id: 7, service: 'Hair Coloring', client: 'Mike Brown', date: '2025-10-18', time: '01:00 PM', status: 'cancelled', amount: 0, isNew: false },
-  { id: 8, service: 'Eyebrow Threading', client: 'Lisa Davis', date: '2025-10-17', time: '09:00 AM', status: 'completed', amount: 1500, isNew: true },
-];
-
-let feedbacks = [
-  { id: 1, name: 'Alice Johnson', message: 'Excellent service! Very professional staff.', rating: 5, timestamp: '2025-10-19T10:30:00Z', status: 'received' },
-  { id: 2, name: 'Bob Smith', message: 'Great experience, will definitely come back.', rating: 5, timestamp: '2025-10-18T14:15:00Z', status: 'received' },
-  { id: 3, name: 'Carol Williams', message: 'Good service but a bit expensive.', rating: 4, timestamp: '2025-10-17T16:45:00Z', status: 'received' },
-  { id: 4, name: 'David Brown', message: 'Amazing transformation! Love my new look.', rating: 5, timestamp: '2025-10-16T11:20:00Z', status: 'received' },
-];
-
-// Import auth controller to access users
-const authController = require('./authController');
+const Booking = require('../models/Booking');
+const User = require('../models/User');
+const Feedback = require('../models/Feedback');
 
 const getDashboardStats = async (req, res) => {
   try {
-    // Calculate total registered customers
-    const totalCustomers = authController.users ? authController.users.length : 0;
+    // Get all bookings from database with virtual fields
+    const allBookings = await Booking.find({}).lean({ virtuals: true });
+    
+    // Calculate total registered customers from database
+    const totalCustomers = await User.countDocuments();
     
     // Calculate total revenue from completed bookings
-    const completedBookings = bookings.filter(booking => booking.status === 'completed');
-    const totalRevenue = completedBookings.reduce((sum, booking) => sum + booking.amount, 0);
+    const completedBookings = allBookings.filter(booking => booking.status === 'completed');
+    const totalRevenue = completedBookings.reduce((sum, booking) => sum + booking.totalAmount, 0);
     
     // Total bookings count
-    const totalBookings = bookings.length;
+    const totalBookings = allBookings.length;
     
     // Weekly booking trends (last 7 days)
     const today = new Date();
@@ -45,7 +29,7 @@ const getDashboardStats = async (req, res) => {
       const dayName = weekDays[date.getDay()];
       const dateStr = date.toISOString().split('T')[0];
       
-      const dayBookings = bookings.filter(booking => booking.date === dateStr);
+      const dayBookings = allBookings.filter(booking => booking.date === dateStr);
       const newClients = dayBookings.filter(booking => booking.isNew).length;
       const returningClients = dayBookings.filter(booking => !booking.isNew).length;
       
@@ -63,23 +47,45 @@ const getDashboardStats = async (req, res) => {
     
     // Booking status counts
     const statusCounts = {
-      booked: bookings.filter(b => b.status === 'booked').length,
-      confirmed: bookings.filter(b => b.status === 'confirmed').length,
-      completed: bookings.filter(b => b.status === 'completed').length,
-      cancelled: bookings.filter(b => b.status === 'cancelled').length
+      booked: allBookings.filter(b => b.status === 'booked').length,
+      confirmed: allBookings.filter(b => b.status === 'confirmed').length,
+      completed: allBookings.filter(b => b.status === 'completed').length,
+      cancelled: allBookings.filter(b => b.status === 'cancelled').length,
+      pending: allBookings.filter(b => b.status === 'pending').length
     };
     
     // Upcoming bookings (today's confirmed bookings)
     const todayStr = today.toISOString().split('T')[0];
-    const upcomingBookings = bookings
-      .filter(booking => booking.date === todayStr && booking.status === 'confirmed')
+    console.log('=== UPCOMING BOOKINGS DEBUG ===');
+    console.log('Looking for bookings on:', todayStr);
+    console.log('Total bookings found:', allBookings.length);
+    
+    // Log some booking dates for debugging
+    allBookings.forEach((booking, index) => {
+      console.log(`Booking ${index + 1}: ${booking.customerName}`);
+      console.log(`  Date: ${booking.date} (comparing with ${todayStr})`);
+      console.log(`  Status: ${booking.status}`);
+      console.log(`  Is Today: ${booking.date === todayStr}`);
+      console.log(`  Valid Status: ${['confirmed', 'pending'].includes(booking.status)}`);
+    });
+    
+    const upcomingBookings = allBookings
+      .filter(booking => {
+        const bookingDate = booking.date;
+        const isToday = bookingDate === todayStr;
+        const isConfirmedOrPending = ['confirmed', 'pending'].includes(booking.status);
+        console.log(`Filter result for ${booking.customerName}: IsToday=${isToday} && ValidStatus=${isConfirmedOrPending} = ${isToday && isConfirmedOrPending}`);
+        return isToday && isConfirmedOrPending;
+      })
       .map(booking => ({
-        id: booking.id,
-        service: booking.service,
-        client: booking.client,
+        id: booking._id,
+        service: booking.services.map(s => s.service).join(', '),
+        client: booking.customerName,
         time: booking.time,
         status: booking.status
       }));
+      
+    console.log('Upcoming bookings found:', upcomingBookings.length);
 
     const dashboardData = {
       stats: {
@@ -141,11 +147,11 @@ const getDashboardStats = async (req, res) => {
 
 const getCustomers = async (req, res) => {
   try {
-    // In a real app, you'd fetch from database with pagination
-    const customers = authController.users || [];
+    // Fetch customers from database
+    const customers = await User.find({}).select('-password -verificationCode -resetPasswordToken');
     
     const customerData = customers.map(user => ({
-      id: user.id,
+      id: user._id,
       customerId: user.customerId,
       name: `${user.firstName} ${user.lastName}`,
       email: user.email,
@@ -172,12 +178,27 @@ const getCustomers = async (req, res) => {
 
 const getFeedbacks = async (req, res) => {
   try {
+    // Try to get from database first, fall back to in-memory if no database data
+    let feedbacks = [];
+    try {
+      feedbacks = await Feedback.find({}).sort({ createdAt: -1 });
+    } catch (dbError) {
+      console.log('Database not available for feedbacks, using sample data');
+      // Sample data fallback
+      feedbacks = [
+        { id: 1, name: 'Alice Johnson', message: 'Excellent service! Very professional staff.', rating: 5, createdAt: '2025-10-19T10:30:00Z', status: 'received' },
+        { id: 2, name: 'Bob Smith', message: 'Great experience, will definitely come back.', rating: 5, createdAt: '2025-10-18T14:15:00Z', status: 'received' },
+        { id: 3, name: 'Carol Williams', message: 'Good service but a bit expensive.', rating: 4, createdAt: '2025-10-17T16:45:00Z', status: 'received' },
+        { id: 4, name: 'David Brown', message: 'Amazing transformation! Love my new look.', rating: 5, createdAt: '2025-10-16T11:20:00Z', status: 'received' }
+      ];
+    }
+
     const feedbackData = feedbacks.map(feedback => ({
-      id: feedback.id,
+      id: feedback._id || feedback.id,
       name: feedback.name,
       message: feedback.message,
       rating: feedback.rating,
-      timestamp: feedback.timestamp,
+      timestamp: feedback.createdAt || feedback.timestamp,
       status: feedback.status
     }));
 
@@ -206,21 +227,24 @@ const getFeedbacks = async (req, res) => {
 
 const getBookings = async (req, res) => {
   try {
-    const bookingData = bookings.map(booking => ({
-      id: booking.id,
-      service: booking.service,
-      customer: booking.client || booking.customer, // Support both field names
+    // Fetch all bookings from database
+    const allBookings = await Booking.find({}).sort({ createdAt: -1 });
+    
+    const bookingData = allBookings.map(booking => ({
+      id: booking._id,
+      service: booking.services.map(s => s.service).join(', '),
+      customer: booking.customerName,
       date: booking.date,
       time: booking.time,
       status: booking.status,
-      amount: booking.amount,
+      amount: booking.totalAmount,
       isNew: booking.isNew
     }));
 
     res.status(200).json({
       success: true,
       message: 'Bookings retrieved successfully',
-      bookings: bookingData, // Change from 'data' to 'bookings'
+      bookings: bookingData,
       total: bookingData.length
     });
 
@@ -237,7 +261,5 @@ module.exports = {
   getDashboardStats,
   getCustomers,
   getFeedbacks,
-  getBookings,
-  bookings, // Export bookings array for use in other controllers
-  feedbacks // Export feedbacks array for use in other controllers
+  getBookings
 };

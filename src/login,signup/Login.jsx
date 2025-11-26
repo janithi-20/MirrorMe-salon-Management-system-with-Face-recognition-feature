@@ -11,7 +11,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { loginAdmin } = useAuth();
+  const { loginAdmin, loginUser } = useAuth();
 
   // Get redirect information from navigation state
   const redirectTo = location.state?.redirectTo || '/';
@@ -51,11 +51,21 @@ const Login = () => {
           localStorage.setItem('token', data.token);
         }
         if (data.customer) {
+          // Use AuthContext to properly set user authentication
+          loginUser(data.customer);
           localStorage.setItem('customer', JSON.stringify(data.customer));
         }
         
         // Trigger a custom event to notify header about login
         window.dispatchEvent(new Event('userLoggedIn'));
+        
+        // Check if user should be redirected to feedback modal
+        if (location.state?.openFeedbackModal) {
+          // Trigger feedback modal after redirect
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('openFeedbackModal'));
+          }, 500);
+        }
         
         // Redirect to the intended page or home page after successful login
         navigate(redirectTo);
@@ -129,6 +139,33 @@ const Login = () => {
         <p style={{ textAlign: 'center', marginTop: 12 }}>
           New User? <Link to="/register" className="register-link">Register now</Link>
         </p>
+        
+        <div style={{ textAlign: 'center', marginTop: 20, paddingTop: 15, borderTop: '1px solid #eee' }}>
+          <Link 
+            to="/" 
+            style={{ 
+              display: 'inline-block',
+              padding: '10px 20px',
+              background: '#f8f9fa',
+              color: '#666',
+              textDecoration: 'none',
+              borderRadius: '4px',
+              border: '1px solid #ddd',
+              fontSize: '14px',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.background = '#e9ecef';
+              e.target.style.color = '#333';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.background = '#f8f9fa';
+              e.target.style.color = '#666';
+            }}
+          >
+            ← Back to Main Page
+          </Link>
+        </div>
       </form>
     </div>
   );

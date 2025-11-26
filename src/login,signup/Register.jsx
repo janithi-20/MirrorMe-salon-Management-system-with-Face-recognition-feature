@@ -290,6 +290,33 @@ const Register = () => {
             </Link>
           </p>
         </div>
+        
+        <div style={{ textAlign: 'center', marginTop: 20, paddingTop: 15, borderTop: '1px solid #eee' }}>
+          <Link 
+            to="/" 
+            style={{ 
+              display: 'inline-block',
+              padding: '10px 20px',
+              background: '#f8f9fa',
+              color: '#666',
+              textDecoration: 'none',
+              borderRadius: '4px',
+              border: '1px solid #ddd',
+              fontSize: '14px',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.background = '#e9ecef';
+              e.target.style.color = '#333';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.background = '#f8f9fa';
+              e.target.style.color = '#666';
+            }}
+          >
+            ← Back to Main Page
+          </Link>
+        </div>
       </form>
     </div>
   );

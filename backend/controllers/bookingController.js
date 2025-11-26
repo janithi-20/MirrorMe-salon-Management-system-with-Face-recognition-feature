@@ -1,10 +1,5 @@
 // controllers/bookingController.js
-
-// Import the entire dashboardController to access the bookings array by reference
-const dashboardController = require('./dashboardController');
-
-// Initialize nextBookingId to be higher than existing bookings
-let nextBookingId = Math.max(...dashboardController.bookings.map(b => b.id), 0) + 1;
+const Booking = require('../models/Booking');
 
 const createBooking = async (req, res) => {
   try {
@@ -27,8 +22,7 @@ const createBooking = async (req, res) => {
     }
 
     // Create new booking
-    const newBooking = {
-      id: nextBookingId++,
+    const newBooking = new Booking({
       bookingId: `BK_${Date.now()}`,
       customerId: customerInfo?.customerId || 'GUEST',
       customerName: customerInfo?.firstName && customerInfo?.lastName 
@@ -41,30 +35,20 @@ const createBooking = async (req, res) => {
         subService: item.label,
         price: item.price
       })),
-      datetime: datetime,
+      datetime: new Date(datetime),
       staff: staff,
       totalAmount: subtotal,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-
-    // Add to bookings array (this would be saved to database in production)
-    dashboardController.bookings.push({
-      id: newBooking.id,
-      customer: newBooking.customerName,
-      date: datetime.split('T')[0], // Extract date part for dashboard compatibility
-      time: datetime.split('T')[1] || '00:00', // Extract time part
-      service: items.map(item => item.service).join(', '),
-      amount: subtotal,
       status: 'pending',
       isNew: !customerInfo?.customerId // Mark as new if no customer ID (guest booking)
     });
 
+    // Save to database
+    const savedBooking = await newBooking.save();
+
     console.log('New booking created:', { 
-      bookingId: newBooking.bookingId, 
-      customer: newBooking.customerName,
-      services: newBooking.services.length,
+      bookingId: savedBooking.bookingId, 
+      customer: savedBooking.customerName,
+      services: savedBooking.services.length,
       amount: subtotal
     });
 
@@ -72,7 +56,7 @@ const createBooking = async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Booking created successfully!',
-      booking: newBooking
+      booking: savedBooking
     });
 
   } catch (error) {
@@ -95,8 +79,8 @@ const getBookingsByCustomer = async (req, res) => {
       });
     }
 
-    // Filter bookings by customer ID
-    const customerBookings = dashboardController.bookings.filter(booking => booking.customerId === customerId);
+    // Filter bookings by customer ID from database
+    const customerBookings = await Booking.find({ customerId }).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -125,39 +109,42 @@ const updateBookingStatus = async (req, res) => {
       });
     }
 
-    // Find and update the booking in the bookings array
-    console.log('Looking for booking with ID:', id, 'Parsed ID:', parseInt(id));
-    console.log('Available bookings:', dashboardController.bookings.map(b => ({id: b.id, customer: b.customer || b.client})));
+    // Find booking in database
+    const booking = await Booking.findById(id);
     
-    const bookingIndex = dashboardController.bookings.findIndex(booking => booking.id === parseInt(id));
-    
-    if (bookingIndex === -1) {
+    if (!booking) {
       return res.status(404).json({
         error: 'Booking not found',
-        message: `No booking found with ID: ${id}. Available IDs: ${dashboardController.bookings.map(b => b.id).join(', ')}`
+        message: `No booking found with ID: ${id}`
       });
     }
 
     // Update the booking
     if (status) {
-      dashboardController.bookings[bookingIndex].status = status;
+      booking.status = status;
     }
     
-    // If payment received, mark as completed
-    if (paymentStatus === 'completed') {
-      dashboardController.bookings[bookingIndex].status = 'completed';
+    if (paymentStatus) {
+      booking.paymentStatus = paymentStatus;
+      // If payment received, mark as completed
+      if (paymentStatus === 'completed') {
+        booking.status = 'completed';
+      }
     }
+
+    // Save updates
+    const updatedBooking = await booking.save();
 
     console.log('Booking updated:', { 
       bookingId: id, 
-      newStatus: status || dashboardController.bookings[bookingIndex].status,
-      paymentStatus: paymentStatus
+      newStatus: updatedBooking.status,
+      paymentStatus: updatedBooking.paymentStatus
     });
 
     res.status(200).json({
       success: true,
       message: 'Booking updated successfully',
-      booking: dashboardController.bookings[bookingIndex]
+      booking: updatedBooking
     });
 
   } catch (error) {

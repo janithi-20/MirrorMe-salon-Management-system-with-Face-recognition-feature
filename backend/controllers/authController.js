@@ -1,8 +1,7 @@
 // controllers/authController.js
-
-// Temporary in-memory storage for users (in production, use a database)
-let users = [];
-let nextId = 1;
+const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const { sendVerificationEmail, generateVerificationCode } = require('../services/emailService');
 
 const createCustomer = async (req, res) => {
   try {
@@ -25,8 +24,8 @@ const createCustomer = async (req, res) => {
       });
     }
 
-    // Check if user already exists
-    const existingUser = users.find(user => user.email === email);
+    // Check if user already exists in database
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return res.status(409).json({
         error: 'User already exists',
@@ -34,40 +33,59 @@ const createCustomer = async (req, res) => {
       });
     }
 
-    // Create new user
-    const newUser = {
-      id: nextId++,
-      customerId: `CUST_${Date.now()}`,
+    // Hash password before saving
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Generate verification code
+    const verificationCode = generateVerificationCode();
+    const verificationCodeExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
+    // Create new user in database
+    const newUser = new User({
+      customerId: `CUST_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       firstName,
       lastName,
-      email,
+      email: email.toLowerCase(),
       phoneNumber,
-      password, // In production, hash this password
-      isVerified: false,
-      createdAt: new Date().toISOString()
-    };
+      password: hashedPassword,
+      isVerified: false, // Set to false, require email verification
+      verificationCode: verificationCode,
+      verificationCodeExpires: verificationCodeExpires
+    });
 
-    users.push(newUser);
+    const savedUser = await newUser.save();
+    console.log('✅ User saved to database:', savedUser._id);
+
+    // Send verification email
+    try {
+      await sendVerificationEmail(savedUser.email, savedUser.firstName, verificationCode);
+      console.log('📧 Verification email sent to:', savedUser.email);
+    } catch (emailError) {
+      console.error('❌ Failed to send verification email:', emailError);
+      // Continue with registration even if email fails
+    }
 
     console.log('New customer created:', { 
-      customerId: newUser.customerId, 
-      email: newUser.email,
+      customerId: savedUser.customerId, 
+      email: savedUser.email,
       name: `${firstName} ${lastName}`
     });
 
     // Return success response
     res.status(201).json({
       success: true,
-      message: 'Registration successful! Please check your email for verification.',
-      customerId: newUser.customerId,
+      message: 'Registration successful! Please check your email for the verification code.',
+      customerId: savedUser.customerId,
+      requiresVerification: true,
       data: {
-        id: newUser.id,
-        customerId: newUser.customerId,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        email: newUser.email,
-        phoneNumber: newUser.phoneNumber,
-        isVerified: newUser.isVerified
+        id: savedUser._id,
+        customerId: savedUser.customerId,
+        firstName: savedUser.firstName,
+        lastName: savedUser.lastName,
+        email: savedUser.email,
+        phoneNumber: savedUser.phoneNumber,
+        isVerified: savedUser.isVerified
       }
     });
 
@@ -92,8 +110,8 @@ const loginCustomer = async (req, res) => {
       });
     }
 
-    // Find user by email
-    const user = users.find(u => u.email === email);
+    // Find user by email in database
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(401).json({
         error: 'Invalid credentials',
@@ -101,8 +119,9 @@ const loginCustomer = async (req, res) => {
       });
     }
 
-    // Check password (in production, compare with hashed password)
-    if (user.password !== password) {
+    // Check password with bcrypt
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return res.status(401).json({
         error: 'Invalid credentials',
         message: 'Invalid email or password'
@@ -116,7 +135,7 @@ const loginCustomer = async (req, res) => {
       success: true,
       message: 'Login successful',
       customer: {
-        id: user.id,
+        _id: user._id,
         customerId: user.customerId,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -140,12 +159,12 @@ const verifyEmail = async (req, res) => {
   try {
     const { customerId, email, otp } = req.body;
     
-    // Find user
+    // Find user in database
     let user;
     if (customerId) {
-      user = users.find(u => u.customerId === customerId);
+      user = await User.findOne({ customerId: customerId });
     } else if (email) {
-      user = users.find(u => u.email === email);
+      user = await User.findOne({ email: email.toLowerCase() });
     }
 
     if (!user) {
@@ -155,7 +174,15 @@ const verifyEmail = async (req, res) => {
       });
     }
 
-    // For demo purposes, accept any 6-digit OTP
+    // Check if user is already verified
+    if (user.isVerified) {
+      return res.status(400).json({
+        error: 'Already verified',
+        message: 'This account has already been verified'
+      });
+    }
+
+    // Validate verification code
     if (!otp || otp.length !== 6) {
       return res.status(400).json({
         error: 'Invalid OTP',
@@ -163,11 +190,28 @@ const verifyEmail = async (req, res) => {
       });
     }
 
-    // Mark user as verified
-    user.isVerified = true;
-    user.verifiedAt = new Date().toISOString();
+    // Check if verification code matches and hasn't expired
+    if (user.verificationCode !== otp) {
+      return res.status(400).json({
+        error: 'Invalid verification code',
+        message: 'The verification code you entered is incorrect'
+      });
+    }
 
-    console.log('Email verified for customer:', { email: user.email, customerId: user.customerId });
+    if (user.verificationCodeExpires && new Date() > user.verificationCodeExpires) {
+      return res.status(400).json({
+        error: 'Code expired',
+        message: 'Verification code has expired. Please request a new one'
+      });
+    }
+
+    // Mark user as verified and clear verification code
+    user.isVerified = true;
+    user.verificationCode = undefined;
+    user.verificationCodeExpires = undefined;
+    await user.save();
+
+    console.log('✅ Email verified for customer:', { email: user.email, customerId: user.customerId });
 
     res.status(200).json({
       success: true,
@@ -197,12 +241,12 @@ const resendVerification = async (req, res) => {
   try {
     const { customerId, email } = req.body;
     
-    // Find user
+    // Find user in database
     let user;
     if (customerId) {
-      user = users.find(u => u.customerId === customerId);
+      user = await User.findOne({ customerId: customerId });
     } else if (email) {
-      user = users.find(u => u.email === email);
+      user = await User.findOne({ email: email.toLowerCase() });
     }
 
     if (!user) {
@@ -212,12 +256,39 @@ const resendVerification = async (req, res) => {
       });
     }
 
-    console.log('Verification code resent to:', user.email);
+    // Check if user is already verified
+    if (user.isVerified) {
+      return res.status(400).json({
+        error: 'Already verified',
+        message: 'This account has already been verified'
+      });
+    }
 
-    res.status(200).json({
-      success: true,
-      message: 'Verification code resent to your email!'
-    });
+    // Generate new verification code
+    const verificationCode = generateVerificationCode();
+    const verificationCodeExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
+    // Update user with new verification code
+    user.verificationCode = verificationCode;
+    user.verificationCodeExpires = verificationCodeExpires;
+    await user.save();
+
+    // Send verification email
+    try {
+      await sendVerificationEmail(user.email, user.firstName, verificationCode);
+      console.log('📧 Verification code resent to:', user.email);
+
+      res.status(200).json({
+        success: true,
+        message: 'Verification code resent to your email!'
+      });
+    } catch (emailError) {
+      console.error('❌ Failed to send verification email:', emailError);
+      res.status(500).json({
+        error: 'Email sending failed',
+        message: 'Failed to send verification email. Please try again.'
+      });
+    }
 
   } catch (error) {
     console.error('Resend verification error:', error);
@@ -232,6 +303,5 @@ module.exports = {
   createCustomer,
   loginCustomer,
   verifyEmail,
-  resendVerification,
-  users // Export users array for dashboard access
+  resendVerification
 };

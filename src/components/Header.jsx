@@ -7,7 +7,7 @@ import '../App.css';
 
 const Header = () => {
   const navigate = useNavigate();
-  const { isAdminAuthenticated, logoutAdmin } = useAuth();
+  const { isAdminAuthenticated, logoutAdmin, logoutUser } = useAuth();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
@@ -51,12 +51,15 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    // Clear authentication data
+    // Use AuthContext logout function for proper state management
+    logoutUser();
+    
+    // Clear any additional local storage items
     localStorage.removeItem('token');
     localStorage.removeItem('customer');
     sessionStorage.removeItem('customerId');
     
-    // Update state
+    // Update local state
     setIsLoggedIn(false);
     setUserName('');
     
@@ -134,7 +137,7 @@ const Header = () => {
       <div className="container header-container">
         <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <img
-            src="/salon logo.jpg"
+            src="/salon-logo.jpg"
             alt="Salon Logo"
             className="logo-img"
             style={{ height: 40, objectFit: 'contain' }}

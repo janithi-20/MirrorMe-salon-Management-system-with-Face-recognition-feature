@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings API Test</title>
+</head>
+<body>
+    <h1>Settings API Test</h1>
+    <button onclick="testUpdate()">Test Update Phone</button>
+    <div id="result"></div>
+
+    <script>
+        async function testUpdate() {
+            try {
+                console.log('Testing settings update...');
+                const response = await fetch('http://localhost:5000/settings/admin/phone', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        value: 'Test Phone: ' + new Date().toLocaleTimeString()
+                    })
+                });
+
+                console.log('Response status:', response.status);
+                const result = await response.json();
+                console.log('Response data:', result);
+                
+                document.getElementById('result').innerHTML = 
+                    '<p>Status: ' + response.status + '</p>' +
+                    '<p>Result: ' + JSON.stringify(result, null, 2) + '</p>';
+                    
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>

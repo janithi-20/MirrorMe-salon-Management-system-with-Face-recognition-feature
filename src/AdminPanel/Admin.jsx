@@ -43,6 +43,10 @@ import './Admin.css';
       
       const result = await response.json();
       if (result.success) {
+        console.log('✅ Dashboard data received:', result.data);
+        console.log('📊 Booking channels:', result.data.bookingChannels);
+        console.log('📈 Booking status:', result.data.bookingStatus);
+        console.log('⏰ Upcoming bookings:', result.data.upcomingBookings);
         setDashboardData(result.data);
       } else {
         throw new Error(result.message || 'Failed to fetch data');
@@ -55,12 +59,54 @@ import './Admin.css';
     }
   };
 
+  // Fetch settings from API
+  const fetchSettings = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/settings/admin', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          // Transform API response to simple key-value structure for state management
+          const transformedSettings = {};
+          
+          // Transform businessHours
+          if (result.data.businessHours) {
+            transformedSettings.businessHours = {};
+            Object.keys(result.data.businessHours).forEach(key => {
+              transformedSettings.businessHours[key] = result.data.businessHours[key].value;
+            });
+          }
+          
+          // Transform contact
+          if (result.data.contact) {
+            transformedSettings.contact = {};
+            Object.keys(result.data.contact).forEach(key => {
+              transformedSettings.contact[key] = result.data.contact[key].value;
+            });
+          }
+          
+          setSettings(prev => ({ ...prev, ...transformedSettings }));
+          console.log('✅ Admin settings loaded from API');
+        }
+      }
+    } catch (err) {
+      console.error('❌ Error fetching settings:', err);
+      // Keep default settings if API fails
+    }
+  };
+
   // Redirect to login if not authenticated as admin
   useEffect(() => {
     if (!isAdminAuthenticated) {
       navigate('/login');
     } else {
       fetchDashboardData();
+      fetchSettings();
     }
   }, [isAdminAuthenticated, navigate]);
 
@@ -88,23 +134,57 @@ import './Admin.css';
     }));
   };
 
-  const handleSaveSetting = (category, field) => {
+  const handleSaveSetting = async (category, field) => {
     const key = `${category}-${field}`;
     const newValue = editingSettings[key];
     
-    setSettings(prev => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        [field]: newValue
-      }
-    }));
+    console.log(`🔄 Attempting to save setting: ${field} = ${newValue}`);
     
-    setEditingSettings(prev => {
-      const updated = { ...prev };
-      delete updated[key];
-      return updated;
-    });
+    try {
+      // Save to backend - use the correct URL format with key parameter
+      const response = await fetch(`http://localhost:5000/settings/admin/${field}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          value: newValue
+        })
+      });
+
+      console.log(`📡 Response status: ${response.status}`);
+      const result = await response.json();
+      console.log(`📡 Response data:`, result);
+
+      if (response.ok) {
+        if (result.success) {
+          // Update local state
+          setSettings(prev => ({
+            ...prev,
+            [category]: {
+              ...prev[category],
+              [field]: newValue
+            }
+          }));
+          
+          // Clear editing state
+          setEditingSettings(prev => {
+            const updated = { ...prev };
+            delete updated[key];
+            return updated;
+          });
+          
+          console.log(`✅ Setting ${category}.${field} saved successfully`);
+        } else {
+          throw new Error(result.message || 'Failed to save setting');
+        }
+      } else {
+        throw new Error(`HTTP ${response.status}: ${result.message || 'Failed to save setting'}`);
+      }
+    } catch (error) {
+      console.error('❌ Error saving setting:', error);
+      alert('Failed to save setting. Please try again.');
+    }
   };
 
   const handleCancelEdit = (category, field) => {
@@ -152,10 +232,15 @@ import './Admin.css';
           return (
             <div className="dashboard-content">
               <h2>Dashboard Overview</h2>
-              <div className="no-data-message">No dashboard data available</div>
+              <div className="no-data-message">Loading dashboard data...</div>
             </div>
           );
         }
+
+        // Debug: Log current dashboard data
+        console.log('🎯 Current dashboardData:', dashboardData);
+        console.log('📊 bookingChannels:', dashboardData.bookingChannels);
+        console.log('📈 bookingStatus:', dashboardData.bookingStatus);
 
         // Prepare stats data for rendering
         const stats = [
@@ -165,7 +250,7 @@ import './Admin.css';
         ];
 
         return (
-          <div className="dashboard-content">
+          <div className="dashboard-content" key={Date.now()}>
             <h2>Dashboard Overview</h2>
             
             {/* Sales Summary Cards */}
@@ -228,7 +313,7 @@ import './Admin.css';
                 <div className="pie-chart-container">
                   <div className="pie-chart">
                     <div className="pie-center">
-                      <div className="pie-total">{dashboardData.bookingChannels.totalBookings}</div>
+                      <div className="pie-total">{dashboardData.bookingChannels?.totalBookings || 0}</div>
                       <div className="pie-label">Bookings</div>
                     </div>
                   </div>
@@ -237,21 +322,21 @@ import './Admin.css';
                       <div className="pie-legend-color in-person"></div>
                       <div className="pie-legend-text">
                         <span className="pie-legend-label">Online bookings (website)</span>
-                        <span className="pie-legend-value">{dashboardData.bookingChannels.online}</span>
+                        <span className="pie-legend-value">{dashboardData.bookingChannels?.online || 0}</span>
                       </div>
                     </div>
                     <div className="pie-legend-item">
                       <div className="pie-legend-color walk-in"></div>
                       <div className="pie-legend-text">
                         <span className="pie-legend-label">Walk-in bookings</span>
-                        <span className="pie-legend-value">{dashboardData.bookingChannels.walkIn}</span>
+                        <span className="pie-legend-value">{dashboardData.bookingChannels?.walkIn || 0}</span>
                       </div>
                     </div>
                     <div className="pie-legend-item">
                       <div className="pie-legend-color google"></div>
                       <div className="pie-legend-text">
                         <span className="pie-legend-label">Through phone</span>
-                        <span className="pie-legend-value">{dashboardData.bookingChannels.phone}</span>
+                        <span className="pie-legend-value">{dashboardData.bookingChannels?.phone || 0}</span>
                       </div>
                     </div>
                   </div>
@@ -293,32 +378,30 @@ import './Admin.css';
                   <span className="chart-period">Last updated: 6 hours ago</span>
                 </div>
                 <div className="status-boxes-container">
-                  <div className="status-box booked">
+                    <div className="status-box booked">
                     <div className="status-box-header">
                       <span className="status-label">Booked</span>
                     </div>
-                    <div className="status-value">{dashboardData.bookingStatus.booked}</div>
-                  </div>
-                  
-                  <div className="status-box confirmed">
+                    <div className="status-value">{dashboardData.bookingStatus?.booked || 0}</div>
+                  </div>                  <div className="status-box confirmed">
                     <div className="status-box-header">
                       <span className="status-label">Confirmed</span>
                     </div>
-                    <div className="status-value">{dashboardData.bookingStatus.confirmed}</div>
+                    <div className="status-value">{dashboardData.bookingStatus?.confirmed || 0}</div>
                   </div>
                   
                   <div className="status-box done">
                     <div className="status-box-header">
                       <span className="status-label">Done</span>
                     </div>
-                    <div className="status-value">{dashboardData.bookingStatus.completed}</div>
+                    <div className="status-value">{dashboardData.bookingStatus?.completed || 0}</div>
                   </div>
                   
                   <div className="status-box cancelled">
                     <div className="status-box-header">
                       <span className="status-label">Cancelled</span>
                     </div>
-                    <div className="status-value">{dashboardData.bookingStatus.cancelled}</div>
+                    <div className="status-value">{dashboardData.bookingStatus?.cancelled || 0}</div>
                   </div>
                 </div>
               </div>

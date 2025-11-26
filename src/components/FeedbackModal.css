@@ -17,3 +17,73 @@
 .btn{background:#A0522D;color:#fff;padding:10px 18px;border-radius:6px;border:none;cursor:pointer;font-weight:700}
 .btn[disabled]{opacity:0.45;cursor:not-allowed}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:2000}
+
+/* Authentication Required Styles */
+.auth-required {
+  text-align: center;
+  padding: 20px;
+}
+
+.auth-required h3 {
+  margin: 0 0 15px 0;
+  color: #2d3748;
+  font-size: 20px;
+}
+
+.auth-required p {
+  margin: 0 0 10px 0;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+.auth-actions {
+  margin-top: 25px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.login-redirect-btn {
+  background: #d1842c !important;
+  color: white !important;
+}
+
+.login-redirect-btn:hover {
+  background: #b36f23 !important;
+}
+
+.register-redirect-btn {
+  background: #27ae60 !important;
+  color: white !important;
+}
+
+.register-redirect-btn:hover {
+  background: #229954 !important;
+}
+
+/* Form Enhancement Styles */
+.character-count {
+  font-size: 12px;
+  color: #718096;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.min-chars {
+  color: #e53e3e;
+  font-weight: 500;
+}
+
+.user-info-display {
+  margin-top: 15px;
+  padding: 10px;
+  background: #f7fafc;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2d3748;
+}
+
+.review-textarea {
+  min-height: 80px;
+  resize: vertical;
+}

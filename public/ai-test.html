@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Face Recognition Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        button { padding: 10px 20px; margin: 10px 0; cursor: pointer; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>AI Face Recognition System Test</h1>
+    
+    <div class="test-section">
+        <h3>Test 1: Get Analysis Options</h3>
+        <button onclick="testAnalysisOptions()">Test Analysis Options</button>
+        <div id="options-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 2: Get Sample Recommendations</h3>
+        <button onclick="testSampleRecommendations()">Test Sample Recommendations</button>
+        <div id="sample-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 3: Test Frontend Functionality</h3>
+        <p>Click this link to test the face recognition page in the main app:</p>
+        <a href="http://localhost:3000/face-recognition" target="_blank">Open Face Recognition Page</a>
+    </div>
+
+    <script>
+        async function testAnalysisOptions() {
+            const resultDiv = document.getElementById('options-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:5000/ai/options');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <p class="success">Success!</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p class="error">Error: ${response.status}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">Network Error: ${error.message}</p>
+                `;
+            }
+        }
+        
+        async function testSampleRecommendations() {
+            const resultDiv = document.getElementById('sample-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:5000/ai/sample?faceShape=oval&skinTone=neutral');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <p class="success">Success!</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p class="error">Error: ${response.status}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">Network Error: ${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

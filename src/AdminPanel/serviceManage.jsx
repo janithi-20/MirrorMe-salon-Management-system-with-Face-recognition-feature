@@ -1,10 +1,32 @@
-import React, { useState } from 'react';
-import { FiEdit2, FiSave, FiX, FiPlus, FiImage, FiTrash2 } from 'react-icons/fi';
+import React, { useState, useEffect } from 'react';
+import { FiEdit2, FiSave, FiX, FiPlus, FiImage, FiTrash2, FiLoader } from 'react-icons/fi';
 import './serviceManage.css';
+
+// Import service images
+import skinImg from '../pages/services/skin.jpg';
+import hairImg from '../pages/services/hair.jpg';
+import dressingImg from '../pages/services/dressing.jpg';
+import nailsImg from '../pages/services/nails.jpg';
+import manicureImg from '../pages/services/manicure.jpg';
+import waxingImg from '../pages/services/waxing.jpg';
+import consultImg from '../pages/services/consultation.jpg';
+
+const defaultServiceImages = {
+  'haircut': hairImg,
+  'skin-treatments': skinImg,
+  'dressings': dressingImg,
+  'nails': nailsImg,
+  'manicure-pedicure': manicureImg,
+  'waxing': waxingImg,
+  'consultations': consultImg
+};
 
 const ServiceManagement = () => {
   const [editingService, setEditingService] = useState(null);
+  const [editingValues, setEditingValues] = useState({});
   const [showAddForm, setShowAddForm] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [newService, setNewService] = useState({
     service: '',
     price: '',
@@ -12,86 +34,48 @@ const ServiceManagement = () => {
     image: null,
     imagePreview: null
   });
-  
-  const [services, setServices] = useState([
-    {
-      name: 'Hair Cut & Styling',
-      image: '/hair.jpg',
-      subServices: [
-        { id: 'adv-restyle', service: 'Cut & Re-Style (Advance)', price: 4000, image: '/haircut-images/cut-restyle-advance.jpg' },
-        { id: 'fringe', service: 'Fringe Cut', price: 1000, image: '/haircut-images/fringe-cut.jpg' },
-        { id: 'trim', service: 'Trim', price: 1400, image: '/haircut-images/trim.jpg' },
-        { id: 'reg-restyle', service: 'Cut & Re-Style (Regular)', price: 2900, image: '/haircut-images/cut-restyle-regular.jpg' },
-        { id: 'wash-blast', service: 'Hair Wash & Blast Dry', price: 2000, image: '/haircut-images/hair-wash.jpg' },
-        { id: 'blow-short', service: 'Blow Dry - Short', price: 2400, image: '/haircut-images/blowdry-short-hair.jpg' },
-        { id: 'blow-medium', service: 'Blow Dry - Medium', price: 3900, image: '/haircut-images/blowdry-medium-hair.jpg' },
-        { id: 'blow-long', service: 'Blow Dry - Long', price: 4500, image: '/haircut-images/blowdry-long-hair.jpg' },
-        { id: 'braid-short', service: 'Braiding Per Strand - Short', price: 1300, image: '/haircut-images/braiding-short.jpg' }
-      ]
-    },
-    {
-      name: 'Skin Treatments',
-      image: '/skin.jpg',
-      subServices: [
-        { id: 'face-shave', service: 'Face Shaving', price: 4400, image: '/skin-images/faceshaving.jpg' },
-        { id: 'low-upper-thread', service: 'Low Upper Threading', price: 200, image: '/skin-images/upperthreading.jpg' },
-        { id: 'galvanize', service: 'Add on - Galvanize Treatment', price: 1400, image: '/skin-images/galvanic.webp' },
-        { id: 'classic-clean', service: 'Classic Clean Up', price: 3800, image: '/skin-images/cleanup.jpg' },
-        { id: 'brightening-ume', service: 'Brightening Clean Up (Ume Care)', price: 6800, image: '/skin-images/brightingcleanup.jpg' },
-        { id: 'basic-sothys', service: 'Basic Clean Up (Sothys)', price: 9800, image: '/skin-images/basiccleaning.jpg' }
-      ]
-    },
-    {
-      name: 'Dressings',
-      image: '/dressing.jpg',
-      subServices: [
-        { id: 'full-early', service: 'Full Dressing (Early Morning) Add on Before 8.30am', price: 2500, image: '/dressing-images/full-dressing-early-morning.jpg' },
-        { id: 'full-derma', service: 'Full Dressing Derma', price: 6500, image: '/dressing-images/full-dressing-derma.jpg' },
-        { id: 'full-mac', service: 'Full Dressing Mac', price: 10300, image: '/dressing-images/full-dressing-mac.jpg' },
-        { id: 'saree', service: 'Saree Draping', price: 2000, image: '/dressing-images/saree-drapping.jpg' },
-        { id: 'makeup-mac', service: 'Make-Up (Mac)', price: 8000, image: '/dressing-images/makeup-mac.jpg' },
-        { id: 'makeup-derma', service: 'Make-Up (Derma)', price: 4200, image: '/dressing-images/makeup-derma.jpg' },
-        { id: 'hairstyle', service: 'Hair Style', price: 3100, image: '/dressing-images/hairstyle.jpg' },
-        { id: 'addon-lashes', service: 'Add-on Eye Lashes', price: 1800, image: '/dressing-images/eye-lashes.jpg' }
-      ]
-    },
-    {
-      name: 'Nail Care',
-      image: '/nails.jpg',
-      subServices: [
-        { id: 'gel-individual', service: 'Gel Individual', price: 900, image: '/nails-images/gel-individual.jpg' },
-        { id: 'gel-soak-off', service: 'Gel Nail Soak Off', price: 1700, image: '/nails-images/gel-nail-soak-off.jpg' },
-        { id: 'normal-color', service: 'Normal Color', price: 1100, image: '/nails-images/normal-colour.jpg' },
-        { id: 'gel-color-express', service: 'Gel Color (Express Mani)', price: 2300, image: '/nails-images/gel-colour-express.jpg' },
-        { id: 'nail-art', service: 'Nail Art Rein Stone/Sticker/ Each', price: 180, image: '/nails-images/nail-art-rein-stone-sticker.jpg' }
-      ]
-    },
-    {
-      name: 'Manicure & Pedicure',
-      image: '/manicure.jpg',
-      subServices: [
-        { id: 'luxury-pedi', service: 'Luxury Pedicure-Massage ', price: 8100, image: '/manicure-images/luxury-pedicure-massage-chair.jpg' },
-        { id: 'premium-pedi', service: 'Premium Pedicure', price: 6800, image: '/manicure-images/premium-pedicure.jpg' },
-        { id: 'classic-mani', service: 'Classic Manicure', price: 2300, image: '/manicure-images/classic-manicure.jpg' },
-        { id: 'classic-pedi', service: 'Classic Pedicure', price: 2300, image: '/manicure-images/classic-pedicure.jpg' },
-        { id: 'spa-mani', service: 'Spa Manicure', price: 4400, image: '/manicure-images/spa-manicure.jpg' },
-        { id: 'spa-pedi', service: 'Spa Pedicure', price: 4800, image: '/manicure-images/spa-pedicure.jpg' },
-        { id: 'soak-up-pedi', service: 'Soak Up Pedicure', price: 5800, image: '/manicure-images/soak-up-pedicure.jpg' }
-      ]
-    },
-    {
-      name: 'Waxing',
-      image: '/waxing.jpg',
-      subServices: [
-        { id: 'full-body', service: 'Full Body', price: 5900, image: '/waxing-images/full-body.jpg' },
-        { id: 'stomach', service: 'Stomach', price: 950, image: '/waxing-images/stomach.jpg' },
-        { id: 'half-leg', service: 'Half Leg', price: 1450, image: '/waxing-images/half-legs.jpg' },
-        { id: 'half-arms', service: 'Half Arms', price: 1350, image: '/waxing-images/half-arms.jpg' },
-        { id: 'classic-full-legs', service: 'Classic Full Legs', price: 2200, image: '/waxing-images/classic-full-legs.jpg' },
-        { id: 'classic-full-arms', service: 'Classic Full Arms', price: 1800, image: '/waxing-images/classic-full-arms.jpg' }
-      ]
+  const [services, setServices] = useState([]);
+
+  // Fetch services from API
+  const fetchServices = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/services/admin/all');
+      const data = await response.json();
+      
+      if (data.success) {
+        // Transform API data to match existing component structure
+        const transformedServices = data.data.map(service => ({
+          _id: service._id,
+          name: service.category,
+          slug: service.slug,
+          image: defaultServiceImages[service.slug] || service.categoryImage || '/salon-logo.jpg',
+          description: service.description,
+          displayOrder: service.displayOrder,
+          isActive: service.isActive,
+          subServices: service.subServices.map(subService => ({
+            id: subService._id,
+            service: subService.name,
+            price: subService.price,
+            image: subService.image,
+            isActive: subService.isActive
+          }))
+        }));
+        setServices(transformedServices);
+      } else {
+        setError('Failed to fetch services');
+      }
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      setError('Failed to connect to server');
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
 
   const handleImageChange = (e, isNewService = true) => {
     const file = e.target.files[0];
@@ -110,36 +94,75 @@ const ServiceManagement = () => {
     }
   };
   
-  const handleAddService = () => {
+  const handleAddService = async () => {
     if (newService.service && newService.price && newService.category) {
-      const categoryIndex = services.findIndex(service => service.name === newService.category);
-      
-      if (categoryIndex !== -1) {
-        const newId = Date.now().toString(); 
-        const updatedServices = [...services];
-        updatedServices[categoryIndex].subServices.push({
-          id: newId,
-          service: newService.service,
-          price: parseInt(newService.price),
-          image: newService.imagePreview || '/salon logo.jpg'
-        });
-        setServices(updatedServices);
-      } else if (newService.category !== 'new') {
-        const newCategory = {
-          name: newService.category,
-          image: newService.imagePreview || '/salon logo.jpg',
-          subServices: [{
-            id: Date.now().toString(),
-            service: newService.service,
-            price: parseInt(newService.price),
-            image: newService.imagePreview || '/salon logo.jpg'
-          }]
-        };
-        setServices([...services, newCategory]);
+      try {
+        setLoading(true);
+        
+        const existingServiceIndex = services.findIndex(service => service.name === newService.category);
+        
+        if (existingServiceIndex !== -1) {
+          // Adding sub-service to existing category
+          const serviceId = services[existingServiceIndex]._id;
+          const response = await fetch(`/services/${serviceId}/sub-services`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: newService.service,
+              price: parseInt(newService.price),
+              image: newService.imagePreview || '/salon-logo.jpg'
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            await fetchServices(); // Refresh the services
+            alert('Sub-service added successfully!');
+          } else {
+            alert('Failed to add sub-service: ' + data.message);
+          }
+        } else if (newService.category !== 'new') {
+          // Creating new service category
+          const slug = newService.category.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-').replace(/-+/g, '-');
+          const response = await fetch('/services', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              category: newService.category,
+              slug: slug,
+              description: `${newService.category} services`,
+              categoryImage: newService.imagePreview || '/salon-logo.jpg',
+              subServices: [{
+                name: newService.service,
+                price: parseInt(newService.price),
+                image: newService.imagePreview || '/salon-logo.jpg'
+              }]
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            await fetchServices(); // Refresh the services
+            alert('New service category created successfully!');
+          } else {
+            alert('Failed to create service category: ' + data.message);
+          }
+        }
+        
+        setNewService({ service: '', price: '', category: '', image: null, imagePreview: null });
+        setShowAddForm(false);
+      } catch (error) {
+        console.error('Error adding service:', error);
+        alert('Failed to add service. Please try again.');
+      } finally {
+        setLoading(false);
       }
-      
-      setNewService({ service: '', price: '', category: '', image: null, imagePreview: null });
-      setShowAddForm(false);
     }
   };
 
@@ -148,35 +171,146 @@ const ServiceManagement = () => {
     setShowAddForm(false);
   };
 
-  const handleDeleteSubService = (mainIndex, subServiceId) => {
+  const handleDeleteSubService = async (mainIndex, subServiceId) => {
     if (window.confirm('Are you sure you want to delete this service? This action cannot be undone.')) {
-      setServices(prevServices =>
-        prevServices.map((ms, msIndex) =>
-          msIndex === mainIndex
-            ? {
-                ...ms,
-                subServices: ms.subServices.filter(ss => ss.id !== subServiceId)
-              }
-            : ms
-        )
-      );
+      try {
+        setLoading(true);
+        const serviceId = services[mainIndex]._id;
+        
+        const response = await fetch(`/services/${serviceId}/sub-services/${subServiceId}`, {
+          method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          await fetchServices(); // Refresh the services
+          alert('Service deleted successfully!');
+        } else {
+          alert('Failed to delete service: ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error deleting service:', error);
+        alert('Failed to delete service. Please try again.');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   const handleImageError = (e) => {
     console.log('Image failed to load:', e.target.src);
-    e.target.src = '/salon logo.jpg'; // Fallback to salon logo if image fails to load
+    e.target.src = '/salon-logo.jpg'; // Fallback to salon logo if image fails to load
     e.target.style.opacity = '1'; // Ensure fallback image is visible
   };
 
+  // Update service name/price
+  const handleUpdateSubService = async (serviceId, subServiceId, field, value, originalValue) => {
+    // Check if value actually changed
+    if (value === originalValue || value === originalValue?.toString()) {
+      return; // No change, don't make API call
+    }
+
+    try {
+      const response = await fetch(`/services/${serviceId}/sub-services/${subServiceId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ [field]: field === 'price' ? parseInt(value) : value })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // Update local state instead of refetching
+        setServices(prevServices => 
+          prevServices.map(service => {
+            if (service._id === serviceId) {
+              return {
+                ...service,
+                subServices: service.subServices.map(subService => {
+                  if (subService.id === subServiceId) {
+                    return {
+                      ...subService,
+                      [field === 'name' ? 'service' : field]: field === 'price' ? parseInt(value) : value
+                    };
+                  }
+                  return subService;
+                })
+              };
+            }
+            return service;
+          })
+        );
+      } else {
+        alert('Failed to update service: ' + data.message);
+      }
+    } catch (error) {
+      console.error('Error updating service:', error);
+      alert('Failed to update service. Please try again.');
+    }
+  };
+
+  // Handle starting edit mode
+  const startEditing = (subServiceId, name, price) => {
+    setEditingService(subServiceId);
+    setEditingValues({
+      name: name,
+      price: price
+    });
+  };
+
+  // Handle saving edits
+  const saveEdits = async (serviceId, subServiceId, originalName, originalPrice) => {
+    const newName = editingValues.name;
+    const newPrice = editingValues.price;
+    
+    // Save name if changed
+    if (newName !== originalName) {
+      await handleUpdateSubService(serviceId, subServiceId, 'name', newName, originalName);
+    }
+    
+    // Save price if changed
+    if (newPrice !== originalPrice && newPrice !== originalPrice?.toString()) {
+      await handleUpdateSubService(serviceId, subServiceId, 'price', newPrice, originalPrice);
+    }
+    
+    // Exit edit mode
+    setEditingService(null);
+    setEditingValues({});
+  };
+
   const getImageSrc = (imagePath) => {
-    if (!imagePath) return '/salon logo.jpg';
+    if (!imagePath) return '/salon-logo.jpg';
     // Split the path to encode only the filename part
     const pathParts = imagePath.split('/');
     const filename = pathParts.pop();
     const encodedFilename = encodeURIComponent(filename);
     return pathParts.join('/') + '/' + encodedFilename;
   };
+
+  if (loading) {
+    return (
+      <div className="section-content">
+        <div className="loading-container" style={{ textAlign: 'center', padding: '50px' }}>
+          <FiLoader className="spinner" size={32} />
+          <p>Loading services...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="section-content">
+        <div className="error-container" style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
+          <p>Error: {error}</p>
+          <button onClick={fetchServices} className="btn">Retry</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="section-content">
@@ -185,6 +319,7 @@ const ServiceManagement = () => {
         <button 
           className="add-service-btn" 
           onClick={() => setShowAddForm(true)}
+          disabled={loading}
         >
           <FiPlus size={16} />
           Add New Service
@@ -297,74 +432,46 @@ const ServiceManagement = () => {
             </div>
             
             <div className="sub-services-grid">
-              {mainService.subServices.map((subService) => (
+              {mainService.subServices.filter(subService => subService.isActive).map((subService) => (
                 <div key={subService.id} className="sub-service-item">
                   {editingService === subService.id ? (
                     <div className="edit-service-form">
                       <input
                         type="text"
-                        defaultValue={subService.service}
+                        value={editingValues.name || subService.service}
                         className="edit-input"
-                        onBlur={(e) => {
-                          setServices(prevServices =>
-                            prevServices.map((ms, msIndex) =>
-                              msIndex === mainIndex
-                                ? {
-                                    ...ms,
-                                    subServices: ms.subServices.map(ss =>
-                                      ss.id === subService.id
-                                        ? { ...ss, service: e.target.value }
-                                        : ss
-                                    )
-                                  }
-                                : ms
-                            )
-                          );
-                          setEditingService(null);
-                        }}
+                        onChange={(e) => setEditingValues(prev => ({ ...prev, name: e.target.value }))}
                         onKeyPress={(e) => {
                           if (e.key === 'Enter') {
-                            e.target.blur();
+                            saveEdits(mainService._id, subService.id, subService.service, subService.price);
                           }
                         }}
                         autoFocus
                       />
                       <input
                         type="number"
-                        defaultValue={subService.price}
+                        value={editingValues.price || subService.price}
                         className="edit-input price-input"
-                        onBlur={(e) => {
-                          setServices(prevServices =>
-                            prevServices.map((ms, msIndex) =>
-                              msIndex === mainIndex
-                                ? {
-                                    ...ms,
-                                    subServices: ms.subServices.map(ss =>
-                                      ss.id === subService.id
-                                        ? { ...ss, price: parseInt(e.target.value) || 0 }
-                                        : ss
-                                    )
-                                  }
-                                : ms
-                            )
-                          );
-                        }}
+                        onChange={(e) => setEditingValues(prev => ({ ...prev, price: e.target.value }))}
                         onKeyPress={(e) => {
                           if (e.key === 'Enter') {
-                            e.target.blur();
+                            saveEdits(mainService._id, subService.id, subService.service, subService.price);
                           }
                         }}
                       />
                       <div className="edit-actions">
                         <button
                           className="save-btn"
-                          onClick={() => setEditingService(null)}
+                          onClick={() => saveEdits(mainService._id, subService.id, subService.service, subService.price)}
                         >
                           <FiSave size={16} />
                         </button>
                         <button
                           className="cancel-btn"
-                          onClick={() => setEditingService(null)}
+                          onClick={() => {
+                            setEditingService(null);
+                            setEditingValues({});
+                          }}
                         >
                           <FiX size={16} />
                         </button>
@@ -377,7 +484,10 @@ const ServiceManagement = () => {
                           <img 
                             src={getImageSrc(subService.image)} 
                             alt={subService.service} 
-                            onError={handleImageError}
+                            onError={(e) => {
+                              console.log('Image failed to load:', e.target.src);
+                              e.target.src = '/salon-logo.jpg';
+                            }}
                           />
                         </div>
                       )}
@@ -388,8 +498,9 @@ const ServiceManagement = () => {
                       <div className="service-actions">
                         <button
                           className="edit-service-btn"
-                          onClick={() => setEditingService(subService.id)}
+                          onClick={() => startEditing(subService.id, subService.service, subService.price)}
                           title="Edit Service"
+                          disabled={loading}
                         >
                           <FiEdit2 size={16} />
                         </button>
@@ -397,6 +508,7 @@ const ServiceManagement = () => {
                           className="delete-service-btn"
                           onClick={() => handleDeleteSubService(mainIndex, subService.id)}
                           title="Delete Service"
+                          disabled={loading}
                         >
                           <FiTrash2 size={16} />
                         </button>

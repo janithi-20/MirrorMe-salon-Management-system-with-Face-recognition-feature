@@ -5,17 +5,12 @@ import { AuthProvider } from './contexts/AuthContext';
 
 import Home from './pages/Home/Home';
 import Services from './pages/services/Services';
-import Haircut from './pages/services/Haircut';
-import SkinTreatments from './pages/services/SkinTreatments';
-import Dressings from './pages/services/Dressings';
-import Nails from './pages/services/Nails';
-import Waxing from './pages/services/Waxing';
-import ManicurePedicure from './pages/services/ManicurePedicure';
-import BeautyConsultation from './pages/services/beautyconsultation';
+import ServiceDetail from './pages/services/ServiceDetail';
 import VerifyEmail from './pages/verifyEmail/VerifyEmail.jsx';
 import Login from './login,signup/Login';
 import Register from './login,signup/Register';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
 import Booking from './booking/Booking';
 import FaceRecognition from './pages/FaceRecognition/FaceRecognition';
 import Profile from './pages/Profile/Profile';
@@ -42,6 +37,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/booking" element={<Booking />} />
         <Route path="/profile" element={<Profile />} />
@@ -53,13 +49,7 @@ function App() {
         <Route path="/Team" element={<Team />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/services/haircut" element={<Haircut />} />
-        <Route path="/services/skin-treatments" element={<SkinTreatments />} />
-        <Route path="/services/dressings" element={<Dressings />} />
-        <Route path="/services/nails" element={<Nails />} />
-        <Route path="/services/waxing" element={<Waxing />} />
-        <Route path="/services/manicure-pedicure" element={<ManicurePedicure />} />
-        <Route path="/services/consultations" element={<BeautyConsultation />} />
+        <Route path="/services/:slug" element={<ServiceDetail />} />
       </Routes>
     </BrowserRouter>
     </AuthProvider>

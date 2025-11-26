@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <h1>Salon Management System - API Test</h1>
+    
+    <button onclick="testServicesAPI()" style="padding: 10px 20px; margin: 10px; font-size: 16px;">
+        Test Services API
+    </button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function testServicesAPI() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="result">Testing services API...</div>';
+
+            try {
+                // Test the public services endpoint
+                const response = await fetch('/services');
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    resultsDiv.innerHTML = `
+                        <div class="result success">
+                            <h3>✅ Services API Working!</h3>
+                            <p><strong>Total Services Found:</strong> ${data.data.length}</p>
+                            <p><strong>API Response:</strong></p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+
+                    // Show service categories found
+                    const categories = data.data.map(service => service.category);
+                    console.log('Service categories found:', categories);
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>❌ API Error</h3>
+                            <p><strong>Status:</strong> ${response.status}</p>
+                            <p><strong>Response:</strong></p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Connection Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p>Make sure the backend server is running on port 5000</p>
+                    </div>
+                `;
+                console.error('API test error:', error);
+            }
+        }
+
+        // Test API on page load
+        window.onload = function() {
+            testServicesAPI();
+        };
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './Booking.css';
-import ServiceIndex from '../data/serviceIndex';
+import ServiceIndex from '../data/serviceIndex'; // Fallback static data
 
 const STAFF = [
 	'Any',
@@ -20,7 +20,43 @@ const Booking = () => {
 	const location = useLocation();
 	const incoming = location?.state?.booking || null; 
 
-	// Check if user is authenticated
+	// Dynamic services state
+	const [serviceData, setServiceData] = useState(ServiceIndex);
+	const [servicesLoading, setServicesLoading] = useState(true);
+	
+	// Fetch services from API
+	const fetchServices = async () => {
+		try {
+			setServicesLoading(true);
+			const response = await fetch('/services');
+			const data = await response.json();
+			
+			if (data.success) {
+				// Transform API data to match ServiceIndex structure
+				const transformedServices = data.data.map(service => ({
+					key: service.category,
+					id: service.slug,
+					subs: service.subServices
+						.filter(subService => subService.isActive) // Only active sub-services
+						.map(subService => ({
+							id: subService._id,
+							label: subService.name,
+							price: subService.price
+						}))
+				}));
+				setServiceData(transformedServices);
+			} else {
+				console.log('Failed to fetch services, using static data');
+			}
+		} catch (error) {
+			console.error('Error fetching services:', error);
+			// Keep static data as fallback
+		} finally {
+			setServicesLoading(false);
+		}
+	}; 
+
+	// Check if user is authenticated and fetch services
 	useEffect(() => {
 		const checkAuthentication = () => {
 			const token = localStorage.getItem('token');
@@ -41,6 +77,7 @@ const Booking = () => {
 		};
 
 		checkAuthentication();
+		fetchServices(); // Fetch dynamic services
 	}, [navigate]);
 
 	const [datetime, setDatetime] = useState('');
@@ -104,10 +141,10 @@ const Booking = () => {
 	const confirmAdd = () => {
 		if (!addMain) return alert('Please select a main service');
 		if (!addSub) return alert('Please select a sub-service');
-		const main = ServiceIndex.find(s => s.key === addMain);
+		const main = serviceData.find(s => s.key === addMain);
 		const sub = main?.subs?.find(x => x.id === addSub);
 		if (!main || !sub) return alert('Select a valid main and sub-service');
-		// qty is fixed to 1 and price is fixed from serviceIndex
+		// qty is fixed to 1 and price is fixed from serviceData
 		// prevent adding same sub-service twice
 		if (items.find(x => x.subId === sub.id)) return alert('This sub-service is already added');
 		const it = { id: Date.now() + Math.random(), service: main.key, label: sub.label, subId: sub.id, price: sub.price };
@@ -118,7 +155,7 @@ const Booking = () => {
 	const removeItem = (id) => setItems(prev => prev.filter(it => it.id !== id));
 
 	// convenience selected objects for display
-	const selectedMainObj = ServiceIndex.find(s => s.key === addMain);
+	const selectedMainObj = serviceData.find(s => s.key === addMain);
 	const selectedSubObj = selectedMainObj?.subs?.find(x => x.id === addSub);
 
 	const handleSubmit = async (e) => {
@@ -263,9 +300,13 @@ const Booking = () => {
 														onClick={() => setMainOpen(false)}
 													/>
 													<div className="service-dropdown-menu" style={{ position: 'absolute', zIndex: 40, left: 0, right: 0, marginTop: 8, background: '#fff', border: '1px solid #eee', borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', maxHeight: 240, overflow: 'auto' }}>
-														{ServiceIndex.map(s => (
-															<div key={s.key} className="service-dropdown-item" onClick={() => { setAddMain(s.key); setAddSub(''); setMainOpen(false); setSubOpen(true); }} style={{ padding: 12, borderBottom: '1px solid #f4f4f4', cursor: 'pointer' }}>{s.key}</div>
-														))}
+														{servicesLoading ? (
+															<div style={{ padding: 12, textAlign: 'center', color: '#666' }}>Loading services...</div>
+														) : (
+															serviceData.map(s => (
+																<div key={s.key} className="service-dropdown-item" onClick={() => { setAddMain(s.key); setAddSub(''); setMainOpen(false); setSubOpen(true); }} style={{ padding: 12, borderBottom: '1px solid #f4f4f4', cursor: 'pointer' }}>{s.key}</div>
+															))
+														)}
 													</div>
 												</>
 											)}
@@ -300,9 +341,13 @@ const Booking = () => {
 														onClick={() => setSubOpen(false)}
 													/>
 													<div className="service-dropdown-menu" style={{ position: 'absolute', zIndex: 40, left: 0, right: 0, marginTop: 8, background: '#fff', border: '1px solid #eee', borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', maxHeight: 240, overflow: 'auto' }}>
-														{ServiceIndex.find(s => s.key === addMain)?.subs?.map(sub => (
-															<div key={sub.id} className="service-dropdown-item" onClick={() => { setAddSub(sub.id); setSubOpen(false); }} style={{ padding: 12, borderBottom: '1px solid #f4f4f4', cursor: 'pointer' }}>{sub.label} — LKR {sub.price.toLocaleString()}</div>
-														))}
+														{serviceData.find(s => s.key === addMain)?.subs?.map(sub => (
+															<div key={sub.id} className="service-dropdown-item" onClick={() => { setAddSub(sub.id); setSubOpen(false); }} style={{ padding: 12, borderBottom: '1px solid #f4f4f4', cursor: 'pointer' }}>
+																{sub.label} — LKR {sub.price.toLocaleString()}
+															</div>
+														)) || (
+															<div style={{ padding: 12, textAlign: 'center', color: '#666' }}>No sub-services available</div>
+														)}
 													</div>
 												</>
 											)}
