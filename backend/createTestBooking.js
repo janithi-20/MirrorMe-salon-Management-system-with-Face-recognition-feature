@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const Booking = require('./models/Booking');
 
-// Connect to MongoDB
+
 mongoose.connect('mongodb://localhost:27017/salon-management');
 
 async function createTestBooking() {
   try {
     console.log('Creating test booking for today...');
     
-    // Today's date in YYYY-MM-DD format
+    
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
     console.log('Today is:', todayStr);
@@ -27,7 +27,7 @@ async function createTestBooking() {
       datetime: new Date(),
       staff: 'Sarah Wilson',
       totalAmount: 2500,
-      status: 'confirmed',  // This should show in upcoming bookings
+      status: 'confirmed',  
       isNew: false
     });
     
@@ -43,7 +43,7 @@ async function createTestBooking() {
       staff: testBooking.staff
     });
     
-    // Create another booking for today
+    
     const testBooking2 = new Booking({
       bookingId: `TEST-${Date.now() + 1}`,
       customerId: 'test-customer-002',
@@ -58,7 +58,7 @@ async function createTestBooking() {
       datetime: new Date(),
       staff: 'Emily Chen',
       totalAmount: 3500,
-      status: 'confirmed',  // This should also show in upcoming bookings
+      status: 'confirmed',  
       isNew: true
     });
     
