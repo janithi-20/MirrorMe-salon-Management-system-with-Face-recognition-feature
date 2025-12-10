@@ -12,6 +12,7 @@ const teamRoutes = require('./routes/teamRoutes');
 const brandRoutes = require('./routes/brandRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const aiAnalysisRoutes = require('./routes/aiAnalysisRoutes');
+const adminUtilityRoutes = require('./routes/adminUtilityRoutes');
 const { swaggerUi, specs } = require('./swagger');
 
 // Load environment variables
@@ -44,6 +45,7 @@ app.use('/team', teamRoutes);
 app.use('/brands', brandRoutes);
 app.use('/settings', settingsRoutes);
 app.use('/ai', aiAnalysisRoutes);
+app.use('/admin', adminUtilityRoutes);
 
 // Debug endpoint to check database contents
 app.get('/debug/users', async (req, res) => {

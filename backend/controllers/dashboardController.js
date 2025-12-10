@@ -237,6 +237,9 @@ const getBookings = async (req, res) => {
       date: booking.date,
       time: booking.time,
       status: booking.status,
+      // Include explicit paymentStatus so frontend can display cancelled payments
+      // Do not show a payment status for cancelled bookings
+      paymentStatus: booking.status === 'cancelled' ? null : (booking.paymentStatus || (booking.status === 'completed' ? 'completed' : 'pending')),
       staff: booking.staff || 'Any',
       amount: booking.totalAmount,
       isNew: booking.isNew

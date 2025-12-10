@@ -110,6 +110,23 @@ import './Admin.css';
     }
   }, [isAdminAuthenticated, navigate]);
 
+  // Listen for booking status changes (e.g., cancellations) from other components
+  useEffect(() => {
+    const bookingStatusHandler = (e) => {
+      try {
+        console.log('Received bookingStatusChanged event, refreshing dashboard:', e && e.detail);
+      } catch (err) {
+        console.log('Received bookingStatusChanged event');
+      }
+      fetchDashboardData();
+    };
+
+    window.addEventListener('bookingStatusChanged', bookingStatusHandler);
+    return () => {
+      window.removeEventListener('bookingStatusChanged', bookingStatusHandler);
+    };
+  }, []);
+
   // Logout function
   const handleLogout = () => {
     logoutAdmin();

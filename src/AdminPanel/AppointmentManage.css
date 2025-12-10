@@ -233,12 +233,13 @@
 .advance-amount {
   color: #2d3748;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .total-amount {
   color: #718096;
-  font-size: 11px;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .payment-status {
@@ -250,7 +251,7 @@
   align-items: center;
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;

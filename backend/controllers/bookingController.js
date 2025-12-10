@@ -122,6 +122,10 @@ const updateBookingStatus = async (req, res) => {
     // Update the booking
     if (status) {
       booking.status = status;
+      // If booking is cancelled, clear paymentStatus so frontend shows no payment badge
+      if (status === 'cancelled') {
+        booking.paymentStatus = null;
+      }
     }
     
     if (paymentStatus) {

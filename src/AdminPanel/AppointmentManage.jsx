@@ -44,9 +44,10 @@ const AppointmentManagement = () => {
               customer: booking.customer,
               status: booking.status,
               provider: booking.staff || 'Any', // Use booked staff name when available
-              advancePayment: Math.floor((booking.amount || booking.totalAmount || 0) * 0.5), // 50% advance
+              // Show full price as the payment amount (no advance shown)
               totalAmount: booking.amount || booking.totalAmount || 0,
-              paymentStatus: booking.status === 'completed' ? 'completed' : 'pending',
+              // Prefer explicit paymentStatus from backend; do not show a paymentStatus for cancelled bookings
+              paymentStatus: booking.status === 'cancelled' ? null : (booking.paymentStatus || (booking.status === 'completed' ? 'completed' : 'pending')),
               timestamp
             };
           });
@@ -119,6 +120,55 @@ const AppointmentManagement = () => {
     } catch (error) {
       console.error('Error updating payment status:', error);
       alert('Unable to update payment status. Please check your connection and try again.');
+    }
+  };
+
+  const handleCancelAppointment = async (appointmentId) => {
+    try {
+      if (!window.confirm('Are you sure you want to cancel this appointment?')) return;
+
+      const response = await fetch(`http://localhost:5000/bookings/${appointmentId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: 'cancelled'
+        })
+      });
+
+      if (response.ok) {
+        // Update local state
+        setAppointments(prevAppointments =>
+          prevAppointments.map(appointment =>
+            appointment.id === appointmentId
+              ? { 
+                  ...appointment,
+                  status: 'cancelled',
+                  paymentStatus: appointment.paymentStatus === 'completed' ? 'completed' : 'pending'
+                }
+              : appointment
+          )
+        );
+
+        // Notify other parts of the admin panel (dashboard) to refresh
+        try {
+          window.dispatchEvent(new CustomEvent('bookingStatusChanged', { detail: { id: appointmentId, status: 'cancelled' } }));
+        } catch (e) {
+          // Some older browsers may not support CustomEvent constructor
+          const evt = document.createEvent('CustomEvent');
+          evt.initCustomEvent('bookingStatusChanged', true, true, { id: appointmentId, status: 'cancelled' });
+          window.dispatchEvent(evt);
+        }
+
+        alert('Appointment cancelled successfully');
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Failed to cancel appointment');
+      }
+    } catch (error) {
+      console.error('Error cancelling appointment:', error);
+      alert('Unable to cancel appointment. Please check your connection and try again.');
     }
   };
 
@@ -240,21 +290,31 @@ const AppointmentManagement = () => {
                     <span>{appointment.provider}</span>
                   </div>
                   <div className="grid-cell payment-info">
-                    <div className="advance-amount">Rs. {appointment.advancePayment?.toLocaleString()}</div>
-                    <div className="total-amount">of Rs. {appointment.totalAmount?.toLocaleString()}</div>
+                    <div className="total-amount">Rs. {appointment.totalAmount?.toLocaleString()}</div>
                   </div>
                   <div className="grid-cell payment-status">
-                    <span className={`payment-badge ${appointment.paymentStatus}`}>
-                      {appointment.paymentStatus}
-                    </span>
+                    {appointment.paymentStatus ? (
+                      <span className={`payment-badge ${appointment.paymentStatus}`}>
+                        {appointment.paymentStatus}
+                      </span>
+                    ) : null}
                   </div>
                   <div className="grid-cell appointment-actions">
-                    {appointment.paymentStatus === 'pending' && (
+                    {appointment.paymentStatus === 'pending' && appointment.status !== 'cancelled' && (
                       <button 
                         className="payment-received-btn"
                         onClick={() => handlePaymentReceived(appointment.id)}
                       >
                         Payment Received
+                      </button>
+                    )}
+                    {appointment.status !== 'cancelled' && appointment.status !== 'completed' && (
+                      <button
+                        className="cancel-appointment-btn"
+                        onClick={() => handleCancelAppointment(appointment.id)}
+                        style={{ marginLeft: '8px', background: '#e53935', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer' }}
+                      >
+                        Cancel
                       </button>
                     )}
                   </div>
