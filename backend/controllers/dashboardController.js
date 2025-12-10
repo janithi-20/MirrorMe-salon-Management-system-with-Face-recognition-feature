@@ -45,16 +45,14 @@ const getDashboardStats = async (req, res) => {
     const walkInBookings = Math.floor(totalBookings * 0.30); // 30% walk-in
     const phoneBookings = totalBookings - onlineBookings - walkInBookings; // remaining through phone
     
-    // Booking status counts
+    // Booking status counts (removed 'booked' and 'confirmed' boxes)
     const statusCounts = {
-      booked: allBookings.filter(b => b.status === 'booked').length,
-      confirmed: allBookings.filter(b => b.status === 'confirmed').length,
+      pending: allBookings.filter(b => b.status === 'pending').length,
       completed: allBookings.filter(b => b.status === 'completed').length,
-      cancelled: allBookings.filter(b => b.status === 'cancelled').length,
-      pending: allBookings.filter(b => b.status === 'pending').length
+      cancelled: allBookings.filter(b => b.status === 'cancelled').length
     };
     
-    // Upcoming bookings (today's confirmed bookings)
+    // Upcoming bookings (today's pending bookings)
     const todayStr = today.toISOString().split('T')[0];
     console.log('=== UPCOMING BOOKINGS DEBUG ===');
     console.log('Looking for bookings on:', todayStr);
@@ -73,9 +71,9 @@ const getDashboardStats = async (req, res) => {
       .filter(booking => {
         const bookingDate = booking.date;
         const isToday = bookingDate === todayStr;
-        const isConfirmedOrPending = ['confirmed', 'pending'].includes(booking.status);
-        console.log(`Filter result for ${booking.customerName}: IsToday=${isToday} && ValidStatus=${isConfirmedOrPending} = ${isToday && isConfirmedOrPending}`);
-        return isToday && isConfirmedOrPending;
+        const isPending = booking.status === 'pending';
+        console.log(`Filter result for ${booking.customerName}: IsToday=${isToday} && IsPending=${isPending} = ${isToday && isPending}`);
+        return isToday && isPending;
       })
       .map(booking => ({
         id: booking._id,
@@ -114,18 +112,6 @@ const getDashboardStats = async (req, res) => {
           message: 'New 5-star review received',
           time: '4 hours ago',
           icon: 'star'
-        },
-        {
-          type: 'team',
-          message: 'Team member added new service',
-          time: '1 day ago',
-          icon: 'users'
-        },
-        {
-          type: 'revenue',
-          message: 'Monthly revenue increased by 15%',
-          time: '2 days ago',
-          icon: 'trending-up'
         }
       ]
     };

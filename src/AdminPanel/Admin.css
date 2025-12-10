@@ -504,27 +504,13 @@
   transition: opacity 0.3s ease;
 }
 
-.status-box.booked {
-  border-left-color: #f59e0b;
-}
+/* Removed booked/confirmed status-box styles per request */
 
-.status-box.booked::before {
-  background: #f59e0b;
-}
-
-.status-box.confirmed {
-  border-left-color: #3b82f6;
-}
-
-.status-box.confirmed::before {
-  background: #3b82f6;
-}
-
-.status-box.done {
+.status-box.completed {
   border-left-color: #10b981;
 }
 
-.status-box.done::before {
+.status-box.completed::before {
   background: #10b981;
 }
 
@@ -573,13 +559,7 @@
   color: #111827;
 }
 
-.status-box.booked:hover {
-  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.25);
-}
-
-.status-box.confirmed:hover {
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
-}
+/* Removed booked/confirmed hover styles per request */
 
 .status-box.done:hover {
   box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);

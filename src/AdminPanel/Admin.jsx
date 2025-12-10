@@ -395,21 +395,9 @@ import './Admin.css';
                   <span className="chart-period">Last updated: 6 hours ago</span>
                 </div>
                 <div className="status-boxes-container">
-                    <div className="status-box booked">
+                  <div className="status-box completed">
                     <div className="status-box-header">
-                      <span className="status-label">Booked</span>
-                    </div>
-                    <div className="status-value">{dashboardData.bookingStatus?.booked || 0}</div>
-                  </div>                  <div className="status-box confirmed">
-                    <div className="status-box-header">
-                      <span className="status-label">Confirmed</span>
-                    </div>
-                    <div className="status-value">{dashboardData.bookingStatus?.confirmed || 0}</div>
-                  </div>
-                  
-                  <div className="status-box done">
-                    <div className="status-box-header">
-                      <span className="status-label">Done</span>
+                      <span className="status-label">Completed</span>
                     </div>
                     <div className="status-value">{dashboardData.bookingStatus?.completed || 0}</div>
                   </div>

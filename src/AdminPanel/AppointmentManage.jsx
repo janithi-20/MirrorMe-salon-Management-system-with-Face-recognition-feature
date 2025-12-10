@@ -37,17 +37,26 @@ const AppointmentManagement = () => {
               timestamp = Date.now();
             }
 
+            // Prefer explicit paymentStatus from backend; do not show a paymentStatus for cancelled bookings
+            const paymentStatus = booking.status === 'cancelled'
+              ? null
+              : (booking.paymentStatus || (booking.status === 'completed' ? 'completed' : 'pending'));
+
+            // use backend status directly; do not map pending -> 'booked'
+            const displayStatus = booking.status;
+
             return {
               id: booking.id,
               dateTime: formatDateTime(booking.date, booking.time),
               service: booking.service,
               customer: booking.customer,
+              // raw status (from backend) and derived displayStatus used by UI
               status: booking.status,
+              displayStatus,
               provider: booking.staff || 'Any', // Use booked staff name when available
               // Show full price as the payment amount (no advance shown)
               totalAmount: booking.amount || booking.totalAmount || 0,
-              // Prefer explicit paymentStatus from backend; do not show a paymentStatus for cancelled bookings
-              paymentStatus: booking.status === 'cancelled' ? null : (booking.paymentStatus || (booking.status === 'completed' ? 'completed' : 'pending')),
+              paymentStatus,
               timestamp
             };
           });
@@ -107,7 +116,8 @@ const AppointmentManagement = () => {
               ? { 
                   ...appointment, 
                   paymentStatus: 'completed',
-                  status: 'completed'
+                  status: 'completed',
+                  displayStatus: 'completed'
                 }
               : appointment
           )
@@ -145,7 +155,8 @@ const AppointmentManagement = () => {
               ? { 
                   ...appointment,
                   status: 'cancelled',
-                  paymentStatus: appointment.paymentStatus === 'completed' ? 'completed' : 'pending'
+                  paymentStatus: null,
+                  displayStatus: 'cancelled'
                 }
               : appointment
           )
@@ -172,13 +183,7 @@ const AppointmentManagement = () => {
     }
   };
 
-  const totalAppointments = appointments.length;
-  const completedAppointments = appointments.filter(app => app.status === 'completed').length;
-  const confirmedAppointments = appointments.filter(app => app.status === 'confirmed').length;
-  const pendingAppointments = appointments.filter(app => app.status === 'pending').length;
-  const totalRevenue = appointments
-    .filter(app => app.paymentStatus === 'completed')
-    .reduce((sum, app) => sum + app.totalAmount, 0);
+  // summary values derived from displayed lists below
 
   // derive displayed appointments according to search query (used by grid and summary)
   const displayedAppointments = appointments.filter(a =>
@@ -187,7 +192,6 @@ const AppointmentManagement = () => {
 
   const totalDisplayed = displayedAppointments.length;
   const completedDisplayed = displayedAppointments.filter(app => app.status === 'completed').length;
-  const confirmedDisplayed = displayedAppointments.filter(app => app.status === 'confirmed').length;
   const pendingDisplayed = displayedAppointments.filter(app => app.status === 'pending').length;
   const revenueDisplayed = displayedAppointments
     .filter(app => app.paymentStatus === 'completed')
@@ -247,7 +251,7 @@ const AppointmentManagement = () => {
             <div className="grid-header">
               <div className="header-cell">Date & Time</div>
               <div className="header-cell">Service / Customer</div>
-              <div className="header-cell">Status</div>
+              <div className="header-cell">Booking Status</div>
               <div className="header-cell">Staff</div>
               <div className="header-cell">Payment</div>
               <div className="header-cell">Payment Status</div>
@@ -300,7 +304,7 @@ const AppointmentManagement = () => {
                     ) : null}
                   </div>
                   <div className="grid-cell appointment-actions">
-                    {appointment.paymentStatus === 'pending' && appointment.status !== 'cancelled' && (
+                    {appointment.paymentStatus === 'pending' && (appointment.status !== 'cancelled') && (
                       <button 
                         className="payment-received-btn"
                         onClick={() => handlePaymentReceived(appointment.id)}
@@ -333,10 +337,7 @@ const AppointmentManagement = () => {
                 <div className="summary-label">Pending</div>
                 <div className="summary-value">{pendingDisplayed}</div>
               </div>
-              <div className="summary-item">
-                <div className="summary-label">Confirmed</div>
-                <div className="summary-value">{confirmedDisplayed}</div>
-              </div>
+              {/* Confirmed removed per request */}
               <div className="summary-item">
                 <div className="summary-label">Completed</div>
                 <div className="summary-value">{completedDisplayed}</div>

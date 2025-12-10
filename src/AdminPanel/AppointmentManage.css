@@ -195,10 +195,6 @@
   color: #2f855a;
 }
 
-.status-badge.confirmed {
-  background-color: #bee3f8;
-  color: #2b6cb0;
-}
 
 .status-badge.no-show {
   background-color: #fed7d7;
@@ -209,6 +205,7 @@
   background-color: #fbb6ce;
   color: #b83280;
 }
+
 
 .provider-info {
   display: flex;
@@ -369,7 +366,7 @@
 
 .summary-stats {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
 
