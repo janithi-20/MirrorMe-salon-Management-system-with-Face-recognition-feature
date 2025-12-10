@@ -3,6 +3,7 @@ import './AppointmentManage.css';
 
 const AppointmentManagement = () => {
   const [appointments, setAppointments] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -27,18 +28,32 @@ const AppointmentManagement = () => {
         if (data.success && data.bookings) {
           console.log('Bookings found:', data.bookings.length);
           // Transform backend data to match frontend structure
-          const transformedAppointments = data.bookings.map(booking => ({
-            id: booking.id,
-            dateTime: formatDateTime(booking.date, booking.time),
-            service: booking.service,
-            customer: booking.customer,
-            status: booking.status,
-            provider: 'Any', // Default since backend doesn't specify staff
-            advancePayment: Math.floor(booking.amount * 0.5), // 50% advance
-            totalAmount: booking.amount,
-            paymentStatus: booking.status === 'completed' ? 'completed' : 'pending'
-          }));
-          console.log('Transformed appointments:', transformedAppointments);
+          const transformedAppointments = data.bookings.map(booking => {
+            // build a timestamp to sort by newest first
+            let timestamp = null;
+            try {
+              timestamp = new Date(`${booking.date}T${booking.time}`).getTime();
+            } catch (e) {
+              timestamp = Date.now();
+            }
+
+            return {
+              id: booking.id,
+              dateTime: formatDateTime(booking.date, booking.time),
+              service: booking.service,
+              customer: booking.customer,
+              status: booking.status,
+              provider: booking.staff || 'Any', // Use booked staff name when available
+              advancePayment: Math.floor((booking.amount || booking.totalAmount || 0) * 0.5), // 50% advance
+              totalAmount: booking.amount || booking.totalAmount || 0,
+              paymentStatus: booking.status === 'completed' ? 'completed' : 'pending',
+              timestamp
+            };
+          });
+
+          // sort by timestamp descending (newest first)
+          transformedAppointments.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+          console.log('Transformed appointments (sorted newest-first):', transformedAppointments);
           setAppointments(transformedAppointments);
         } else {
           console.log('No bookings data in response');
@@ -115,10 +130,32 @@ const AppointmentManagement = () => {
     .filter(app => app.paymentStatus === 'completed')
     .reduce((sum, app) => sum + app.totalAmount, 0);
 
+  // derive displayed appointments according to search query (used by grid and summary)
+  const displayedAppointments = appointments.filter(a =>
+    !searchQuery || (a.customer || '').toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const totalDisplayed = displayedAppointments.length;
+  const completedDisplayed = displayedAppointments.filter(app => app.status === 'completed').length;
+  const confirmedDisplayed = displayedAppointments.filter(app => app.status === 'confirmed').length;
+  const pendingDisplayed = displayedAppointments.filter(app => app.status === 'pending').length;
+  const revenueDisplayed = displayedAppointments
+    .filter(app => app.paymentStatus === 'completed')
+    .reduce((sum, app) => sum + app.totalAmount, 0);
+
   return (
     <div className="appointment-management">
-      <div className="appointments-header">
+      <div className="appointments-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h2>Appointment History</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <input
+            type="text"
+            placeholder="Search by customer name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ padding: '8px 10px', borderRadius: '6px', border: '1px solid #ddd', minWidth: '220px' }}
+          />
+        </div>
       </div>
 
       {loading && (
@@ -167,17 +204,25 @@ const AppointmentManagement = () => {
               <div className="header-cell">Actions</div>
             </div>
 
-            {appointments.length === 0 ? (
-              <div style={{ 
-                textAlign: 'center', 
-                padding: '2rem', 
-                gridColumn: '1 / -1',
-                color: '#666'
-              }}>
-                No appointments found. Once customers start booking, they will appear here.
-              </div>
-            ) : (
-              appointments.map((appointment) => (
+            {(() => {
+              const filtered = appointments.filter(a =>
+                !searchQuery || (a.customer || '').toLowerCase().includes(searchQuery.toLowerCase())
+              );
+
+              if (filtered.length === 0) {
+                return (
+                  <div style={{ 
+                    textAlign: 'center', 
+                    padding: '2rem', 
+                    gridColumn: '1 / -1',
+                    color: '#666'
+                  }}>
+                    No appointments found. Once customers start booking, they will appear here.
+                  </div>
+                );
+              }
+
+              return filtered.map((appointment) => (
                 <div key={appointment.id} className="grid-row">
                   <div className="grid-cell date-time">
                     <div className="date">{appointment.dateTime}</div>
@@ -214,31 +259,31 @@ const AppointmentManagement = () => {
                     )}
                   </div>
                 </div>
-              ))
-            )}
+              ));
+            })()}
           </div>
 
           <div className="appointments-summary">
             <div className="summary-stats">
               <div className="summary-item">
                 <div className="summary-label">Total Appointments</div>
-                <div className="summary-value">{totalAppointments}</div>
+                <div className="summary-value">{totalDisplayed}</div>
               </div>
               <div className="summary-item">
                 <div className="summary-label">Pending</div>
-                <div className="summary-value">{pendingAppointments}</div>
+                <div className="summary-value">{pendingDisplayed}</div>
               </div>
               <div className="summary-item">
                 <div className="summary-label">Confirmed</div>
-                <div className="summary-value">{confirmedAppointments}</div>
+                <div className="summary-value">{confirmedDisplayed}</div>
               </div>
               <div className="summary-item">
                 <div className="summary-label">Completed</div>
-                <div className="summary-value">{completedAppointments}</div>
+                <div className="summary-value">{completedDisplayed}</div>
               </div>
               <div className="summary-item">
                 <div className="summary-label">Total Revenue</div>
-                <div className="summary-value">Rs. {totalRevenue.toLocaleString()}</div>
+                <div className="summary-value">Rs. {revenueDisplayed.toLocaleString()}</div>
               </div>
             </div>
           </div>

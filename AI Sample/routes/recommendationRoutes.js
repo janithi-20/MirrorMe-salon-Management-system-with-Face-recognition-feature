@@ -7,8 +7,8 @@ import {
 
 const router = express.Router();
 
-router.get("/", listRecommendations);               // GET /api/recommendations
-router.get("/:shape", getRecommendation);           // GET /api/recommendations/Oval
-router.post("/", createRecommendation);             // POST /api/recommendations
+router.get("/", listRecommendations);               
+router.get("/:shape", getRecommendation);           
+router.post("/", createRecommendation);             
 
 export default router;

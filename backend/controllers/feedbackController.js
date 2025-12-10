@@ -1,7 +1,7 @@
 const Feedback = require('../models/Feedback');
 const User = require('../models/User');
 
-// Submit new feedback (requires authentication)
+// Submit new feedback 
 const submitFeedback = async (req, res) => {
   try {
     const { userId, name, message, rating } = req.body;

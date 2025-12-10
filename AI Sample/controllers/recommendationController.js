@@ -5,17 +5,17 @@ function findStatic(shape) {
   return STATIC_DATA.find((r) => String(r.faceShape).toLowerCase() === s) || null;
 }
 
-// Create (for Postman)
+
 export const createRecommendation = async (_req, res) => {
-  // Static-only API: writes disabled
+
   return res.status(405).json({ message: "Disabled in static data mode" });
 };
 
-// Read by face shape (for frontend)
+
 export const getRecommendation = async (req, res) => {
   try {
     const raw = req.params.shape || "";
-    const shape = String(raw).trim(); // e.g. "Oval"
+    const shape = String(raw).trim(); 
     const data = findStatic(shape);
     if (!data) return res.status(404).json({ message: "No recommendation found" });
     res.json(data);
@@ -24,7 +24,7 @@ export const getRecommendation = async (req, res) => {
   }
 };
 
-// Optional: list all (for debugging in Postman)
+
 export const listRecommendations = async (_req, res) => {
   try {
     return res.json(STATIC_DATA);

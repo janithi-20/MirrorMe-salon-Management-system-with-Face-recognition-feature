@@ -1,18 +1,15 @@
-// controllers/aiAnalysisController.js
 const aiAnalysisService = require('../services/aiAnalysisService');
 const faceAnnotationService = require('../services/faceAnnotationService');
 const multer = require('multer');
 const path = require('path');
 
-// Configure multer for image uploads
 const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
+    fileSize: 10 * 1024 * 1024, 
   },
   fileFilter: (req, file, cb) => {
-    // Check file type
     const allowedTypes = /jpeg|jpg|png|gif|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
@@ -25,12 +22,10 @@ const upload = multer({
   }
 });
 
-/**
- * Analyze face image and provide beauty recommendations
- */
+
 const analyzeFaceImage = async (req, res) => {
   try {
-    // Check if image was uploaded
+    
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -39,7 +34,7 @@ const analyzeFaceImage = async (req, res) => {
       });
     }
 
-    // Get analysis options from request body
+    
     const { options = [] } = req.body;
     let analysisOptions = [];
     
@@ -61,10 +56,8 @@ const analyzeFaceImage = async (req, res) => {
     });
     console.log('Analysis options:', analysisOptions);
 
-    // Start processing time measurement
     const startTime = Date.now();
 
-    // Analyze the face image
     const analysisResult = await aiAnalysisService.analyzeFace(req.file.buffer, analysisOptions);
 
     // Create annotated image with visual overlays
@@ -133,14 +126,14 @@ const getAnalysisOptions = async (req, res) => {
           id: 'Haircut',
           name: 'Haircut Recommendations',
           description: 'Get personalized haircut suggestions based on your face shape',
-          icon: ''
         },
+
         {
           id: 'Eye brow shape',
           name: 'Eyebrow Shaping',
           description: 'Find the perfect eyebrow shape for your facial features',
-          icon: ''
         }
+        
       ],
       faceShapes: [
         { name: 'Oval', description: 'Balanced proportions, versatile styling options' },

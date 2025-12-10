@@ -144,7 +144,7 @@ const updateBrand = async (req, res) => {
   }
 };
 
-// Delete a brand (soft delete - set isActive to false)
+// Delete a brand 
 const deleteBrand = async (req, res) => {
   try {
     const { id } = req.params;

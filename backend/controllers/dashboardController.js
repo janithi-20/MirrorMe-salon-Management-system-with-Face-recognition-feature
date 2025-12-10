@@ -42,7 +42,7 @@ const getDashboardStats = async (req, res) => {
     
     // Booking channels
     const onlineBookings = Math.floor(totalBookings * 0.65); // 65% online
-    const walkInBookings = Math.floor(totalBookings * 0.25); // 25% walk-in
+    const walkInBookings = Math.floor(totalBookings * 0.30); // 30% walk-in
     const phoneBookings = totalBookings - onlineBookings - walkInBookings; // remaining through phone
     
     // Booking status counts
@@ -237,6 +237,7 @@ const getBookings = async (req, res) => {
       date: booking.date,
       time: booking.time,
       status: booking.status,
+      staff: booking.staff || 'Any',
       amount: booking.totalAmount,
       isNew: booking.isNew
     }));

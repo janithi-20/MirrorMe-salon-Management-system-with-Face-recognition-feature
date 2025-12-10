@@ -1,4 +1,3 @@
-// controllers/authController.js
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const { sendVerificationEmail, generateVerificationCode } = require('../services/emailService');
@@ -7,7 +6,6 @@ const createCustomer = async (req, res) => {
   try {
     const { firstName, lastName, email, phoneNumber, password } = req.body;
     
-    // Validate required fields
     if (!firstName || !lastName || !email || !phoneNumber || !password) {
       return res.status(400).json({
         error: 'Missing required fields',
@@ -15,7 +13,6 @@ const createCustomer = async (req, res) => {
       });
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({
