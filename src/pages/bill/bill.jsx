@@ -30,6 +30,16 @@ const Bill = () => {
 	const items = Array.isArray(booking.items) ? booking.items : [];
 	const total = typeof booking.subtotal === 'number' ? booking.subtotal : items.reduce((s, it) => s + Number(it.price || 0), 0);
 
+	// Receipt number: prefer an explicit stored receiptNumber; otherwise ALWAYS generate RCP-YYYYMMDD-<4digits>
+	const receiptNumber = booking.receiptNumber || (() => {
+		const dt = booking.datetime ? new Date(booking.datetime) : new Date();
+		const y = dt.getFullYear();
+		const m = String(dt.getMonth() + 1).padStart(2, '0');
+		const d = String(dt.getDate()).padStart(2, '0');
+		const rand = Math.floor(Math.random() * 9000) + 1000;
+		return `RCP-${y}${m}${d}-${rand}`;
+	})();
+
 	const subject = encodeURIComponent('Your Salon Receipt');
 	const bodyLines = [
 		`Hello ${customerName},`,
@@ -98,9 +108,14 @@ const Bill = () => {
 								<div class="badge"><img src="/salon logo.jpg" alt="" style="height:36px;object-fit:contain;vertical-align:middle" onerror="this.style.display='none'"/></div>
 								<div class="company"><div style="font-weight:700">Mirror Me Salon</div><div style="font-size:12px;color:#666;margin-top:6px">123 Elegance Street, Colombo</div><div style="font-size:12px;color:#666">+94 77 123 4567</div></div>
 							</div>
-							<div style="text-align:right"><div class="receipt-title">RECEIPT</div><div style="margin-top:8px;color:#666;font-size:13px">Receipt #: ${booking.id || '—'}</div><div style="color:#666;font-size:13px;margin-top:6px">Date: ${dateStr}</div></div>
+							<div style="text-align:right">
+								<div class="receipt-title">RECEIPT</div>
+								<div style="margin-top:8px;color:#666;font-size:13px">Receipt : ${receiptNumber}</div>
+								<div style="color:#666;font-size:13px;margin-top:6px">Date: ${dateStr}</div>
+								<div style="color:#666;font-size:13px;margin-top:4px">Time: ${timeStr}</div>
+							</div>
 						</div>
-						<div class="meta"><div class="left"><div><strong>Bill To</strong></div><div style="margin-top:8px">${customerName}</div></div><div class="right"></div></div>
+						<div class="meta"><div class="left"></div><div class="right"></div></div>
 						<table>
 							<thead>
 								<tr>
@@ -134,7 +149,7 @@ const Bill = () => {
 		<div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
 			<Header />
 			<main style={{ flex: 1 }}>
-				<div style={{ minHeight: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 1.25rem' }}>
+				<div style={{ minHeight: '100%', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '6rem 1.2rem' }}>
 					<div style={{ width: '100%', maxWidth: 800 }}>
 						<div style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 8px 20px rgba(0,0,0,0.08)' }}>
 							<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -150,16 +165,13 @@ const Bill = () => {
 								</div>
 								<div style={{ textAlign: 'right' }}>
 									<div style={{ fontSize: 28, fontWeight: 700 }}>RECEIPT</div>
-									<div style={{ color: '#666', marginTop: 8 }}>Receipt #: {booking.id || '—'}</div>
+									<div style={{ color: '#666', marginTop: 8 }}>Receipt : {receiptNumber}</div>
 									<div style={{ color: '#666' }}>Date: {dateStr}</div>
+									<div style={{ color: '#666', marginTop: 4 }}>Time: {timeStr}</div>
 								</div>
 							</div>
 
-							<div style={{ marginTop: 18, display: 'flex', justifyContent: 'space-between' }}>
-								<div>
-									<div style={{ fontWeight: 700 }}>Bill To</div>
-									<div style={{ marginTop: 8 }}>{customerName}</div>
-								</div>
+							<div style={{ marginTop: 18, display: 'flex', justifyContent: 'flex-end' }}>
 								<div style={{ textAlign: 'right' }}>
 									<div><strong>Staff:</strong> {staff}</div>
 								</div>
@@ -198,6 +210,13 @@ const Bill = () => {
 											<div>Total</div>
 											<div>LKR {Number(total).toLocaleString()}</div>
 										</div>
+									</div>
+								</div>
+
+								{/* Receipt ID shown under payment totals */}
+								<div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
+									<div style={{ textAlign: 'right', color: '#444', fontSize: 13 }}>
+										<div><strong>Receipt ID:</strong> {receiptNumber}</div>
 									</div>
 								</div>
 

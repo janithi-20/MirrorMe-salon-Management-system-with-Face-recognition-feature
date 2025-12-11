@@ -9,6 +9,25 @@ const AppointmentManagement = () => {
 
   // Fetch appointments from backend
   useEffect(() => {
+    // Helper to compute a receipt id similar to the Bill page logic
+    const makeReceiptId = (booking) => {
+      // Always prefer an explicit stored receiptNumber when present
+      // Otherwise generate a deterministic-looking RCP value (RCP-YYYYMMDD-<4digits>)
+      if (!booking) return null;
+      if (booking.receiptNumber) return booking.receiptNumber;
+
+      try {
+        const dt = booking.datetime ? new Date(booking.datetime) : new Date();
+        const y = dt.getFullYear();
+        const m = String(dt.getMonth() + 1).padStart(2, '0');
+        const d = String(dt.getDate()).padStart(2, '0');
+        const rand = Math.floor(Math.random() * 9000) + 1000;
+        return `RCP-${y}${m}${d}-${rand}`;
+      } catch (e) {
+        return `RCP-${Date.now()}`;
+      }
+    };
+
     const fetchAppointments = async () => {
       try {
         setLoading(true);
@@ -57,6 +76,8 @@ const AppointmentManagement = () => {
               // Show full price as the payment amount (no advance shown)
               totalAmount: booking.amount || booking.totalAmount || 0,
               paymentStatus,
+              // Receipt ID: compute using bill-like fallback/generation
+              receiptId: makeReceiptId(booking),
               timestamp
             };
           });
@@ -186,9 +207,13 @@ const AppointmentManagement = () => {
   // summary values derived from displayed lists below
 
   // derive displayed appointments according to search query (used by grid and summary)
-  const displayedAppointments = appointments.filter(a =>
-    !searchQuery || (a.customer || '').toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const displayedAppointments = appointments.filter(a => {
+    const q = (searchQuery || '').trim().toLowerCase();
+    if (!q) return true;
+    const customer = (a.customer || '').toLowerCase();
+    const receipt = String(a.receiptId || '').toLowerCase();
+    return customer.includes(q) || receipt.includes(q);
+  });
 
   const totalDisplayed = displayedAppointments.length;
   const completedDisplayed = displayedAppointments.filter(app => app.status === 'completed').length;
@@ -204,7 +229,7 @@ const AppointmentManagement = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <input
             type="text"
-            placeholder="Search by customer name..."
+            placeholder="Search by customer name or receipt..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{ padding: '8px 10px', borderRadius: '6px', border: '1px solid #ddd', minWidth: '220px' }}
@@ -259,9 +284,7 @@ const AppointmentManagement = () => {
             </div>
 
             {(() => {
-              const filtered = appointments.filter(a =>
-                !searchQuery || (a.customer || '').toLowerCase().includes(searchQuery.toLowerCase())
-              );
+              const filtered = displayedAppointments;
 
               if (filtered.length === 0) {
                 return (
@@ -295,6 +318,11 @@ const AppointmentManagement = () => {
                   </div>
                   <div className="grid-cell payment-info">
                     <div className="total-amount">Rs. {appointment.totalAmount?.toLocaleString()}</div>
+                    {appointment.receiptId && (
+                      <div style={{ marginTop: 6, fontSize: 12, color: '#666' }}>
+                        <strong style={{ fontWeight: 600 }}>Receipt:</strong> {String(appointment.receiptId)}
+                      </div>
+                    )}
                   </div>
                   <div className="grid-cell payment-status">
                     {appointment.paymentStatus ? (
