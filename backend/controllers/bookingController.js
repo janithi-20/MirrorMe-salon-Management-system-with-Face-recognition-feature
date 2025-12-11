@@ -4,6 +4,7 @@ const Booking = require('../models/Booking');
 const createBooking = async (req, res) => {
   try {
     const { items, datetime, staff, subtotal, customerInfo } = req.body;
+    console.log('CreateBooking request body:', { items, datetime, staff, subtotal, customerInfo });
     
     // Validate required fields
     if (!items || !datetime || !staff || subtotal === undefined) {
@@ -21,6 +22,16 @@ const createBooking = async (req, res) => {
       });
     }
 
+    // Validate and parse datetime
+    const parsedDatetime = new Date(datetime);
+    if (!datetime || isNaN(parsedDatetime.getTime())) {
+      console.error('Invalid datetime received for booking:', datetime);
+      return res.status(400).json({
+        error: 'Invalid datetime',
+        message: 'The provided datetime is invalid. Please use a valid date and time.'
+      });
+    }
+
     // Create new booking
     const newBooking = new Booking({
       bookingId: `BK_${Date.now()}`,
@@ -35,7 +46,7 @@ const createBooking = async (req, res) => {
         subService: item.label,
         price: item.price
       })),
-      datetime: new Date(datetime),
+      datetime: parsedDatetime,
       staff: staff,
       totalAmount: subtotal,
       status: 'pending',
@@ -60,7 +71,7 @@ const createBooking = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Booking creation error:', error);
+    console.error('Booking creation error:', error && error.stack ? error.stack : error);
     res.status(500).json({
       error: 'Internal Server Error',
       message: 'An error occurred while creating the booking. Please try again.'

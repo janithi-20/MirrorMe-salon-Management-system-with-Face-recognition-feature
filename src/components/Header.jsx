@@ -9,6 +9,8 @@ const Header = () => {
   const navigate = useNavigate();
   const { isAdminAuthenticated, logoutAdmin, logoutUser } = useAuth();
 
+  const [conflictMessage, setConflictMessage] = useState(null);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -40,13 +42,31 @@ const Header = () => {
   useEffect(() => {
     // Initial check
     checkAuthStatus();
-    
+
     // Listen for login events
     window.addEventListener('userLoggedIn', checkAuthStatus);
-    
+
+    // Listen for booking conflict events
+    const conflictHandler = (e) => {
+      try {
+        const d = e.detail;
+        if (!d) {
+          setConflictMessage(null);
+        } else if (d && d.message) {
+          setConflictMessage(d.message);
+        } else {
+          setConflictMessage(null);
+        }
+      } catch (err) {
+        setConflictMessage(null);
+      }
+    };
+    window.addEventListener('staffBookingConflict', conflictHandler);
+
     // Cleanup
     return () => {
       window.removeEventListener('userLoggedIn', checkAuthStatus);
+      window.removeEventListener('staffBookingConflict', conflictHandler);
     };
   }, []);
 
@@ -133,6 +153,7 @@ const Header = () => {
   };
 
   return (
+    <>
     <header className="site-header">
       <div className="container header-container">
         <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -269,6 +290,16 @@ const Header = () => {
         </nav>
       </div>
     </header>
+
+    {/* Banner placed immediately below the header so it does not overlap header content */}
+    {conflictMessage && (
+      <div style={{ position: 'fixed', left: 0, right: 0, top: 100, background: '#fff3cd', color: '#856404', padding: '10px 18px', boxSizing: 'border-box', fontSize: 14, textAlign: 'center', zIndex: 200, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+        <span style={{ marginRight: 8 }}>⚠️</span>
+        <span>{conflictMessage}</span>
+      </div>
+    )}
+
+    </>
   );
 };
 

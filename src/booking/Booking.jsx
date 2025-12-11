@@ -102,6 +102,7 @@ const Booking = () => {
 	const mainRef = useRef(null);
 	const subRef = useRef(null);
 
+
 	// Mobile detection
 	useEffect(() => {
 		const checkMobile = () => {
@@ -158,19 +159,106 @@ const Booking = () => {
 	const selectedMainObj = serviceData.find(s => s.key === addMain);
 	const selectedSubObj = selectedMainObj?.subs?.find(x => x.id === addSub);
 
+	// Staff conflict check helper (can be used for on-change checks and on-submit)
+	const checkStaffConflict = async (forStaff, forDatetime) => {
+		try {
+			const useStaff = forStaff || staff;
+			const useDatetime = forDatetime || datetime;
+
+			// If user selected 'Any' staff, skip the conflict check
+			if (!useStaff || useStaff === 'Any') return null;
+			if (!useDatetime) return null;
+
+			// derive date string (YYYY-MM-DD) and hour from datetime-local value
+			const selected = new Date(useDatetime);
+			if (isNaN(selected.getTime())) return null;
+			const selDate = selected.toISOString().split('T')[0];
+			const selHour = selected.getHours();
+
+			const resp = await fetch('http://localhost:5000/dashboard/bookings');
+			if (!resp.ok) return null;
+			const data = await resp.json();
+			const bookings = data.bookings || [];
+
+			// Find a booking with same staff, same date, and same hour (exclude cancelled bookings)
+			for (const b of bookings) {
+				try {
+					if (!b.staff) continue;
+					if (b.staff !== useStaff) continue;
+					if (b.status === 'cancelled') continue;
+					if (b.date !== selDate) continue;
+
+					// parse booking.time to get hour
+					let bHour = null;
+					if (b.time) {
+						const parts = String(b.time).split(':');
+						if (parts.length >= 1) bHour = parseInt(parts[0], 10);
+					} else if (b.datetime) {
+						const dbdt = new Date(b.datetime);
+						if (!isNaN(dbdt.getTime())) bHour = dbdt.getHours();
+					}
+
+					if (bHour === null) continue;
+					if (bHour === selHour) {
+						return b; // conflict found
+					}
+				} catch (err) {
+					continue;
+				}
+			}
+
+			return null;
+		} catch (err) {
+			console.error('Error checking staff conflicts:', err);
+			return null;
+		}
+	};
+
+	// Debounced effect: when staff or datetime changes, check for conflicts and dispatch event for Header
+	useEffect(() => {
+		let mounted = true;
+		let timer = null;
+		const runCheck = async () => {
+			const conflict = await checkStaffConflict();
+			if (!mounted) return;
+			if (conflict) {
+				const otherTime = conflict.time || (conflict.datetime ? new Date(conflict.datetime).toLocaleTimeString() : 'unknown');
+				// Do NOT include the booked customer's name in the public message
+				const msg = `${staff} already has a booking on ${conflict.date} at ${otherTime}.`;
+				try {
+					window.dispatchEvent(new CustomEvent('staffBookingConflict', { detail: { message: msg, conflict } }));
+				} catch (e) {
+					// fallback
+					const evt = document.createEvent('CustomEvent'); evt.initCustomEvent('staffBookingConflict', true, true, { message: msg, conflict }); window.dispatchEvent(evt);
+				}
+			} else {
+				try {
+					window.dispatchEvent(new CustomEvent('staffBookingConflict', { detail: null }));
+				} catch (e) {
+					const evt = document.createEvent('CustomEvent'); evt.initCustomEvent('staffBookingConflict', true, true, null); window.dispatchEvent(evt);
+				}
+			}
+		};
+
+		// debounce 600ms
+		timer = setTimeout(runCheck, 600);
+		return () => { mounted = false; if (timer) clearTimeout(timer); };
+	}, [staff, datetime]);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (items.length === 0) return alert('Add at least one service');
-		
+
 		try {
 			// Get customer info from localStorage
 			const customerData = JSON.parse(localStorage.getItem('customer') || '{}');
 			
 			const bookingData = {
 				items,
-				datetime,
+				// send ISO datetime to backend to avoid locale parsing issues
+				datetime: datetime ? new Date(datetime).toISOString() : datetime,
 				staff,
-				subtotal,
+				subtotal: Number(subtotal) || 0,
 				customerInfo: customerData
 			};
 
