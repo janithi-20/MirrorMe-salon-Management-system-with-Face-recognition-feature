@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Booking = require('../models/Booking');
+const User = require('../models/User');
 
 /**
  * POST /admin/fix-cancelled-payments
@@ -26,4 +27,17 @@ router.post('/fix-cancelled-payments', async (req, res) => {
   }
 });
 
+// GET /admin/customers
+// Returns a list of registered customers (non-sensitive fields only)
+router.get('/customers', async (req, res) => {
+  try {
+    const users = await User.find({}).select('customerId firstName lastName email phoneNumber isVerified createdAt');
+    res.status(200).json({ success: true, total: users.length, customers: users });
+  } catch (err) {
+    console.error('Error fetching customers:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 module.exports = router;
+

@@ -7,6 +7,7 @@ import TeamManagement from './TeamManage';
 import FeedbackManagement from './FeedbackManage';
 import AppointmentManagement from './AppointmentManage';
 import BrandManagement from './BrandManage';
+import CustomersList from './CustomersList';
 import './Admin.css';
 
   //Feedback management
@@ -261,7 +262,7 @@ import './Admin.css';
 
         // Prepare stats data for rendering
         const stats = [
-          { title: 'Registered Customers', value: dashboardData.stats.totalCustomers.toString(), color: '#3b82f6' },
+          { title: 'Registered Customers', value: dashboardData.stats.totalCustomers.toString(), color: '#3b82f6', key: 'customers' },
           { title: 'Invoice Value', value: `Rs. ${dashboardData.stats.totalRevenue.toLocaleString()}`, color: '#10b981' },
           { title: 'Number of Bookings', value: dashboardData.stats.totalBookings.toString(), color: '#f59e0b' },
         ];
@@ -273,8 +274,17 @@ import './Admin.css';
             {/* Sales Summary Cards */}
             <div className="stats-grid">
               {stats.map((stat, index) => {
+                const handleClick = () => {
+                  if (stat.key === 'customers') setActiveSection('customers');
+                };
+
                 return (
-                  <div key={index} className="stat-card enhanced" style={{ borderLeft: `4px solid ${stat.color}` }}>
+                  <div
+                    key={index}
+                    className={`stat-card enhanced ${stat.key === 'customers' ? 'clickable' : ''}`}
+                    style={{ borderLeft: `4px solid ${stat.color}` }}
+                    onClick={handleClick}
+                  >
                     <div className="stat-content">
                       <div className="stat-value">{stat.value}</div>
                       <div className="stat-title">{stat.title}</div>
@@ -429,6 +439,9 @@ import './Admin.css';
             </div>
           </div>
         );
+      case 'customers':
+        return <CustomersList onBack={() => setActiveSection('dashboard')} />;
+
       case 'services':
         return (
           <ServiceManagement />

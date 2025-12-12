@@ -10,6 +10,19 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  
+  // Password strength rules (client-side)
+  const passwordChecks = (pwd) => ({
+    length: typeof pwd === 'string' && pwd.length >= 8,
+    upper: /[A-Z]/.test(pwd),
+    lower: /[a-z]/.test(pwd),
+    number: /[0-9]/.test(pwd),
+    // any non-alphanumeric counts as a symbol
+    symbol: /[^A-Za-z0-9]/.test(pwd),
+  });
+
+  const passwordStrength = passwordChecks(password);
+  const isStrongPassword = Object.values(passwordStrength).every(Boolean);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -76,9 +89,9 @@ const Register = () => {
       return;
     }
 
-    // Additional password validation
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters long.');
+    // Require strong password
+    if (!isStrongPassword) {
+      setError('Password must be at least 8 characters and include uppercase, lowercase, number and symbol.');
       return;
     }
 
@@ -239,6 +252,30 @@ const Register = () => {
               {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
             </button>
           </div>
+          {password && (
+            <div style={{ marginTop: 8, fontSize: 13 }}>
+              <ul style={{ listStyle: 'none', paddingLeft: 0, margin: 0 }}>
+                <li style={{ color: passwordStrength.length ? 'green' : '#c00', marginBottom: 4 }}>
+                  {passwordStrength.length ? '✔' : '✖'} Minimum 8 characters
+                </li>
+                <li style={{ color: passwordStrength.upper ? 'green' : '#c00', marginBottom: 4 }}>
+                  {passwordStrength.upper ? '✔' : '✖'} At least one uppercase letter
+                </li>
+                <li style={{ color: passwordStrength.lower ? 'green' : '#c00', marginBottom: 4 }}>
+                  {passwordStrength.lower ? '✔' : '✖'} At least one lowercase letter
+                </li>
+                <li style={{ color: passwordStrength.number ? 'green' : '#c00', marginBottom: 4 }}>
+                  {passwordStrength.number ? '✔' : '✖'} At least one number
+                </li>
+                <li style={{ color: passwordStrength.symbol ? 'green' : '#c00', marginBottom: 4 }}>
+                  {passwordStrength.symbol ? '✔' : '✖'} At least one symbol (@$!%*?& or other)
+                </li>
+              </ul>
+              <div style={{ marginTop: 6, fontWeight: 600, color: isStrongPassword ? 'green' : '#c00' }}>
+                {isStrongPassword ? 'Strong Password' : 'Weak Password'}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="form-group">
