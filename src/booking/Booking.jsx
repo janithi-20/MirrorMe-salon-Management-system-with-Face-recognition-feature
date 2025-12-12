@@ -275,11 +275,24 @@ const Booking = () => {
 			const result = await response.json();
 
 			if (response.ok) {
-				// Booking created successfully, navigate to payment with the booking data
+				// Booking created successfully
+				try {
+					// Dispatch a client-side event so other parts of the app (notifications) can update live
+					const evtDetail = { booking: result.booking };
+					try {
+						window.dispatchEvent(new CustomEvent('bookingCreated', { detail: evtDetail }));
+					} catch (e) {
+						const evt = document.createEvent('CustomEvent'); evt.initCustomEvent('bookingCreated', true, true, evtDetail); window.dispatchEvent(evt);
+					}
+				} catch (e) {
+					console.warn('Could not dispatch bookingCreated event', e);
+				}
+
+				// navigate to payment with the booking data
 				navigate('/payment', { 
 					state: { 
 						booking: { ...bookingData, bookingId: result.booking.bookingId }
-					} 
+					}
 				});
 			} else {
 				alert(result.message || 'Failed to create booking. Please try again.');
