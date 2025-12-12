@@ -39,5 +39,44 @@ router.get('/customers', async (req, res) => {
   }
 });
 
+
+// PUT /admin/customers/:id - admin update of a customer by _id or customerId
+router.put('/customers/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updates = req.body || {};
+    console.log('admin PUT /admin/customers/:id called. id=', id, 'updates=', updates);
+
+    if (!id) return res.status(400).json({ success: false, message: 'Missing id' });
+
+    let user = null;
+    try { user = await User.findById(id); } catch (e) { user = null; }
+    if (!user) user = await User.findOne({ customerId: id });
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    const allowed = ['firstName', 'lastName', 'email', 'phoneNumber', 'isVerified'];
+    allowed.forEach(k => {
+      if (typeof updates[k] !== 'undefined') {
+        user[k] = (k === 'email' && updates[k]) ? String(updates[k]).toLowerCase() : updates[k];
+      }
+    });
+
+    await user.save();
+
+    res.status(200).json({ success: true, message: 'Customer updated', user: {
+      _id: user._id,
+      customerId: user.customerId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      isVerified: user.isVerified
+    }});
+  } catch (err) {
+    console.error('Admin update customer error', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 module.exports = router;
 

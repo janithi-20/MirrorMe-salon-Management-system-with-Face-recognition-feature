@@ -53,6 +53,106 @@ const CustomersList = ({ onBack }) => {
     fetchCustomers();
   }, []);
 
+  // Listen for profile/customer updates elsewhere in the app (Profile page, admin edits)
+  useEffect(() => {
+    const handler = (e) => {
+      try {
+        const u = e && e.detail && e.detail.user;
+        if (!u) return;
+
+        setCustomers(prev => {
+          // ensure we always have an array to work with
+          const list = Array.isArray(prev) ? prev : [];
+
+          // matching keys to try
+          const uKeys = {
+            _id: u._id,
+            id: u.id,
+            customerId: u.customerId,
+            email: (u.email || '').toLowerCase()
+          };
+
+          const matchIndex = list.findIndex(c => {
+            try {
+              if (uKeys._id && c._id && String(c._id) === String(uKeys._id)) return true;
+              if (uKeys.id && (c.id && String(c.id) === String(uKeys.id))) return true;
+              if (uKeys.customerId && (c.customerId && String(c.customerId) === String(uKeys.customerId))) return true;
+              if (uKeys.email && (c.email && String(c.email).toLowerCase() === uKeys.email)) return true;
+            } catch (ex) {
+              return false;
+            }
+            return false;
+          });
+
+          if (matchIndex !== -1) {
+            const copy = [...list];
+            copy[matchIndex] = { ...copy[matchIndex], ...u };
+            return copy;
+          }
+
+          // Not found: append (or prepend) the updated user so admins can see it
+          return [u, ...list];
+        });
+      } catch (err) {
+        console.error('customerUpdated handler error', err);
+      }
+    };
+
+    window.addEventListener('customerUpdated', handler);
+    return () => window.removeEventListener('customerUpdated', handler);
+  }, []);
+
+  // Also listen for storage events so updates in other tabs/windows propagate here
+  useEffect(() => {
+    const storageHandler = (e) => {
+      try {
+        if (!e) return;
+        // React only to changes to customer/user keys
+        if (e.key !== 'customer' && e.key !== 'user') return;
+        const raw = e.newValue;
+        if (!raw) return;
+        const u = JSON.parse(raw);
+        if (!u) return;
+
+        setCustomers(prev => {
+          const list = Array.isArray(prev) ? prev : [];
+
+          const uKeys = {
+            _id: u._id,
+            id: u.id,
+            customerId: u.customerId,
+            email: (u.email || '').toLowerCase()
+          };
+
+          const matchIndex = list.findIndex(c => {
+            try {
+              if (uKeys._id && c._id && String(c._id) === String(uKeys._id)) return true;
+              if (uKeys.id && (c.id && String(c.id) === String(uKeys.id))) return true;
+              if (uKeys.customerId && (c.customerId && String(c.customerId) === String(uKeys.customerId))) return true;
+              if (uKeys.email && (c.email && String(c.email).toLowerCase() === uKeys.email)) return true;
+            } catch (ex) {
+              return false;
+            }
+            return false;
+          });
+
+          if (matchIndex !== -1) {
+            const copy = [...list];
+            copy[matchIndex] = { ...copy[matchIndex], ...u };
+            return copy;
+          }
+
+          return [u, ...list];
+        });
+      } catch (err) {
+        console.error('storage event handler error', err);
+      }
+    };
+
+    window.addEventListener('storage', storageHandler);
+    return () => window.removeEventListener('storage', storageHandler);
+  }, []);
+
   return (
     <div className="section-content">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

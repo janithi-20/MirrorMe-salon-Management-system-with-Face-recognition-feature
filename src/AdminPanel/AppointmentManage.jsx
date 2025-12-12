@@ -272,6 +272,28 @@ const AppointmentManagement = () => {
 
       {!loading && !error && (
         <>
+          <div className="appointments-summary">
+            <div className="summary-stats">
+              <div className="summary-item">
+                <div className="summary-label">Total Appointments</div>
+                <div className="summary-value">{totalDisplayed}</div>
+              </div>
+              <div className="summary-item">
+                <div className="summary-label">Pending</div>
+                <div className="summary-value">{pendingDisplayed}</div>
+              </div>
+              {/* Confirmed removed per request */}
+              <div className="summary-item">
+                <div className="summary-label">Completed</div>
+                <div className="summary-value">{completedDisplayed}</div>
+              </div>
+              <div className="summary-item">
+                <div className="summary-label">Total Revenue</div>
+                <div className="summary-value">Rs. {revenueDisplayed.toLocaleString()}</div>
+              </div>
+            </div>
+          </div>
+
           <div className="appointments-grid">
             <div className="grid-header">
               <div className="header-cell">Date & Time</div>
@@ -353,28 +375,6 @@ const AppointmentManagement = () => {
                 </div>
               ));
             })()}
-          </div>
-
-          <div className="appointments-summary">
-            <div className="summary-stats">
-              <div className="summary-item">
-                <div className="summary-label">Total Appointments</div>
-                <div className="summary-value">{totalDisplayed}</div>
-              </div>
-              <div className="summary-item">
-                <div className="summary-label">Pending</div>
-                <div className="summary-value">{pendingDisplayed}</div>
-              </div>
-              {/* Confirmed removed per request */}
-              <div className="summary-item">
-                <div className="summary-label">Completed</div>
-                <div className="summary-value">{completedDisplayed}</div>
-              </div>
-              <div className="summary-item">
-                <div className="summary-label">Total Revenue</div>
-                <div className="summary-value">Rs. {revenueDisplayed.toLocaleString()}</div>
-              </div>
-            </div>
           </div>
         </>
       )}

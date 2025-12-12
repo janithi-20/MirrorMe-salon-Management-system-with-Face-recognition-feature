@@ -300,5 +300,61 @@ module.exports = {
   createCustomer,
   loginCustomer,
   verifyEmail,
-  resendVerification
+  resendVerification,
+  updateCustomer
 };
+
+// Update customer (profile) by _id or customerId
+async function updateCustomer(req, res) {
+  try {
+    const id = req.params.id;
+    const updates = req.body || {};
+    console.log('updateCustomer called. id=', id, 'updates=', updates);
+
+    // Determine lookup: try _id first, then customerId, then email
+    let user = null;
+    if (!id) return res.status(400).json({ success: false, message: 'Missing id parameter' });
+
+    // try by _id
+    try { user = await User.findById(id); } catch (e) { user = null; }
+    if (!user) {
+      // try as customerId
+      user = await User.findOne({ customerId: id });
+    }
+    if (!user) {
+      // try as email
+      user = await User.findOne({ email: (id || '').toLowerCase() });
+    }
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Only allow certain fields to be updated here
+    const allowed = ['firstName', 'lastName', 'email', 'phoneNumber'];
+    allowed.forEach(k => {
+      if (typeof updates[k] !== 'undefined') {
+        if (k === 'email' && updates[k]) {
+          user[k] = String(updates[k]).toLowerCase();
+        } else {
+          user[k] = updates[k];
+        }
+      }
+    });
+
+    await user.save();
+
+    res.status(200).json({ success: true, message: 'User updated', user: {
+      _id: user._id,
+      customerId: user.customerId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      isVerified: user.isVerified
+    }});
+  } catch (err) {
+    console.error('updateCustomer error', err);
+    res.status(500).json({ success: false, message: err.message || 'Internal error' });
+  }
+}

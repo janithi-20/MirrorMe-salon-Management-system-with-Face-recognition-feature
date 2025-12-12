@@ -8,6 +8,9 @@ const {
   resendVerification 
 } = require('../controllers/authController');
 
+// add updateCustomer dynamically to support profile updates
+const { updateCustomer } = require('../controllers/authController');
+
 /**
  * @swagger
  * /customers/createCustomer:
@@ -139,5 +142,25 @@ router.post('/verify-email', verifyEmail);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post('/resend-verification', resendVerification);
+
+// PUT /customers/:id - update profile (by _id, customerId or email)
+router.put('/:id', updateCustomer);
+
+// POST /customers/update - tolerant fallback that accepts { id, ...fields }
+router.post('/update', async (req, res) => {
+  try {
+    const { id } = req.body || {};
+    if (!id) return res.status(400).json({ success: false, message: 'Missing id in body' });
+
+    // Construct a fake req.params for reuse of update logic in controller
+    req.params = req.params || {};
+    req.params.id = id;
+    // Delegate to controller
+    return updateCustomer(req, res);
+  } catch (err) {
+    console.error('Fallback update route error', err);
+    return res.status(500).json({ success: false, message: err.message || 'Internal error' });
+  }
+});
 
 module.exports = router;

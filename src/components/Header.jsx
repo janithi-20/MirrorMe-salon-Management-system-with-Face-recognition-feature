@@ -63,10 +63,28 @@ const Header = () => {
     };
     window.addEventListener('staffBookingConflict', conflictHandler);
 
+    // Listen for customer updates to refresh displayed name
+    const customerUpdatedHandler = (e) => {
+      try {
+        const u = e && e.detail && e.detail.user;
+        if (u) {
+          const fullName = `${u.firstName || ''} ${u.lastName || ''}`.trim();
+          setUserName(fullName || u.email || 'User');
+          setIsLoggedIn(true);
+        } else {
+          checkAuthStatus();
+        }
+      } catch (err) {
+        checkAuthStatus();
+      }
+    };
+    window.addEventListener('customerUpdated', customerUpdatedHandler);
+
     // Cleanup
     return () => {
       window.removeEventListener('userLoggedIn', checkAuthStatus);
       window.removeEventListener('staffBookingConflict', conflictHandler);
+      window.removeEventListener('customerUpdated', customerUpdatedHandler);
     };
   }, []);
 
@@ -240,19 +258,25 @@ const Header = () => {
             {/* Regular user authentication buttons */}
             {isLoggedIn ? (
               <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ color: '#fff', fontSize: '14px' }}>Welcome, {userName}!</span>
-                <button 
-                  onClick={() => {
-                    handleLogout();
-                    closeMobileMenu();
-                  }}
-                  className="btn btn-icon btn-secondary" 
-                  style={{ padding: '8px 12px', color: 'white' }}
-                >
-                  <FiLogOut style={{ verticalAlign: 'middle', marginRight: 6, color: 'white' }} />
-                  Logout
-                </button>
-              </li>
+                  <button
+                    onClick={() => { navigate('/profile'); closeMobileMenu(); }}
+                    title="View profile"
+                    style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', fontSize: 14, padding: 0 }}
+                  >
+                    Welcome, {userName}!
+                  </button>
+                  <button 
+                    onClick={() => {
+                      handleLogout();
+                      closeMobileMenu();
+                    }}
+                    className="btn btn-icon btn-secondary" 
+                    style={{ padding: '8px 12px', color: 'white' }}
+                  >
+                    <FiLogOut style={{ verticalAlign: 'middle', marginRight: 6, color: 'white' }} />
+                    Logout
+                  </button>
+                </li>
             ) : (
               <li>
                 <Link 

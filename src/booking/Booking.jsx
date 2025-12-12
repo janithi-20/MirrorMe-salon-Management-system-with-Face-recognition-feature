@@ -83,6 +83,76 @@ const Booking = () => {
 	const [datetime, setDatetime] = useState('');
 	const [staff, setStaff] = useState('Any');
 
+	// compute min allowed datetime (local) to prevent selecting past dates/times
+	const formatLocalForInput = (d) => {
+		const pad = (n) => String(n).padStart(2, '0');
+		return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+	};
+
+	const minDatetime = useMemo(() => {
+		const now = new Date();
+		const pad = (n) => String(n).padStart(2, '0');
+		// business hours start at 06:30 and end at 22:30
+		const makeAt = (base, hh, mm) => {
+			const d = new Date(base);
+			d.setHours(hh, mm, 0, 0);
+			return d;
+		};
+
+		const todayStart = makeAt(now, 6, 30);
+		const todayEnd = makeAt(now, 22, 30);
+
+		let earliest = now;
+		if (now.getTime() < todayStart.getTime()) {
+			earliest = todayStart;
+		} else if (now.getTime() > todayEnd.getTime()) {
+			// after business hours -> earliest is tomorrow at 06:30
+			const tomorrow = new Date(now);
+			tomorrow.setDate(tomorrow.getDate() + 1);
+			earliest = makeAt(tomorrow, 6, 30);
+		}
+
+		return formatLocalForInput(earliest);
+	}, []);
+
+	// helper: clamp a Date to business hours range for that date
+	const clampToBusinessHours = (d) => {
+		const base = new Date(d);
+		const start = new Date(base); start.setHours(6, 30, 0, 0);
+		const end = new Date(base); end.setHours(22, 30, 0, 0);
+		if (base.getTime() < start.getTime()) return start;
+		if (base.getTime() > end.getTime()) return end;
+		return base;
+	};
+
+	const handleDatetimeChange = (e) => {
+		const val = e.target.value;
+		if (!val) { setDatetime(''); return; }
+		const selected = new Date(val);
+		if (isNaN(selected.getTime())) { setDatetime(val); return; }
+
+		// clamp to business hours for the selected date
+		const clamped = clampToBusinessHours(selected);
+
+		// ensure not in the past relative to now
+		const now = new Date();
+		let final = clamped;
+		if (final.getTime() < now.getTime()) {
+			// if clamped result is still in the past, move to next available start
+			const next = new Date(now);
+			next.setDate(next.getDate() + 1);
+			next.setHours(6, 30, 0, 0);
+			final = next;
+		}
+
+		// if user picked outside business hours, notify and set adjusted value
+		if (final.getTime() !== selected.getTime()) {
+			alert('Selected time is outside business hours (06:30 - 22:30). It has been adjusted to the nearest available time.');
+		}
+
+		setDatetime(formatLocalForInput(final));
+	};
+
 	// multi-item cart (each item represents one sub-service; qty is fixed to 1)
 	const [items, setItems] = useState(incoming ? [{ id: Date.now(), service: incoming?.service || incoming?.serviceLabel || 'Service', label: incoming?.subServiceLabel || '', subId: incoming?.subServiceId || null, price: incoming?.subServicePrice || incoming?.price || 0 }] : []);
 
@@ -249,6 +319,20 @@ const Booking = () => {
 		e.preventDefault();
 		if (items.length === 0) return alert('Add at least one service');
 
+		// Prevent booking in the past
+		if (datetime) {
+			const selected = new Date(datetime);
+			const now = new Date();
+			// Ensure within business hours
+			const clamped = clampToBusinessHours(selected);
+			if (selected.getTime() < now.getTime()) {
+				return alert('Please select a future date/time for your booking.');
+			}
+			if (clamped.getTime() !== selected.getTime()) {
+				return alert('Selected time is outside business hours (06:30 - 22:30). Please choose a time within business hours.');
+			}
+		}
+
 		try {
 			// Get customer info from localStorage
 			const customerData = JSON.parse(localStorage.getItem('customer') || '{}');
@@ -324,7 +408,8 @@ const Booking = () => {
 									<input
 										type="datetime-local"
 										value={datetime}
-										onChange={e => setDatetime(e.target.value)}
+										min={minDatetime}
+										onChange={handleDatetimeChange}
 										required
 										style={{
 											width: '100%',
